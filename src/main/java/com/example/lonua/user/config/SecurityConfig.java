@@ -22,9 +22,9 @@ public class SecurityConfig{
         try {
             http.csrf().disable()
                         .authorizeHttpRequests()
-                        .antMatchers("/login","/user/signup", "/grade/*").permitAll()
-                        .antMatchers("/user/mypage").hasRole("USER")
-                        .anyRequest().authenticated()
+//                        .antMatchers("/login","/user/signup", "/grade/*", "/*").permitAll()
+//                        .antMatchers("/user/mypage").hasRole("USER")
+                        .anyRequest().permitAll()
                     .and()
                         .formLogin().loginProcessingUrl("/user/login")
                         .defaultSuccessUrl("/user/mypage");
