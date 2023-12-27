@@ -44,7 +44,7 @@ public class UserService {
                 .preferStyle(postSignUpReq.getPreferStyle())
                 .upperType(postSignUpReq.getUpperType())
                 .lowerType(postSignUpReq.getLowerType())
-                .userMileage(postSignUpReq.getUserMileage())
+                .userMileage(0)
                 .createdAt(postSignUpReq.getCreatedAt())
                 .updatedAt(postSignUpReq.getUpdatedAt())
                 .status(postSignUpReq.getStatus())
