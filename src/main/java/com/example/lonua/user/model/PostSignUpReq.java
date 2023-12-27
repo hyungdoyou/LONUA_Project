@@ -12,8 +12,6 @@ import java.util.Date;
 @Builder
 public class PostSignUpReq {
 
-    private Integer grade_idx;
-
     private String userId;
 
     private String userPw;
