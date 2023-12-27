@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -83,13 +84,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private Integer lowerType;
 
+    @Column(nullable = false)
     private Integer userMileage;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private String status;
@@ -98,7 +100,6 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton((GrantedAuthority) () -> authority);
     }
-
 
     @Override
     public boolean isAccountNonExpired() {

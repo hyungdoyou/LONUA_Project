@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -52,13 +53,12 @@ public class UserService implements UserDetailsService{
                 .lowerType(postSignUpReq.getLowerType())
                 .userMileage(0)
                 .authority("ROLE_USER")
-                .createdAt(postSignUpReq.getCreatedAt())
-                .updatedAt(postSignUpReq.getUpdatedAt())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .status(postSignUpReq.getStatus())
                 .build());
     }
 
-    // 사용자가 입력한 username을 DB에서 찾는 역할 수행
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> result = userRepository.findByUserId(username);
@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService{
         if(result.isPresent()) {
             user = result.get();
         }
-        return user; // 입력한 username이 있으면 Member 객체를 UserDetails 로 반환
+        return user;
     }
 
 }

@@ -10,6 +10,7 @@ import com.example.lonua.grade.model.PostCreateReq;
 import com.example.lonua.grade.model.entity.Grade;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -28,8 +29,8 @@ public class CategoryService {
 
         categoryRepository.save(Category.builder()
                         .categoryName(postRegReqReq.getCategoryName())
-                        .createdAt(postRegReqReq.getCreatedAt())
-                        .updatedAt(postRegReqReq.getUpdatedAt())
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
                         .status(1)
                 .build());
     }

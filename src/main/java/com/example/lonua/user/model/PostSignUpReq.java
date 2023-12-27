@@ -34,11 +34,5 @@ public class PostSignUpReq {
 
     private Integer lowerType;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date createdAt;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date updatedAt;
-
     private String status;
 }
