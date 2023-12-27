@@ -1,6 +1,8 @@
 package com.example.lonua.grade.service;
 
 import com.example.lonua.brand.repository.BrandRepository;
+import com.example.lonua.exception.ErrorCode;
+import com.example.lonua.exception.exception.GradeException;
 import com.example.lonua.grade.model.PostCreateReq;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.grade.repository.GradeRepository;
@@ -20,7 +22,7 @@ public class GradeService {
     public void create(PostCreateReq postCreateReq) {
         Optional<Grade> result = gradeRepository.findByGradeType(postCreateReq.getGradeType());
         if(result.isPresent()) {
-            throw new UserException(ErrorCode.DUPLICATED_USER, String.format("Id is %s", postSignUpReq.getUserId()));
+            throw new GradeException(ErrorCode.DUPLICATED_USER, String.format("Id is %s", postCreateReq.getGradeType()));
         }
 
         gradeRepository.save(Grade.builder()
