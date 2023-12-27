@@ -8,11 +8,11 @@ import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -20,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userIdx;
@@ -51,8 +51,11 @@ public class User {
     @Column(nullable = false, length = 45, unique = true)
     private String userId;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, length = 200)
     private String userPw;
+
+    @Column(nullable = false)
+    private String authority;
 
     @Column(nullable = false, length = 45)
     private String userName;
@@ -90,5 +93,41 @@ public class User {
 
     @Column(nullable = false)
     private String status;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton((GrantedAuthority) () -> authority);
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+    @Override
+    public String getUsername(){
+        return userId;
+    }
+
+    @Override
+    public String getPassword(){
+        return userPw;
+    }
+
 
 }

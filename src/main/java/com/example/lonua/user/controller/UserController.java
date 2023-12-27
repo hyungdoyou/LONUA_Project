@@ -1,5 +1,6 @@
 package com.example.lonua.user.controller;
 
+import com.example.lonua.user.model.PostLoginReq;
 import com.example.lonua.user.model.PostSignUpReq;
 import com.example.lonua.user.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,12 @@ public class UserController {
         userService.signup(postSignUpReq);
 
         return ResponseEntity.ok().body("회원가입 성공");
+    }
+
+    // 로그인(세션 기반 로그인)
+    @RequestMapping(method = RequestMethod.GET, value = "/mypage")
+    public ResponseEntity mypage() {
+
+        return ResponseEntity.ok().body("마이 페이지입니다.");
     }
 }
