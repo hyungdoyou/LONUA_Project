@@ -2,6 +2,7 @@ package com.example.lonua.category.model.entity;
 
 import com.example.lonua.product.model.entity.Product;
 import io.swagger.models.auth.In;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
