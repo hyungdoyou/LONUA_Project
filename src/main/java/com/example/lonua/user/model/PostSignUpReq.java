@@ -34,8 +34,6 @@ public class PostSignUpReq {
 
     private Integer lowerType;
 
-    private Integer userMileage;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date createdAt;
 
