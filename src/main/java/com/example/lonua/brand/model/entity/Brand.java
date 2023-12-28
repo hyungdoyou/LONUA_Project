@@ -38,8 +38,8 @@ public class Brand {
     @Column(nullable = false, length = 100)
     private String brandImgUrl;
 
-    @Column(nullable = false)
-    private Integer brandStyle;
+    @Column(nullable = false, length = 10)
+    private String brandStyle;
 
     @Column(nullable = false, unique = true, length = 200)
     private String businessAddress;
