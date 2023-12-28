@@ -41,12 +41,4 @@ public class PostRegReq {
     private Integer hemLength;
     private Integer totalBottomLength;
 
-    private Integer upperType1Amount;
-    private Integer upperType2Amount;
-    private Integer upperType3Amount;
-
-    private Integer lowerType1Amount;
-    private Integer lowerType2Amount;
-    private Integer lowerType3Amount;
-
 }
