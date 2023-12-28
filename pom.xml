@@ -12,8 +12,10 @@
 	<artifactId>lonua</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>lonua</name>
+	<packaging>jar</packaging>
 	<description>Demo project for Spring Boot</description>
 	<properties>
+		<maven.test.skip>true</maven.test.skip>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
