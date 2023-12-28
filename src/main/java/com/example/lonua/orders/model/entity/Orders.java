@@ -2,11 +2,17 @@ package com.example.lonua.orders.model.entity;
 
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.user.model.entity.User;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
