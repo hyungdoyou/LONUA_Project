@@ -28,7 +28,7 @@ public class PostSignUpReq {
 
     private String userAddr;
 
-    private Integer preferStyle;
+    private String preferStyle;
 
     private Integer upperType;
 
