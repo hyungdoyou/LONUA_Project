@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService{
                 .authority("ROLE_USER")
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
-                .status(postSignUpReq.getStatus())
+                .status(1)
                 .build());
     }
 

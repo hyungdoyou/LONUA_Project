@@ -33,6 +33,4 @@ public class PostSignUpReq {
     private Integer upperType;
 
     private Integer lowerType;
-
-    private String status;
 }

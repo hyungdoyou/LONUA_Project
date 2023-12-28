@@ -94,7 +94,7 @@ public class User implements UserDetails {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private String status;
+    private Integer status;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
