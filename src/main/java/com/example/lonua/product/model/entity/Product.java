@@ -8,18 +8,25 @@ import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
 import com.example.lonua.style.model.entity.Style;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer product_idx;
+    private Integer productIdx;
 
     @OneToMany(mappedBy = "product")
     private List<Cart> cartList = new ArrayList<>();
@@ -70,11 +77,8 @@ public class Product {
     private Integer hemLength;
     private Integer totalBottomLength;
 
-    @Column(nullable = false)
-    private Date createdAt;
-
-    @Column(nullable = false)
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private Integer status;

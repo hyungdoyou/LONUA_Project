@@ -5,10 +5,14 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
+    // User
     DUPLICATED_USER(HttpStatus.CONFLICT, "이미 존재하는 정보입니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰입니다."),
     INVALID_PERMISIION(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
-    WRONG_ADDR(HttpStatus.NOT_FOUND,"주소를 잘못입력했습니다.")
+    WRONG_ADDR(HttpStatus.NOT_FOUND,"주소를 잘못입력했습니다."),
+
+    // Product
+    DUPLICATED_PRODUCT(HttpStatus.CONFLICT, "이미 존재하는 상품명 입니다."),
     ;
 
 
