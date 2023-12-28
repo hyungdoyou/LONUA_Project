@@ -63,10 +63,10 @@ public class Brand {
     private String returnCourier;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private Integer status;
