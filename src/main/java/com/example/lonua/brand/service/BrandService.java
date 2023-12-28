@@ -6,6 +6,8 @@ import com.example.lonua.brand.repository.BrandRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class BrandService {
     private final BrandRepository brandRepository;
@@ -14,7 +16,7 @@ public class BrandService {
         this.brandRepository = brandRepository;
     }
 
-    public void create(PostBrandReq postBrandReq) {
+    public void register(PostBrandReq postBrandReq) {
         if(!brandRepository.findByBrandName(postBrandReq.getBrandName()).isPresent()) {
             brandRepository.save(Brand.builder()
                     .brandName(postBrandReq.getBrandName())
@@ -28,9 +30,9 @@ public class BrandService {
                     .returnAddress(postBrandReq.getReturnAddress())
                     .returnCost(postBrandReq.getReturnCost())
                     .returnCourier(postBrandReq.getReturnCourier())
-                    .createdAt(postBrandReq.getCreatedAt())
-                    .updatedAt(postBrandReq.getUpdatedAt())
-                    .status(postBrandReq.getStatus())
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .status(1)
                     .build());
         }
     }

@@ -43,12 +43,4 @@ public class PostBrandReq {
 
     private String returnCourier;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date createdAt;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private Date updatedAt;
-
-    private Integer status;
-
 }

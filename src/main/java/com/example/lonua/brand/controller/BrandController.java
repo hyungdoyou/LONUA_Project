@@ -18,10 +18,10 @@ public class BrandController {
         this.brandService = brandService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/create")
-    public ResponseEntity create(PostBrandReq postBrandReq) {
-        brandService.create(postBrandReq);
+    @RequestMapping(method = RequestMethod.POST, value = "/register")
+    public ResponseEntity register(PostBrandReq postBrandReq) {
+        brandService.register(postBrandReq);
 
-        return ResponseEntity.ok().body("브랜드 생성 완료");
+        return ResponseEntity.ok().body("브랜드 등록 완료");
     }
 }
