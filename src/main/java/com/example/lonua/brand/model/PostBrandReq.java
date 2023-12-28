@@ -27,7 +27,7 @@ public class PostBrandReq {
 
     private String brandImgUrl;
 
-    private Integer brandStyle;
+    private String brandStyle;
 
     private String businessAddress;
 
