@@ -1,7 +1,6 @@
 package com.example.lonua.grade.controller;
 
 
-import com.example.lonua.brand.model.PostBrandReq;
 import com.example.lonua.grade.model.PostCreateReq;
 import com.example.lonua.grade.service.GradeService;
 import org.springframework.http.ResponseEntity;

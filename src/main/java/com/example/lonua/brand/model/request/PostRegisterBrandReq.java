@@ -1,22 +1,14 @@
-package com.example.lonua.brand.model;
+package com.example.lonua.brand.model.request;
 
-import com.example.lonua.branch.model.entity.Branch;
-import com.example.lonua.product.model.entity.Product;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostBrandReq {
+public class PostRegisterBrandReq {
 
 //    private List<Branch> branchList = new ArrayList<>();
 //    private List<Product> productList = new ArrayList<>();
@@ -25,7 +17,7 @@ public class PostBrandReq {
 
     private String brandIntroduction;
 
-    private String brandImgUrl;
+    private MultipartFile brandImage;
 
     private String brandStyle;
 

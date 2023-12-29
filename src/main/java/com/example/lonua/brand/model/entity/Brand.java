@@ -35,8 +35,8 @@ public class Brand {
     @Column(nullable = false, length = 500)
     private String brandIntroduction;
 
-    @Column(nullable = false, length = 100)
-    private String brandImgUrl;
+    @Column(nullable = false, length = 200, unique = true)
+    private String brandImage;
 
     @Column(nullable = false, length = 10)
     private String brandStyle;
