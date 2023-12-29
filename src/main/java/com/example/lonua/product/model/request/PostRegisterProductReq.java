@@ -1,21 +1,15 @@
-package com.example.lonua.product.model;
+package com.example.lonua.product.model.request;
 
 
-import com.example.lonua.brand.model.entity.Brand;
-import com.example.lonua.category.model.entity.Category;
-import com.example.lonua.style.model.entity.Style;
 import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import java.time.LocalDateTime;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostRegReq {
+public class PostRegisterProductReq {
 
     private Integer brand_idx;
     private Integer category_idx;
@@ -23,10 +17,10 @@ public class PostRegReq {
 
     private String productName;
 
-    private String productIntroduction;
+    private MultipartFile productImage;
+    private MultipartFile productIntroductionImage;
 
     private Integer quantity;
-
     private Integer price;
 
     private Integer shoulderWidth;
