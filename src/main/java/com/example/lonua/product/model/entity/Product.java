@@ -57,8 +57,11 @@ public class Product {
     @Column(nullable = false, length = 45)
     private String productName;
 
-    @Column(nullable = false, length = 200)
-    private String productIntroduction;
+    @Column(nullable = false, length = 200, unique = true)
+    private String productImage;
+
+    @Column(nullable = false, length = 200, unique = true)
+    private String productIntroductionImage;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -70,6 +73,7 @@ public class Product {
     private Integer chestSize;
     private Integer armLength;
     private Integer topLength;
+
     private Integer waistline;
     private Integer hipCircumference;
     private Integer thighCircumference;
