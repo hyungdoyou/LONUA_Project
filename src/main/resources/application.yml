@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -23,3 +23,20 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
+
+#project:
+#  upload:
+#    path: C:\brand
+
+cloud:
+  aws:
+    s3:
+      bucket: ${bucket}
+    credentials:
+      access-key: ${access-key}
+      secret-key: ${secret-key}
+    region:
+      static: ${region}
+      auto: false
+    stack:
+      auto: false
