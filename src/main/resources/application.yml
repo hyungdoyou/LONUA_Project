@@ -24,19 +24,19 @@ logging:
   level:
     org.springframework.security: DEBUG
 
-#project:
-#  upload:
-#    path: C:\brand
+project:
+  upload:
+    path: C:\brand
 
-cloud:
-  aws:
-    s3:
-      bucket: ${bucket}
-    credentials:
-      access-key: ${access-key}
-      secret-key: ${secret-key}
-    region:
-      static: ${region}
-      auto: false
-    stack:
-      auto: false
+#cloud:
+#  aws:
+#    s3:
+#      bucket: ${bucket}
+#    credentials:
+#      access-key: ${access-key}
+#      secret-key: ${secret-key}
+#    region:
+#      static: ${region}
+#      auto: false
+#    stack:
+#      auto: false
