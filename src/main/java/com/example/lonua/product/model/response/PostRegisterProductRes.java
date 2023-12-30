@@ -21,15 +21,15 @@ public class PostRegisterProductRes {
     private Integer quantity;
     private Integer price;
 
-    private Integer shoulderWidth;
-    private Integer chestSize;
-    private Integer armLength;
-    private Integer topLength;
+    private Float shoulderWidth;
+    private Float chestSize;
+    private Float armLength;
+    private Float topLength;
 
-    private Integer waistline;
-    private Integer hipCircumference;
-    private Integer thighCircumference;
-    private Integer crotchLength;
-    private Integer hemLength;
-    private Integer totalBottomLength;
+    private Float waistline;
+    private Float hipCircumference;
+    private Float thighCircumference;
+    private Float crotchLength;
+    private Float hemLength;
+    private Float totalBottomLength;
 }
