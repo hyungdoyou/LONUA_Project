@@ -4,6 +4,7 @@ import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

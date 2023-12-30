@@ -33,17 +33,4 @@ project:
   upload:
     path: C:\lonua\brand
     product-path: C:\lonua\product\images
-    product-introduction-path: C:\lonua\product\introduction_images
-
-#cloud:
-#  aws:
-#    s3:
-#      bucket: ${bucket}
-#    credentials:
-#      access-key: ${access-key}
-#      secret-key: ${secret-key}
-#    region:
-#      static: ${region}
-#      auto: false
-#    stack:
-#      auto: false
+    product-introduction-path: C:\lonua\product\introductionimages
