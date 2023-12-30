@@ -26,8 +26,9 @@ logging:
 
 project:
   upload:
-    product-path: C:\brand\product\images
-    product-introduction-path: C:\brand\product\introduction_images
+    path: C:\lonua\brand
+    product-path: C:\lonua\product\images
+    product-introduction-path: C:\lonua\product\introduction_images
 
 #cloud:
 #  aws:
