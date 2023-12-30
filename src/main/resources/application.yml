@@ -11,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -26,7 +26,8 @@ logging:
 
 project:
   upload:
-    path: C:\brand
+    product-path: C:\brand\product\images
+    product-introduction-path: C:\brand\product\introduction_images
 
 #cloud:
 #  aws:
