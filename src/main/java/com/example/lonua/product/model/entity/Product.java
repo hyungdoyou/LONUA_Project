@@ -69,17 +69,17 @@ public class Product {
     @Column(nullable = false)
     private Integer price;
 
-    private Integer shoulderWidth;
-    private Integer chestSize;
-    private Integer armLength;
-    private Integer topLength;
+    private Integer shoulderWidth; // 어깨 너비
+    private Integer chestSize;  // 가슴 둘레
+    private Integer armLength;  // 팔 길이
+    private Integer topLength;  // 상의 총 길이
 
-    private Integer waistline;
-    private Integer hipCircumference;
-    private Integer thighCircumference;
-    private Integer crotchLength;
-    private Integer hemLength;
-    private Integer totalBottomLength;
+    private Integer waistline;  // 허리 둘레
+    private Integer hipCircumference;  // 엉덩이 둘레
+    private Integer thighCircumference;  // 허벅지 둘레
+    private Integer crotchLength;  // 밑위 길이
+    private Integer hemLength;  // 밑단 길이
+    private Integer totalBottomLength;  // 하의 총 길이
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
