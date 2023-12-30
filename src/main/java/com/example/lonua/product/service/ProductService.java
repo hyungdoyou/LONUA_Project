@@ -6,6 +6,7 @@ import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.CategoryException;
 import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.style.model.entity.Style;
 import org.springframework.beans.factory.annotation.Value;
@@ -101,7 +102,7 @@ public class ProductService {
     }
 
 
-    public void register(PostRegisterProductReq postRegisterProductReq) {
+    public PostRegisterProductRes register(PostRegisterProductReq postRegisterProductReq) {
         Optional<Product> result = productRepository.findByProductName(postRegisterProductReq.getProductName());
         if(result.isPresent()) {
             throw new CategoryException(ErrorCode.DUPLICATED_PRODUCT, String.format("Product is %s", postRegisterProductReq.getProductName()));
@@ -111,40 +112,63 @@ public class ProductService {
         String saveProductIntroductionFileName = saveProductIntroductionFile(postRegisterProductReq.getProductIntroductionImage());
 
 
-        productRepository.save(Product.builder()
-                        .brand(Brand.builder()
-                                .brandIdx(postRegisterProductReq.getBrand_idx())
-                                .build())
-                        .category(Category.builder()
-                                .categoryIdx(postRegisterProductReq.getCategory_idx())
-                                .build())
-                        .style(Style.builder()
-                                .styleIdx(postRegisterProductReq.getStyle_idx())
-                                .build())
-                        .productName(postRegisterProductReq.getProductName())
-                        .productImage(saveProductFileName.replace(File.separator, "/"))
-                        .productIntroductionImage(saveProductIntroductionFileName.replace(File.separator, "/"))
-                        .quantity(postRegisterProductReq.getQuantity())
-                        .price(postRegisterProductReq.getPrice())
-                        .shoulderWidth(postRegisterProductReq.getShoulderWidth())
-                        .chestSize(postRegisterProductReq.getChestSize())
-                        .armLength(postRegisterProductReq.getArmLength())
-                        .topLength(postRegisterProductReq.getTopLength())
-                        .waistline(postRegisterProductReq.getWaistline())
-                        .hipCircumference(postRegisterProductReq.getHipCircumference())
-                        .thighCircumference(postRegisterProductReq.getThighCircumference())
-                        .crotchLength(postRegisterProductReq.getCrotchLength())
-                        .hemLength(postRegisterProductReq.getHemLength())
-                        .totalBottomLength(postRegisterProductReq.getTotalBottomLength())
-                        .upperType1Amount(0)
-                        .upperType2Amount(0)
-                        .upperType3Amount(0)
-                        .lowerType1Amount(0)
-                        .lowerType2Amount(0)
-                        .lowerType3Amount(0)
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .status(1)
-                .build());
+        Product product = Product.builder()
+                .brand(Brand.builder()
+                        .brandIdx(postRegisterProductReq.getBrand_idx())
+                        .build())
+                .category(Category.builder()
+                        .categoryIdx(postRegisterProductReq.getCategory_idx())
+                        .build())
+                .style(Style.builder()
+                        .styleIdx(postRegisterProductReq.getStyle_idx())
+                        .build())
+                .productName(postRegisterProductReq.getProductName())
+                .productImage(saveProductFileName.replace(File.separator, "/"))
+                .productIntroductionImage(saveProductIntroductionFileName.replace(File.separator, "/"))
+                .quantity(postRegisterProductReq.getQuantity())
+                .price(postRegisterProductReq.getPrice())
+                .shoulderWidth(postRegisterProductReq.getShoulderWidth())
+                .chestSize(postRegisterProductReq.getChestSize())
+                .armLength(postRegisterProductReq.getArmLength())
+                .topLength(postRegisterProductReq.getTopLength())
+                .waistline(postRegisterProductReq.getWaistline())
+                .hipCircumference(postRegisterProductReq.getHipCircumference())
+                .thighCircumference(postRegisterProductReq.getThighCircumference())
+                .crotchLength(postRegisterProductReq.getCrotchLength())
+                .hemLength(postRegisterProductReq.getHemLength())
+                .totalBottomLength(postRegisterProductReq.getTotalBottomLength())
+                .upperType1Amount(0)
+                .upperType2Amount(0)
+                .upperType3Amount(0)
+                .lowerType1Amount(0)
+                .lowerType2Amount(0)
+                .lowerType3Amount(0)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .status(1)
+                .build();
+
+        Product regProduct = productRepository.save(product);
+
+        PostRegisterProductRes response = PostRegisterProductRes.builder()
+                .productIdx(regProduct.getProductIdx())
+                .productName(regProduct.getProductName())
+                .productImage(regProduct.getProductImage())
+                .productIntroductionImage(regProduct.getProductIntroductionImage())
+                .quantity(regProduct.getQuantity())
+                .price(regProduct.getPrice())
+                .shoulderWidth(regProduct.getShoulderWidth())
+                .chestSize(regProduct.getChestSize())
+                .armLength(regProduct.getArmLength())
+                .topLength(regProduct.getTopLength())
+                .waistline(regProduct.getWaistline())
+                .hipCircumference(regProduct.getHipCircumference())
+                .thighCircumference(regProduct.getThighCircumference())
+                .crotchLength(regProduct.getCrotchLength())
+                .hemLength(regProduct.getHemLength())
+                .totalBottomLength(regProduct.getTotalBottomLength())
+                .build();
+
+        return response;
     }
 }
