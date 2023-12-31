@@ -10,6 +10,7 @@ import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.model.entity.response.GetListUserRes;
 import com.example.lonua.user.model.entity.response.GetUserOrdersRes;
 import com.example.lonua.user.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -105,6 +106,45 @@ public class UserService implements UserDetailsService{
         }
 
         return getListUserResList;
+    }
+
+    public GetListUserRes read(String userId) {
+        Optional<User> result = userRepository.findByUserId(userId);
+        User user = result.get();
+
+        List<GetUserOrdersRes> getUserOrdersResList = new ArrayList<>();
+        List<Orders> ordersList = user.getOrdersList();
+
+        for(Orders orders : ordersList) {
+            GetUserOrdersRes getUserOrdersRes = GetUserOrdersRes.builder()
+                    .ordersIdx(orders.getOrdersIdx())
+                    .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
+                            .productIdx(orders.getProduct().getProductIdx())
+                            .brandName(orders.getProduct().getBrand().getBrandName())
+                            .productName(orders.getProduct().getProductName())
+                            .price(orders.getProduct().getPrice())
+                            .build())
+                    .build();
+            getUserOrdersResList.add(getUserOrdersRes);
+        }
+
+        GetListUserRes getListUserRes = GetListUserRes.builder()
+                .userIdx(user.getUserIdx())
+                .userId(user.getUserId())
+                .userName(user.getUsername())
+                .userBirth(user.getUserBirth())
+                .userGender(user.getUserGender())
+                .userPhoneNumber(user.getUserPhoneNumber())
+                .userEmail(user.getUserEmail())
+                .userAddr(user.getUserAddr())
+                .preferStyle(user.getPreferStyle())
+                .upperType(user.getUpperType())
+                .lowerType(user.getLowerType())
+                .gradeType(user.getGrade().getGradeType())
+                .getUserOrdersResList(getUserOrdersResList)
+                .build();
+
+        return getListUserRes;
     }
 
     @Override
