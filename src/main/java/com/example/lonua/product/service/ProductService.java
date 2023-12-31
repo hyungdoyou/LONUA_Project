@@ -6,6 +6,7 @@ import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.CategoryException;
 import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.product.model.response.GetListProductRes;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.style.model.entity.Style;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -170,5 +173,26 @@ public class ProductService {
                 .build();
 
         return response;
+    }
+
+    // 상품 리스트 출력
+    public List<GetListProductRes> list() {
+
+        List<Product> result = productRepository.findAll();
+
+        List<GetListProductRes> getListProductResList = new ArrayList<>();
+
+        for(Product product : result) {
+            GetListProductRes getListProductRes = GetListProductRes.builder()
+                    .brandName(product.getBrand().getBrandName())
+                    .productIdx(product.getProductIdx())
+                    .productName(product.getProductName())
+                    .productImage(product.getProductImage())
+                    .price(product.getPrice())
+                    .build();
+
+            getListProductResList.add(getListProductRes);
+        }
+        return getListProductResList;
     }
 }

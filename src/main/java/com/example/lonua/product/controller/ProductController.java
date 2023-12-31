@@ -25,4 +25,10 @@ public class ProductController {
 
         return ResponseEntity.ok().body(postRegisterProductRes);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    public ResponseEntity list() {
+
+        return ResponseEntity.ok().body(productService.list());
+    }
 }
