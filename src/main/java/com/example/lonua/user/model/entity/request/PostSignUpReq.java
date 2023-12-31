@@ -1,4 +1,4 @@
-package com.example.lonua.user.model;
+package com.example.lonua.user.model.entity.request;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;

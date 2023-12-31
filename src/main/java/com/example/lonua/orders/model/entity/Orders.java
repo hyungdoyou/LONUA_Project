@@ -5,6 +5,7 @@ import com.example.lonua.user.model.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,18 +20,19 @@ public class Orders {
     private Integer ordersIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Product_idx")
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "User_idx")
     private User user;
 
-    @Column(nullable = false)
-    private Date createdAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Product_idx")
+    private Product product;
+
 
     @Column(nullable = false)
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private Integer status;

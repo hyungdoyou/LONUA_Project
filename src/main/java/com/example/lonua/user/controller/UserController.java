@@ -1,7 +1,6 @@
 package com.example.lonua.user.controller;
 
-import com.example.lonua.user.model.PostLoginReq;
-import com.example.lonua.user.model.PostSignUpReq;
+import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
