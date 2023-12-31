@@ -83,6 +83,7 @@ public class OrdersService {
                             .build())
                     .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
                             .productIdx(orders.getProduct().getProductIdx())
+                            .brandName(orders.getProduct().getBrand().getBrandName())
                             .productName(orders.getProduct().getProductName())
                             .price(orders.getProduct().getPrice())
                             .build())

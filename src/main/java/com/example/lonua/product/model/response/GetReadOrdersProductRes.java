@@ -11,6 +11,7 @@ import lombok.*;
 public class GetReadOrdersProductRes {
 
     private Integer productIdx;
+    private String brandName;
     private String productName;
     private Integer price;
 

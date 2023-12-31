@@ -31,4 +31,10 @@ public class UserController {
 
         return ResponseEntity.ok().body("마이 페이지입니다.");
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    public ResponseEntity list() {
+
+        return ResponseEntity.ok().body(userService.list());
+    }
 }
