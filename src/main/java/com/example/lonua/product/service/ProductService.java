@@ -4,11 +4,14 @@ import com.example.lonua.brand.model.entity.Brand;
 import com.example.lonua.category.model.entity.Category;
 import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.CategoryException;
+import com.example.lonua.product.model.entity.ProductIntrod;
 import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.response.GetListProductRes;
 import com.example.lonua.product.model.response.GetReadProductRes;
+import com.example.lonua.product.model.response.GetProductIntrodRes;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
+import com.example.lonua.product.repository.ProductIntrodRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.style.model.entity.Style;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,128 +34,99 @@ public class ProductService {
     @Value("${project.upload.product-path}")
     private String uploadProductPath;
 
-    @Value("${project.upload.product-introduction-path}")
-    private String uploadProductIntroductionPath;
+//    @Value("${project.upload.product-introduction-path}")
+//    private String uploadProductIntroductionPath;
     private final ProductRepository productRepository;
+    private final ProductIntrodRepository productIntrodRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductIntrodRepository productIntrodRepository) {
         this.productRepository = productRepository;
+        this.productIntrodRepository = productIntrodRepository;
     }
 
+    public String makeProductFolder(){
+        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        String productFolderPath = str.replace("/", File.separator);
 
-//    public String makeProductFolder(){
-//        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-//        String productFolderPath = str.replace("/", File.separator);
-//
-//        File uploadProductPathFolder = new File(uploadProductPath, productFolderPath);
-//
-//        if(uploadProductPathFolder.exists() == false) {
-//            uploadProductPathFolder.mkdirs();
-//        }
-//
-//        // 폴더 경로를 반환한다.
-//        return productFolderPath;
-//    }
-//
-//    public String saveProductFile(MultipartFile productFile) {
-//        String originalName = productFile.getOriginalFilename();
-//
-//        String productFolderPath = makeProductFolder();
-//
-//        String uuid = UUID.randomUUID().toString();
-//
-//        String saveProductFileName = productFolderPath+ File.separator + uuid + "_" + originalName;
-//        // 해당 경로에 파일을 생성한다.
-//        File saveProductFile = new File(uploadProductPath, saveProductFileName);
-//
-//        try {
-//            productFile.transferTo(saveProductFile);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return saveProductFileName;
-//    }
-//
-//    public String makeProductIntroductionFolder(){
-//        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-//        String productIntrocutionFolderPath = str.replace("/", File.separator);
-//
-//        File uploadProductIntroductionPathFolder = new File(uploadProductIntroductionPath, productIntrocutionFolderPath);
-//
-//        if(uploadProductIntroductionPathFolder.exists() == false) {
-//            uploadProductIntroductionPathFolder.mkdirs();
-//        }
-//
-//        // 폴더 경로를 반환한다.
-//        return productIntrocutionFolderPath;
-//    }
-//
-//    public String saveProductIntroductionFile(MultipartFile productIntroductionFile) {
-//        String originalName = productIntroductionFile.getOriginalFilename();
-//        String productIntrocutionFolderPath = makeProductIntroductionFolder();
-//
-//        String uuid = UUID.randomUUID().toString();
-//
-//        String saveProductIntroductionFileName = productIntrocutionFolderPath+ File.separator + uuid + "_" + originalName;
-//        // 해당 경로에 파일을 생성한다.
-//        File saveProductIntroductionFile = new File(uploadProductIntroductionPath, saveProductIntroductionFileName);
-//
-//        try {
-//            productIntroductionFile.transferTo(saveProductIntroductionFile);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return saveProductIntroductionFileName;
-//    }
-public String makeFolder(String originalName){
-    String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-    String folderPath = str.replace("/", File.separator);
-
-    if(originalName.contains("설명")) {
-        File uploadProductIntroductionPathFolder = new File(uploadProductIntroductionPath, folderPath);
-
-        if(uploadProductIntroductionPathFolder.exists() == false) {
-            uploadProductIntroductionPathFolder.mkdirs();
-        }
-        return folderPath;
-    } else {
-        File uploadProductPathFolder = new File(uploadProductPath, folderPath);
+        File uploadProductPathFolder = new File(uploadProductPath, productFolderPath);
 
         if(uploadProductPathFolder.exists() == false) {
             uploadProductPathFolder.mkdirs();
         }
+
         // 폴더 경로를 반환한다.
-        return folderPath;
+        return productFolderPath;
     }
-}
 
-    public String saveFile(MultipartFile file) {
-        String originalName = file.getOriginalFilename();
+    public String saveProductFile(MultipartFile productFile) {
+        String originalName = productFile.getOriginalFilename();
 
-        String folderPath = makeFolder(originalName);
+        String productFolderPath = makeProductFolder();
 
         String uuid = UUID.randomUUID().toString();
 
-        if(originalName.contains("설명")) {
-            String saveFileName = folderPath+ File.separator + uuid + "_" + originalName;
-            File saveFile = new File(uploadProductIntroductionPath, saveFileName);
-            try {
-                file.transferTo(saveFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return saveFileName;
-        } else {
-            String saveFileName = folderPath+ File.separator + uuid + "_" + originalName;
-            File saveFile = new File(uploadProductPath, saveFileName);
-            try {
-                file.transferTo(saveFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            return saveFileName;
+        String saveProductFileName = productFolderPath+ File.separator + uuid + "_" + originalName;
+        // 해당 경로에 파일을 생성한다.
+        File saveProductFile = new File(uploadProductPath, saveProductFileName);
+
+        try {
+            productFile.transferTo(saveProductFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        return saveProductFileName;
     }
+
+
+//public String makeFolder(String originalName){
+//    String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+//    String folderPath = str.replace("/", File.separator);
+//
+//    if(originalName.contains("설명")) {
+//        File uploadProductIntroductionPathFolder = new File(uploadProductIntroductionPath, folderPath);
+//
+//        if(uploadProductIntroductionPathFolder.exists() == false) {
+//            uploadProductIntroductionPathFolder.mkdirs();
+//        }
+//        return folderPath;
+//    } else {
+//        File uploadProductPathFolder = new File(uploadProductPath, folderPath);
+//
+//        if(uploadProductPathFolder.exists() == false) {
+//            uploadProductPathFolder.mkdirs();
+//        }
+//        // 폴더 경로를 반환한다.
+//        return folderPath;
+//    }
+//}
+//
+//    public String saveFile(MultipartFile file) {
+//        String originalName = file.getOriginalFilename();
+//
+//        String folderPath = makeFolder(originalName);
+//
+//        String uuid = UUID.randomUUID().toString();
+//
+//        if(originalName.contains("설명")) {
+//            String saveFileName = folderPath+ File.separator + uuid + "_" + originalName;
+//            File saveFile = new File(uploadProductIntroductionPath, saveFileName);
+//            try {
+//                file.transferTo(saveFile);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            return saveFileName;
+//        } else {
+//            String saveFileName = folderPath+ File.separator + uuid + "_" + originalName;
+//            File saveFile = new File(uploadProductPath, saveFileName);
+//            try {
+//                file.transferTo(saveFile);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//            return saveFileName;
+//        }
+//    }
 
 
     public PostRegisterProductRes register(PostRegisterProductReq postRegisterProductReq) {
@@ -161,9 +135,7 @@ public String makeFolder(String originalName){
             throw new CategoryException(ErrorCode.DUPLICATED_PRODUCT, String.format("Product is %s", postRegisterProductReq.getProductName()));
         }
 
-        String saveProductFileName = saveFile(postRegisterProductReq.getProductImage());
-        String saveProductIntroductionFileName = saveFile(postRegisterProductReq.getProductIntroductionImage());
-
+        String saveProductFileName = saveProductFile(postRegisterProductReq.getProductImage());
 
         Product product = Product.builder()
                 .brand(Brand.builder()
@@ -177,7 +149,6 @@ public String makeFolder(String originalName){
                         .build())
                 .productName(postRegisterProductReq.getProductName())
                 .productImage(saveProductFileName.replace(File.separator, "/"))
-                .productIntroductionImage(saveProductIntroductionFileName.replace(File.separator, "/"))
                 .quantity(postRegisterProductReq.getQuantity())
                 .price(postRegisterProductReq.getPrice())
                 .shoulderWidth(postRegisterProductReq.getShoulderWidth())
@@ -207,7 +178,6 @@ public String makeFolder(String originalName){
                 .productIdx(regProduct.getProductIdx())
                 .productName(regProduct.getProductName())
                 .productImage(regProduct.getProductImage())
-                .productIntroductionImage(regProduct.getProductIntroductionImage())
                 .quantity(regProduct.getQuantity())
                 .price(regProduct.getPrice())
                 .shoulderWidth(regProduct.getShoulderWidth())
@@ -250,15 +220,27 @@ public String makeFolder(String originalName){
     public GetReadProductRes read(Integer productIdx) {
         Optional<Product> result = productRepository.findByProductIdx(productIdx);
 
+
         if(result.isPresent()) {
             Product product = result.get();
+
+            List<GetProductIntrodRes> getProductIntrodResList = new ArrayList<>();
+            List<ProductIntrod> productIntrodList = product.getProductIntrodList();
+
+            for(ProductIntrod productIntrod : productIntrodList) {
+                GetProductIntrodRes getProductIntrodRes = GetProductIntrodRes.builder()
+                        .productIntrodImage(productIntrod.getProductIntrodImage())
+                        .build();
+
+                getProductIntrodResList.add(getProductIntrodRes);
+            }
 
             GetReadProductRes response = GetReadProductRes.builder()
                     .productIdx(product.getProductIdx())
                     .brandName(product.getBrand().getBrandName())
                     .productName(product.getProductName())
                     .productImage(product.getProductImage())
-                    .productIntroductionImage(product.getProductIntroductionImage())
+                    .getProductIntrodResList(getProductIntrodResList)
                     .price(product.getPrice())
                     .shoulderWidth(product.getShoulderWidth())
                     .chestSize(product.getChestSize())

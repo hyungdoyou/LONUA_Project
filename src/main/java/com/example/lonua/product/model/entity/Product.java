@@ -63,9 +63,6 @@ public class Product {
     @Column(nullable = false, length = 200, unique = true)
     private String productImage;
 
-    @Column(nullable = false, length = 200, unique = true)
-    private String productIntroductionImage;
-
     @Column(nullable = false)
     private Integer quantity;
 

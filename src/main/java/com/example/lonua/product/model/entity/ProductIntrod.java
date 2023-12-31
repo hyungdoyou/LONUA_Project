@@ -21,6 +21,7 @@ public class ProductIntrod {
     @JoinColumn(name = "Product_idx")
     private Product product;
 
+    @Column(nullable = false, length = 200, unique = true)
     private String productIntrodImage;
 
 
