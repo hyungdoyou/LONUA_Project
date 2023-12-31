@@ -42,6 +42,9 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Review> reviewList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product")
+    private List<ProductIntrod> productIntrodList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Brand_idx")
     private Brand brand;
