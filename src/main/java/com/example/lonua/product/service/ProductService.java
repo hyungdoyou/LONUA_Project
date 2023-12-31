@@ -40,69 +40,118 @@ public class ProductService {
     }
 
 
-    public String makeProductFolder(){
-        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        String productFolderPath = str.replace("/", File.separator);
+//    public String makeProductFolder(){
+//        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+//        String productFolderPath = str.replace("/", File.separator);
+//
+//        File uploadProductPathFolder = new File(uploadProductPath, productFolderPath);
+//
+//        if(uploadProductPathFolder.exists() == false) {
+//            uploadProductPathFolder.mkdirs();
+//        }
+//
+//        // 폴더 경로를 반환한다.
+//        return productFolderPath;
+//    }
+//
+//    public String saveProductFile(MultipartFile productFile) {
+//        String originalName = productFile.getOriginalFilename();
+//
+//        String productFolderPath = makeProductFolder();
+//
+//        String uuid = UUID.randomUUID().toString();
+//
+//        String saveProductFileName = productFolderPath+ File.separator + uuid + "_" + originalName;
+//        // 해당 경로에 파일을 생성한다.
+//        File saveProductFile = new File(uploadProductPath, saveProductFileName);
+//
+//        try {
+//            productFile.transferTo(saveProductFile);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return saveProductFileName;
+//    }
+//
+//    public String makeProductIntroductionFolder(){
+//        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+//        String productIntrocutionFolderPath = str.replace("/", File.separator);
+//
+//        File uploadProductIntroductionPathFolder = new File(uploadProductIntroductionPath, productIntrocutionFolderPath);
+//
+//        if(uploadProductIntroductionPathFolder.exists() == false) {
+//            uploadProductIntroductionPathFolder.mkdirs();
+//        }
+//
+//        // 폴더 경로를 반환한다.
+//        return productIntrocutionFolderPath;
+//    }
+//
+//    public String saveProductIntroductionFile(MultipartFile productIntroductionFile) {
+//        String originalName = productIntroductionFile.getOriginalFilename();
+//        String productIntrocutionFolderPath = makeProductIntroductionFolder();
+//
+//        String uuid = UUID.randomUUID().toString();
+//
+//        String saveProductIntroductionFileName = productIntrocutionFolderPath+ File.separator + uuid + "_" + originalName;
+//        // 해당 경로에 파일을 생성한다.
+//        File saveProductIntroductionFile = new File(uploadProductIntroductionPath, saveProductIntroductionFileName);
+//
+//        try {
+//            productIntroductionFile.transferTo(saveProductIntroductionFile);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return saveProductIntroductionFileName;
+//    }
+public String makeFolder(String originalName){
+    String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+    String folderPath = str.replace("/", File.separator);
 
-        File uploadProductPathFolder = new File(uploadProductPath, productFolderPath);
-
-        if(uploadProductPathFolder.exists() == false) {
-            uploadProductPathFolder.mkdirs();
-        }
-
-        // 폴더 경로를 반환한다.
-        return productFolderPath;
-    }
-
-    public String saveProductFile(MultipartFile productFile) {
-        String originalName = productFile.getOriginalFilename();
-
-        String productFolderPath = makeProductFolder();
-
-        String uuid = UUID.randomUUID().toString();
-
-        String saveProductFileName = productFolderPath+ File.separator + uuid + "_" + originalName;
-        // 해당 경로에 파일을 생성한다.
-        File saveProductFile = new File(uploadProductPath, saveProductFileName);
-
-        try {
-            productFile.transferTo(saveProductFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return saveProductFileName;
-    }
-
-    public String makeProductIntroductionFolder(){
-        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        String productIntrocutionFolderPath = str.replace("/", File.separator);
-
-        File uploadProductIntroductionPathFolder = new File(uploadProductIntroductionPath, productIntrocutionFolderPath);
+    if(originalName.contains("설명")) {
+        File uploadProductIntroductionPathFolder = new File(uploadProductIntroductionPath, folderPath);
 
         if(uploadProductIntroductionPathFolder.exists() == false) {
             uploadProductIntroductionPathFolder.mkdirs();
         }
+        return folderPath;
+    } else {
+        File uploadProductPathFolder = new File(uploadProductPath, folderPath);
 
+        if(uploadProductPathFolder.exists() == false) {
+            uploadProductPathFolder.mkdirs();
+        }
         // 폴더 경로를 반환한다.
-        return productIntrocutionFolderPath;
+        return folderPath;
     }
+}
 
-    public String saveProductIntroductionFile(MultipartFile productIntroductionFile) {
-        String originalName = productIntroductionFile.getOriginalFilename();
-        String productIntrocutionFolderPath = makeProductIntroductionFolder();
+    public String saveFile(MultipartFile file) {
+        String originalName = file.getOriginalFilename();
+
+        String folderPath = makeFolder(originalName);
 
         String uuid = UUID.randomUUID().toString();
 
-        String saveProductIntroductionFileName = productIntrocutionFolderPath+ File.separator + uuid + "_" + originalName;
-        // 해당 경로에 파일을 생성한다.
-        File saveProductIntroductionFile = new File(uploadProductIntroductionPath, saveProductIntroductionFileName);
-
-        try {
-            productIntroductionFile.transferTo(saveProductIntroductionFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(originalName.contains("설명")) {
+            String saveFileName = folderPath+ File.separator + uuid + "_" + originalName;
+            File saveFile = new File(uploadProductIntroductionPath, saveFileName);
+            try {
+                file.transferTo(saveFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return saveFileName;
+        } else {
+            String saveFileName = folderPath+ File.separator + uuid + "_" + originalName;
+            File saveFile = new File(uploadProductPath, saveFileName);
+            try {
+                file.transferTo(saveFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return saveFileName;
         }
-        return saveProductIntroductionFileName;
     }
 
 
@@ -112,8 +161,8 @@ public class ProductService {
             throw new CategoryException(ErrorCode.DUPLICATED_PRODUCT, String.format("Product is %s", postRegisterProductReq.getProductName()));
         }
 
-        String saveProductFileName = saveProductFile(postRegisterProductReq.getProductImage());
-        String saveProductIntroductionFileName = saveProductIntroductionFile(postRegisterProductReq.getProductIntroductionImage());
+        String saveProductFileName = saveFile(postRegisterProductReq.getProductImage());
+        String saveProductIntroductionFileName = saveFile(postRegisterProductReq.getProductIntroductionImage());
 
 
         Product product = Product.builder()
