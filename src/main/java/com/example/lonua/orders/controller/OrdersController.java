@@ -29,4 +29,10 @@ public class OrdersController {
 
         return ResponseEntity.ok().body("상품 주문이 완료되었습니다.");
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/read")
+    public ResponseEntity read(Integer ordersIdx) {
+
+        return ResponseEntity.ok().body(ordersService.read(ordersIdx));
+    }
 }

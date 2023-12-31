@@ -35,4 +35,32 @@ public class OrdersService {
                 .status(1)
                 .build();
     }
+
+    public PostRegisterOrdersRes read(Integer ordersIdx) {
+        Optional<Orders> result = ordersRepository.findByOrdersIdx(ordersIdx);
+
+        if(result.isPresent()) {
+            Orders orders = result.get();
+
+            PostRegisterOrdersRes response = PostRegisterOrdersRes.builder()
+                    .ordersIdx(orders.getOrdersIdx())
+                    .postUserLoginRes(PostUserLoginRes.builder()
+                            .userIdx(orders.getUser().getUserIdx())
+                            .userId(orders.getUser().getUserId())
+                            .userName(orders.getUser().getUsername())
+                            .userPhoneNumber(orders.getUser().getUserPhoneNumber())
+                            .userAddr(orders.getUser().getUserAddr())
+                            .build())
+                    .postReadProductRes(PostReadProductRes.builder()
+                            .productIdx(orders.getProduct().getProductIdx())
+                            .productName(orders.getProduct().getProductName())
+                            .price(orders.getProduct().getPrice())
+                            .build())
+                    .build();
+
+            return response;
+        } else {
+            return null;
+        }
+    }
 }
