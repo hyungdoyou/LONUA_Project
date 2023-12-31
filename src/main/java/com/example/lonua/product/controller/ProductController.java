@@ -31,4 +31,10 @@ public class ProductController {
 
         return ResponseEntity.ok().body(productService.list());
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/read")
+    public ResponseEntity read(Integer productIdx) {
+
+        return ResponseEntity.ok().body(productService.read(productIdx));
+    }
 }

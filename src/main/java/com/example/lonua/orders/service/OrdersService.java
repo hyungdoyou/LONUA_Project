@@ -7,7 +7,7 @@ import com.example.lonua.orders.model.response.GetListOrdersRes;
 import com.example.lonua.orders.model.response.GetReadOrdersRes;
 import com.example.lonua.orders.repository.OrdersRepository;
 import com.example.lonua.product.model.entity.Product;
-import com.example.lonua.product.model.response.PostReadProductRes;
+import com.example.lonua.product.model.response.GetReadOrdersProductRes;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.model.entity.response.PostUserLoginRes;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,7 +49,7 @@ public class OrdersService {
             User loginUser = orders.getUser();
 
             if(loginUser.getUserIdx() == userIdx) {
-                PostReadProductRes postReadProductRes = PostReadProductRes.builder()
+                GetReadOrdersProductRes getReadOrdersProductRes = GetReadOrdersProductRes.builder()
                         .productIdx(orders.getProduct().getProductIdx())
                         .productName(orders.getProduct().getProductName())
                         .price(orders.getProduct().getPrice())
@@ -57,7 +57,7 @@ public class OrdersService {
 
                 GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
                         .ordersIdx(orders.getOrdersIdx())
-                        .postReadProductRes(postReadProductRes)
+                        .getReadOrdersProductRes(getReadOrdersProductRes)
                         .build();
 
                 getListOrdersResList.add(getListOrdersRes);
@@ -81,7 +81,7 @@ public class OrdersService {
                             .userPhoneNumber(orders.getUser().getUserPhoneNumber())
                             .userAddr(orders.getUser().getUserAddr())
                             .build())
-                    .postReadProductRes(PostReadProductRes.builder()
+                    .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
                             .productIdx(orders.getProduct().getProductIdx())
                             .productName(orders.getProduct().getProductName())
                             .price(orders.getProduct().getPrice())

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostReadProductRes {
+public class GetReadOrdersProductRes {
 
     private Integer productIdx;
     private String productName;

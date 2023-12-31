@@ -7,6 +7,7 @@ import com.example.lonua.exception.exception.CategoryException;
 import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.response.GetListProductRes;
+import com.example.lonua.product.model.response.GetReadProductRes;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.style.model.entity.Style;
@@ -194,5 +195,37 @@ public class ProductService {
             getListProductResList.add(getListProductRes);
         }
         return getListProductResList;
+    }
+
+    // 상품 1개 출력
+    public GetReadProductRes read(Integer productIdx) {
+        Optional<Product> result = productRepository.findByProductIdx(productIdx);
+
+        if(result.isPresent()) {
+            Product product = result.get();
+
+            GetReadProductRes response = GetReadProductRes.builder()
+                    .productIdx(product.getProductIdx())
+                    .brandName(product.getBrand().getBrandName())
+                    .productName(product.getProductName())
+                    .productImage(product.getProductImage())
+                    .productIntroductionImage(product.getProductIntroductionImage())
+                    .price(product.getPrice())
+                    .shoulderWidth(product.getShoulderWidth())
+                    .chestSize(product.getChestSize())
+                    .armLength(product.getArmLength())
+                    .topLength(product.getTopLength())
+                    .waistline(product.getWaistline())
+                    .hipCircumference(product.getHipCircumference())
+                    .thighCircumference(product.getThighCircumference())
+                    .crotchLength(product.getCrotchLength())
+                    .hemLength(product.getHemLength())
+                    .totalBottomLength(product.getTotalBottomLength())
+                    .build();
+
+            return response;
+        } else {
+            return null;
+        }
     }
 }

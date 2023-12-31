@@ -1,6 +1,6 @@
 package com.example.lonua.orders.model.response;
 
-import com.example.lonua.product.model.response.PostReadProductRes;
+import com.example.lonua.product.model.response.GetReadOrdersProductRes;
 import com.example.lonua.user.model.entity.response.PostUserLoginRes;
 import lombok.*;
 
@@ -13,6 +13,6 @@ public class GetReadOrdersRes {
     private Integer ordersIdx;
 
     private PostUserLoginRes postUserLoginRes;
-    private PostReadProductRes postReadProductRes;
+    private GetReadOrdersProductRes getReadOrdersProductRes;
 
 }
