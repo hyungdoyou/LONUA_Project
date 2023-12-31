@@ -23,7 +23,7 @@ public class SecurityConfig{
             http.csrf().disable()
                         .authorizeHttpRequests()
 //                        .antMatchers("/login","/user/signup", "/grade/*", "/*").permitAll()
-                        .antMatchers("/orders/register").hasRole("USER")
+                        .antMatchers("/orders/*").hasRole("USER")
                         .anyRequest().permitAll()
                     .and()
                         .formLogin().loginProcessingUrl("/user/login")

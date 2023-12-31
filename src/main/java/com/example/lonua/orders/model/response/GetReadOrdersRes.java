@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostRegisterOrdersRes {
+public class GetReadOrdersRes {
     private Integer ordersIdx;
 
     private PostUserLoginRes postUserLoginRes;

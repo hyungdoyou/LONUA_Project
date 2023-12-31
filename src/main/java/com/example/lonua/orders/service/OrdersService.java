@@ -3,18 +3,19 @@ package com.example.lonua.orders.service;
 
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.orders.model.request.PostRegisterOrdersReq;
-import com.example.lonua.orders.model.response.PostRegisterOrdersRes;
+import com.example.lonua.orders.model.response.GetListOrdersRes;
+import com.example.lonua.orders.model.response.GetReadOrdersRes;
 import com.example.lonua.orders.repository.OrdersRepository;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.response.PostReadProductRes;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.model.entity.response.PostUserLoginRes;
-import org.hibernate.criterion.Order;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,13 +37,42 @@ public class OrdersService {
                 .build();
     }
 
-    public PostRegisterOrdersRes read(Integer ordersIdx) {
+    public List<GetListOrdersRes> list() {
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Integer userIdx = user.getUserIdx();
+
+        List<Orders> result = ordersRepository.findAll();
+
+        List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
+
+        for(Orders orders : result) {
+            User loginUser = orders.getUser();
+
+            if(loginUser.getUserIdx() == userIdx) {
+                PostReadProductRes postReadProductRes = PostReadProductRes.builder()
+                        .productIdx(orders.getProduct().getProductIdx())
+                        .productName(orders.getProduct().getProductName())
+                        .price(orders.getProduct().getPrice())
+                        .build();
+
+                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+                        .ordersIdx(orders.getOrdersIdx())
+                        .postReadProductRes(postReadProductRes)
+                        .build();
+
+                getListOrdersResList.add(getListOrdersRes);
+            }
+        }
+        return getListOrdersResList;
+    }
+
+    public GetReadOrdersRes read(Integer ordersIdx) {
         Optional<Orders> result = ordersRepository.findByOrdersIdx(ordersIdx);
 
         if(result.isPresent()) {
             Orders orders = result.get();
 
-            PostRegisterOrdersRes response = PostRegisterOrdersRes.builder()
+            GetReadOrdersRes response = GetReadOrdersRes.builder()
                     .ordersIdx(orders.getOrdersIdx())
                     .postUserLoginRes(PostUserLoginRes.builder()
                             .userIdx(orders.getUser().getUserIdx())
