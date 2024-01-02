@@ -6,12 +6,16 @@ import com.example.lonua.orders.service.OrdersService;
 import com.example.lonua.user.model.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/orders")
+@CrossOrigin("*") // CORS 에러를 위한 프론트 서버 URL 허용하는법
 public class OrdersController {
     private final OrdersService ordersService;
 
@@ -26,6 +30,12 @@ public class OrdersController {
         ordersService.register(user.getUserIdx(), postRegisterOrdersReq);
 
         return ResponseEntity.ok().body("상품 주문이 완료되었습니다.");
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/validation")
+    public ResponseEntity paymentValidation(String impUid) throws IOException {
+
+        return ResponseEntity.ok().body(ordersService.paymentValidation(impUid));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/list")
