@@ -17,9 +17,6 @@ public enum ErrorCode {
     DUPLICATED_PRODUCT(HttpStatus.CONFLICT, "PRODUCT-001", "이미 존재하는 상품명 입니다."),
     ;
 
-
-
-
     private final HttpStatus status;
     private final String code;
     private final String message;

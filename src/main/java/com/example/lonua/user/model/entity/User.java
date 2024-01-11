@@ -3,7 +3,7 @@ package com.example.lonua.user.model.entity;
 import com.example.lonua.cart.model.entity.Cart;
 import com.example.lonua.coupon.model.entity.Coupon;
 import com.example.lonua.grade.model.entity.Grade;
-import com.example.lonua.like.model.entity.Likes.Likes;
+import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;

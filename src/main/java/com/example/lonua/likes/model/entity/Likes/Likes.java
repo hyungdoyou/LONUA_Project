@@ -1,4 +1,4 @@
-package com.example.lonua.like.model.entity.Likes;
+package com.example.lonua.likes.model.entity.Likes;
 
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.user.model.entity.User;

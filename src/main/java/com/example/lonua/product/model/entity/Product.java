@@ -3,7 +3,7 @@ package com.example.lonua.product.model.entity;
 import com.example.lonua.brand.model.entity.Brand;
 import com.example.lonua.cart.model.entity.Cart;
 import com.example.lonua.category.model.entity.Category;
-import com.example.lonua.like.model.entity.Likes.Likes;
+import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
@@ -13,7 +13,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -87,11 +86,17 @@ public class Product {
     @Column(nullable = false)
     private Integer status;
 
-    private Integer upperType1Amount;
-    private Integer upperType2Amount;
-    private Integer upperType3Amount;
+    @Version // 낙관적 락을 걸어 주기 위한 것
+    private Integer likeCount; // "격리성" 실습을 위한 좋아요 수
+    public void increaseLikeCount() {
+        this.likeCount = this.likeCount + 1;
+    }
 
-    private Integer lowerType1Amount;
-    private Integer lowerType2Amount;
-    private Integer lowerType3Amount;
+    private Integer upperType1Count;  // 상체 마름
+    private Integer upperType2Count;  // 상체 보통
+    private Integer upperType3Count;  // 상체 비만
+
+    private Integer lowerType1Count;  // 하체 마름
+    private Integer lowerType2Count;  // 하체 보통
+    private Integer lowerType3Count;  // 하체 비만
 }
