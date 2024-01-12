@@ -12,9 +12,10 @@ import java.util.Date;
 @Builder
 public class PostSignUpReq {
 
-    private String userId;
 
-    private String userPw;
+    private String userEmail;
+
+    private String userPassword;
 
     private String userName;
 
@@ -23,8 +24,6 @@ public class PostSignUpReq {
     private String userGender;
 
     private String userPhoneNumber;
-
-    private String userEmail;
 
     private String userAddr;
 

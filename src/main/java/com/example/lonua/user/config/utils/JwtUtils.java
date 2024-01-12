@@ -17,8 +17,7 @@ public class JwtUtils {
 
         Claims claims = Jwts.claims();
         claims.put("idx", user.getUserIdx());
-        claims.put("userId", user.getUserId());
-        claims.put("userEmail", user.getUserEmail());
+        claims.put("email", user.getUserEmail());
         claims.put("ROLE", user.getAuthority());
 
         byte[] secretBytes = secretKey.getBytes();
@@ -39,8 +38,8 @@ public class JwtUtils {
     }
 
     // 사용자 이름 가져오는 메서드
-    public static String getUserId(String token, String key) {
-        return extractAllClaims(token, key).get("userId", String.class);
+    public static String getUserEmail(String token, String key) {
+        return extractAllClaims(token, key).get("email", String.class);
     }
 
     // 토근에서 정보를 가져오는 코드가 계속 중복되어 사용되기 때문에 별도의 메서드로 만들어서 사용하기 위한 것

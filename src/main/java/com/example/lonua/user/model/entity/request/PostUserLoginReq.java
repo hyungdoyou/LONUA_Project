@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PostUserLoginReq {
-    private String userId;
-    private String userPw;
+    private String email;
+    private String password;
 }

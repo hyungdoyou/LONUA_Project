@@ -82,7 +82,7 @@ public class OrdersService {
                     .ordersIdx(orders.getOrdersIdx())
                     .postUserOrdersRes(PostUserOrdersRes.builder()
                             .userIdx(orders.getUser().getUserIdx())
-                            .userId(orders.getUser().getUserId())
+                            .userEmail(orders.getUser().getUserEmail())
                             .userName(orders.getUser().getUsername())
                             .userPhoneNumber(orders.getUser().getUserPhoneNumber())
                             .userAddr(orders.getUser().getUserAddr())

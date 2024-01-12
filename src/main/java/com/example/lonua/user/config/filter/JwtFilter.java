@@ -38,9 +38,9 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String userId = JwtUtils.getUserId(token, secretKey);
-        if(userId != null) {
-            Optional<User> result = userRepository.findByUserId(userId);
+        String userEmail = JwtUtils.getUserEmail(token, secretKey);
+        if(userEmail != null) {
+            Optional<User> result = userRepository.findByUserEmail(userEmail);
 
             if(result.isPresent()) {
                 User user = result.get();

@@ -1,5 +1,6 @@
 package com.example.lonua.user.service;
 
+import com.example.lonua.config.BaseRes;
 import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.UserException;
 import com.example.lonua.grade.model.entity.Grade;
@@ -9,21 +10,24 @@ import com.example.lonua.user.config.utils.JwtUtils;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.User;
-import com.example.lonua.user.model.entity.response.GetListUserRes;
-import com.example.lonua.user.model.entity.response.GetUserOrdersRes;
-import com.example.lonua.user.model.entity.response.PostUserLoginRes;
-import com.example.lonua.user.model.entity.response.PostUserOrdersRes;
+import com.example.lonua.user.model.entity.response.*;
 import com.example.lonua.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserService{
 
     @Value("${jwt.secret-key}")
@@ -33,28 +37,25 @@ public class UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender emailSender;
+    private final EmailVerifyService emailVerifyService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     // 회원가입
-    public void signup(PostSignUpReq postSignUpReq) {
+    public BaseRes signup(PostSignUpReq postSignUpReq) {
         // 중복된 ID에 대한 예외처리 추가
-        Optional<User> result = userRepository.findByUserId(postSignUpReq.getUserId());
+        Optional<User> result = userRepository.findByUserEmail(postSignUpReq.getUserEmail());
 
         if(result.isPresent()) {
-            throw new UserException(ErrorCode.DUPLICATED_USER, String.format("Id is %s", postSignUpReq.getUserId()));
+            throw new UserException(ErrorCode.DUPLICATED_USER, String.format("Email is %s", postSignUpReq.getUserEmail()));
         }
 
-        userRepository.save(User.builder()
+        User user = User.builder()
                 .grade(Grade.builder()
                         .gradeIdx(1) // 처음 회원 가입 시 회원등급은 반드시 1번 등급(실버)으로 가입
                         .build())
-                .userId(postSignUpReq.getUserId())
-                .userPw(passwordEncoder.encode(postSignUpReq.getUserPw()))
-                .userName(postSignUpReq.getUserName())
+                .userPassword(passwordEncoder.encode(postSignUpReq.getUserPassword()))
+                .name(postSignUpReq.getUserName())
                 .userBirth(postSignUpReq.getUserBirth())
                 .userGender(postSignUpReq.getUserGender())
                 .userPhoneNumber(postSignUpReq.getUserPhoneNumber())
@@ -65,10 +66,24 @@ public class UserService{
                 .lowerType(postSignUpReq.getLowerType())
                 .userMileage(0)
                 .authority("ROLE_USER")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .status(1)
-                .build());
+                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
+                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
+                .status(false)
+                .build();
+
+        userRepository.save(user);
+
+        BaseRes baseRes = BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("회원가입에 성공하였습니다.")
+                .result(PostSignupRes.builder()
+                        .userEmail(user.getUserEmail())
+                        .userName(user.getName())
+                        .build())
+                .build();
+
+        return baseRes;
     }
 
     public List<GetListUserRes> list() {
@@ -95,12 +110,11 @@ public class UserService{
 
             GetListUserRes getListUserRes = GetListUserRes.builder()
                     .userIdx(user.getUserIdx())
-                    .userId(user.getUserId())
+                    .userEmail(user.getUserEmail())
                     .userName(user.getUsername())
                     .userBirth(user.getUserBirth())
                     .userGender(user.getUserGender())
                     .userPhoneNumber(user.getUserPhoneNumber())
-                    .userEmail(user.getUserEmail())
                     .preferStyle(user.getPreferStyle())
                     .upperType(user.getUpperType())
                     .lowerType(user.getLowerType())
@@ -114,8 +128,8 @@ public class UserService{
         return getListUserResList;
     }
 
-    public GetListUserRes read(String userId) {
-        Optional<User> result = userRepository.findByUserId(userId);
+    public GetListUserRes read(String email) {
+        Optional<User> result = userRepository.findByUserEmail(email);
         User user = result.get();
 
         List<GetUserOrdersRes> getUserOrdersResList = new ArrayList<>();
@@ -136,12 +150,11 @@ public class UserService{
 
         GetListUserRes getListUserRes = GetListUserRes.builder()
                 .userIdx(user.getUserIdx())
-                .userId(user.getUserId())
+                .userEmail(user.getUserEmail())
                 .userName(user.getUsername())
                 .userBirth(user.getUserBirth())
                 .userGender(user.getUserGender())
                 .userPhoneNumber(user.getUserPhoneNumber())
-                .userEmail(user.getUserEmail())
                 .userAddr(user.getUserAddr())
                 .preferStyle(user.getPreferStyle())
                 .upperType(user.getUpperType())
@@ -153,11 +166,12 @@ public class UserService{
         return getListUserRes;
     }
 
+    // 회원 로그인
     public PostUserLoginRes login(PostUserLoginReq postUserLoginReq) {
-        Optional<User> result = userRepository.findByUserId(postUserLoginReq.getUserId());
+        Optional<User> result = userRepository.findByUserEmail(postUserLoginReq.getEmail());
         if (result.isPresent()) {
             User user = result.get();
-            if (passwordEncoder.matches(postUserLoginReq.getUserPw(), user.getPassword())) {
+            if (passwordEncoder.matches(postUserLoginReq.getPassword(), user.getPassword())) {
                 PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
                         .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
                         .build();
@@ -167,5 +181,40 @@ public class UserService{
             }
         }
         return null;
+    }
+
+    // 인증메일 발송
+    public void sendEmail(PostSignUpReq postSignUpReq) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(postSignUpReq.getUserEmail());
+        message.setSubject("[LONUA] 회원가입을 완료하기 위해서 이메일 인증을 진행해 주세요"); // 메일 제목
+
+        String uuid = UUID.randomUUID().toString();
+        message.setText("http://localhost:8080/user/verify?email=" + postSignUpReq.getUserEmail() + "&uuid=" + uuid);    // 메일 내용
+
+        emailSender.send(message);
+        emailVerifyService.create(postSignUpReq.getUserEmail(), uuid);
+    }
+
+    // 메일 인증 완료 후 회원 상태 수정
+    public BaseRes updateStatus(String email) {
+        Optional<User> result = userRepository.findByUserEmail(email);
+        if(result.isPresent()) {
+            User user = result.get();
+            user.setStatus(true);
+            userRepository.save(user);
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("메일 인증에 성공하였습니다.")
+                    .result(GetEmailVerifyRes.builder()
+                            .email(user.getUserEmail())
+                            .status(user.getStatus())
+                            .build())
+                    .build();
+        } else {
+            return null;
+        }
     }
 }
