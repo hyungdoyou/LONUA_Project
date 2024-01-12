@@ -66,8 +66,8 @@ public class UserService{
                 .lowerType(postSignUpReq.getLowerType())
                 .userMileage(0)
                 .authority("ROLE_USER")
-                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
-                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss")))
+                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
                 .status(false)
                 .build();
 
@@ -216,5 +216,41 @@ public class UserService{
         } else {
             return null;
         }
+    }
+
+    // 카카오 회원가입
+    public void kakaoSignup(String nickName) {
+
+        User user = User.builder()
+                .grade(Grade.builder()
+                        .gradeIdx(1) // 처음 회원 가입 시 회원등급은 반드시 1번 등급(실버)으로 가입
+                        .build())
+                .userEmail(nickName)
+                .userPassword(passwordEncoder.encode("kako"))
+                .name(nickName)
+                .userBirth("0000-00-00")
+                .userGender("K")
+                .userPhoneNumber("kakao")
+                .userAddr("카카오 로그인")
+                .preferStyle("캐쥬얼")
+                .upperType(1)
+                .lowerType(1)
+                .userMileage(0)
+                .authority("ROLE_USER")
+                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .status(false)
+                .build();
+
+        userRepository.save(user);
+    }
+
+    // 회원 이메일 검증
+    public User getUserEmail(String email) {
+        Optional<User> result = userRepository.findByUserEmail(email);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        return null;
     }
 }
