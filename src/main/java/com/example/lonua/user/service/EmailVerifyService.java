@@ -1,6 +1,6 @@
 package com.example.lonua.user.service;
 
-import com.example.lonua.user.model.EmailVerify;
+import com.example.lonua.user.model.entity.EmailVerify;
 import com.example.lonua.user.model.entity.request.GetEmailVerifyReq;
 import com.example.lonua.user.repository.EmailVerifyRepostiory;
 import lombok.RequiredArgsConstructor;

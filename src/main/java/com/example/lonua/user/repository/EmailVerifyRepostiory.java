@@ -1,6 +1,6 @@
 package com.example.lonua.user.repository;
 
-import com.example.lonua.user.model.EmailVerify;
+import com.example.lonua.user.model.entity.EmailVerify;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
