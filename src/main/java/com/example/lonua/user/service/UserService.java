@@ -10,6 +10,7 @@ import com.example.lonua.user.config.utils.JwtUtils;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.User;
+import com.example.lonua.user.model.entity.request.PatchUserUpdateReq;
 import com.example.lonua.user.model.entity.response.*;
 import com.example.lonua.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -86,7 +88,7 @@ public class UserService{
         return baseRes;
     }
 
-    public List<GetListUserRes> list() {
+    public BaseRes list() {
         List<User> result = userRepository.findAll();
 
         List<GetListUserRes> getListUserResList = new ArrayList<>();
@@ -125,10 +127,15 @@ public class UserService{
             getListUserResList.add(getListUserRes);
         }
 
-        return getListUserResList;
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListUserResList)
+                .build();
     }
 
-    public GetListUserRes read(String email) {
+    public BaseRes read(String email) {
         Optional<User> result = userRepository.findByUserEmail(email);
         User user = result.get();
 
@@ -163,11 +170,16 @@ public class UserService{
                 .getUserOrdersResList(getUserOrdersResList)
                 .build();
 
-        return getListUserRes;
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListUserRes)
+                .build();
     }
 
     // 회원 로그인
-    public PostUserLoginRes login(PostUserLoginReq postUserLoginReq) {
+    public BaseRes login(PostUserLoginReq postUserLoginReq) {
         Optional<User> result = userRepository.findByUserEmail(postUserLoginReq.getEmail());
         if (result.isPresent()) {
             User user = result.get();
@@ -175,12 +187,28 @@ public class UserService{
                 PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
                         .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
                         .build();
-                return postUserLoginRes;
+
+                return BaseRes.builder()
+                        .code(200)
+                        .isSuccess(true)
+                        .message("로그인에 성공하였습니다.")
+                        .result(postUserLoginRes)
+                        .build();
             } else {
-                return null;
+                return BaseRes.builder()
+                        .code(400)
+                        .isSuccess(false)
+                        .message("로그인에 실패하였습니다.")
+                        .result("Access Denied")
+                        .build();
             }
         }
-        return null;
+        return BaseRes.builder()
+                .code(400)
+                .isSuccess(false)
+                .message("로그인에 실패하였습니다.")
+                .result("Access Denied")
+                .build();
     }
 
     // 인증메일 발송
@@ -252,5 +280,57 @@ public class UserService{
             return result.get();
         }
         return null;
+    }
+
+    // 회원정보 수정
+    public BaseRes update(String userEmail, PatchUserUpdateReq patchUserUpdateReq) {
+        Optional<User> result = userRepository.findByUserEmail(userEmail);
+
+        if(result.isPresent()) {
+            User user = result.get();
+
+            user.update(patchUserUpdateReq.getUserAddr(), patchUserUpdateReq.getUserPhoneNumber(), patchUserUpdateReq.getPreferStyle(), patchUserUpdateReq.getUpperType(), patchUserUpdateReq.getLowerType());
+            user.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+            userRepository.save(user);
+
+            PatchUserUpdateRes patchUserUpdateRes = PatchUserUpdateRes.builder()
+                    .userAddr(user.getUserAddr())
+                    .userPhoneNumber(user.getUserPhoneNumber())
+                    .preferStyle(user.getPreferStyle())
+                    .upperType(user.getUpperType())
+                    .lowerType(user.getLowerType())
+                    .build();
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("회원정보 수정 성공")
+                    .result(patchUserUpdateRes)
+                    .build();
+        } else {
+            return null;
+        }
+    }
+
+    @Transactional
+    public BaseRes delete(Integer idx) {
+
+        Integer result = userRepository.deleteByUserIdx(idx);
+
+        if(!result.equals(0)) {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result("회원이 삭제되었습니다.")
+                    .build();
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("요청 실패")
+                    .result("회원을 찾을 수 없습니다.")
+                    .build();
+        }
     }
 }

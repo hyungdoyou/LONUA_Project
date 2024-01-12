@@ -5,16 +5,16 @@ import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.model.entity.request.GetEmailVerifyReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
+import com.example.lonua.user.model.entity.request.PatchUserUpdateReq;
 import com.example.lonua.user.service.EmailVerifyService;
 import com.example.lonua.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
 @RequestMapping("/user")
@@ -55,19 +55,42 @@ public class UserController {
     // 로그인
     @RequestMapping(method = RequestMethod.POST, value = "/login")
     public ResponseEntity login(PostUserLoginReq postUserLoginReq) {
-        return ResponseEntity.ok().body(userService.login(postUserLoginReq));
+
+        BaseRes baseRes = userService.login(postUserLoginReq);
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/list")
     public ResponseEntity list() {
 
-        return ResponseEntity.ok().body(userService.list());
+        BaseRes baseRes = userService.list();
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/read")
     public ResponseEntity read() {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        return ResponseEntity.ok().body(userService.read(user.getUserEmail()));
+        BaseRes baseRes = userService.read(user.getUserEmail());
+
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/update")
+    public ResponseEntity update(PatchUserUpdateReq patchUserUpdateReq) {
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        BaseRes baseRes = userService.update(user.getUserEmail(), patchUserUpdateReq);
+
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{userIdx}")
+    public ResponseEntity delete(@PathVariable Integer userIdx) {
+
+        BaseRes baseRes = userService.delete(userIdx);
+
+        return ResponseEntity.ok().body(baseRes);
     }
 }
