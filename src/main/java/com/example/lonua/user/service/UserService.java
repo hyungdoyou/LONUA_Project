@@ -5,15 +5,16 @@ import com.example.lonua.exception.exception.UserException;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.product.model.response.GetReadOrdersProductRes;
+import com.example.lonua.user.config.utils.JwtUtils;
+import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.model.entity.response.GetListUserRes;
 import com.example.lonua.user.model.entity.response.GetUserOrdersRes;
+import com.example.lonua.user.model.entity.response.PostUserLoginRes;
 import com.example.lonua.user.repository.UserRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService{
+public class UserService{
+
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+    @Value("${jwt.token.expired-time-ms}")
+    private Long expiredTimeMs;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -147,14 +153,19 @@ public class UserService implements UserDetailsService{
         return getListUserRes;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> result = userRepository.findByUserId(username);
-        User user = null;
-        if(result.isPresent()) {
-            user = result.get();
+    public PostUserLoginRes login(PostUserLoginReq postUserLoginReq) {
+        Optional<User> result = userRepository.findByUserId(postUserLoginReq.getUserId());
+        if (result.isPresent()) {
+            User user = result.get();
+            if (passwordEncoder.matches(postUserLoginReq.getUserPw(), user.getPassword())) {
+                PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
+                        .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
+                        .build();
+                return postUserLoginRes;
+            } else {
+                return null;
+            }
         }
-        return user;
+        return null;
     }
-
 }

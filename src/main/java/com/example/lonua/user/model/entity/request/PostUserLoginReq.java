@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostLoginReq {
+public class PostUserLoginReq {
     private String userId;
     private String userPw;
 }

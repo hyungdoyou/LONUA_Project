@@ -11,10 +11,10 @@ import lombok.*;
 public class PostUserLoginRes {
 
     private Integer userIdx;
-
     private String userId;
     private String userName;
     private String userPhoneNumber;
     private String userAddr;
+    private String token;
 
 }

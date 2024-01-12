@@ -34,3 +34,8 @@ project:
     path: C:\lonua\brand
     product-path: C:\lonua\product\images
     product-introduction-path: C:\lonua\product\introductionimages
+
+jwt:
+  secret-key: abcdefghijklmnopqrstuvwxyz0123456789
+  token:
+    expired-time-ms: 3000000
