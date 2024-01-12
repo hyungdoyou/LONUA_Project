@@ -7,6 +7,7 @@ import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
+import io.swagger.models.auth.In;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -129,6 +130,24 @@ public class User implements UserDetails {
     @Override
     public String getPassword(){
         return userPassword;
+    }
+
+    public void update(String userAddr, String userPhoneNumber, String preferStyle, Integer upperType, Integer lowerType) {
+        if (userAddr != null) {
+            this.userAddr = userAddr;
+        }
+        if (userPhoneNumber != null) {
+            this.userPhoneNumber = userPhoneNumber;
+        }
+        if (preferStyle != null) {
+            this.preferStyle = preferStyle;
+        }
+        if (upperType != null) {
+            this.upperType = upperType;
+        }
+        if (lowerType != null) {
+            this.lowerType = lowerType;
+        }
     }
 
 
