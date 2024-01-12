@@ -86,7 +86,7 @@ public class UserService{
         return baseRes;
     }
 
-    public List<GetListUserRes> list() {
+    public BaseRes list() {
         List<User> result = userRepository.findAll();
 
         List<GetListUserRes> getListUserResList = new ArrayList<>();
@@ -125,10 +125,15 @@ public class UserService{
             getListUserResList.add(getListUserRes);
         }
 
-        return getListUserResList;
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListUserResList)
+                .build();
     }
 
-    public GetListUserRes read(String email) {
+    public BaseRes read(String email) {
         Optional<User> result = userRepository.findByUserEmail(email);
         User user = result.get();
 
@@ -163,11 +168,16 @@ public class UserService{
                 .getUserOrdersResList(getUserOrdersResList)
                 .build();
 
-        return getListUserRes;
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListUserRes)
+                .build();
     }
 
     // 회원 로그인
-    public PostUserLoginRes login(PostUserLoginReq postUserLoginReq) {
+    public BaseRes login(PostUserLoginReq postUserLoginReq) {
         Optional<User> result = userRepository.findByUserEmail(postUserLoginReq.getEmail());
         if (result.isPresent()) {
             User user = result.get();
@@ -175,12 +185,28 @@ public class UserService{
                 PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
                         .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
                         .build();
-                return postUserLoginRes;
+
+                return BaseRes.builder()
+                        .code(200)
+                        .isSuccess(true)
+                        .message("로그인에 성공하였습니다.")
+                        .result(postUserLoginRes)
+                        .build();
             } else {
-                return null;
+                return BaseRes.builder()
+                        .code(400)
+                        .isSuccess(false)
+                        .message("로그인에 실패하였습니다.")
+                        .result("Access Denied")
+                        .build();
             }
         }
-        return null;
+        return BaseRes.builder()
+                .code(400)
+                .isSuccess(false)
+                .message("로그인에 실패하였습니다.")
+                .result("Access Denied")
+                .build();
     }
 
     // 인증메일 발송

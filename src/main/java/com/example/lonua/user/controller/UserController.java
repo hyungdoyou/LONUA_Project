@@ -55,19 +55,24 @@ public class UserController {
     // 로그인
     @RequestMapping(method = RequestMethod.POST, value = "/login")
     public ResponseEntity login(PostUserLoginReq postUserLoginReq) {
-        return ResponseEntity.ok().body(userService.login(postUserLoginReq));
+
+        BaseRes baseRes = userService.login(postUserLoginReq);
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/list")
     public ResponseEntity list() {
 
-        return ResponseEntity.ok().body(userService.list());
+        BaseRes baseRes = userService.list();
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/read")
     public ResponseEntity read() {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        return ResponseEntity.ok().body(userService.read(user.getUserEmail()));
+        BaseRes baseRes = userService.read(user.getUserEmail());
+
+        return ResponseEntity.ok().body(baseRes);
     }
 }
