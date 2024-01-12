@@ -10,7 +10,7 @@ import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.response.GetReadOrdersProductRes;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.user.model.entity.User;
-import com.example.lonua.user.model.entity.response.PostUserLoginRes;
+import com.example.lonua.user.model.entity.response.PostUserOrdersRes;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -80,7 +80,7 @@ public class OrdersService {
 
             GetReadOrdersRes response = GetReadOrdersRes.builder()
                     .ordersIdx(orders.getOrdersIdx())
-                    .postUserLoginRes(PostUserLoginRes.builder()
+                    .postUserOrdersRes(PostUserOrdersRes.builder()
                             .userIdx(orders.getUser().getUserIdx())
                             .userId(orders.getUser().getUserId())
                             .userName(orders.getUser().getUsername())

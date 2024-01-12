@@ -16,10 +16,10 @@ public class JwtUtils {
     public static String generateAccessToken(User user, String secretKey, Long expiredTimeMs) {
 
         Claims claims = Jwts.claims();
-        claims.put("id", user.getUserIdx());
+        claims.put("idx", user.getUserIdx());
         claims.put("userId", user.getUserId());
         claims.put("userEmail", user.getUserEmail());
-        claims.put("ROLE", user.getAuthorities());
+        claims.put("ROLE", user.getAuthority());
 
         byte[] secretBytes = secretKey.getBytes();
 
