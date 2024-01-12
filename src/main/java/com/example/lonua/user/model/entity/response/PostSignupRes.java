@@ -1,6 +1,5 @@
 package com.example.lonua.user.model.entity.response;
 
-
 import lombok.*;
 
 @Getter
@@ -8,11 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostUserOrdersRes {
+public class PostSignupRes {
 
-    private Integer userIdx;
     private String userEmail;
     private String userName;
-    private String userPhoneNumber;
-    private String userAddr;
+
 }

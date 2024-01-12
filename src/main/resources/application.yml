@@ -3,19 +3,35 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dbgudeh123
+    password: hgerrcnvaqcnmflt
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
   datasource:
     master:
       hikari:
         username: test01
         password: qwer1234
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.111/master
+        jdbc-url: jdbc:mysql://77.77.77.111/lonua
     slave:
       hikari:
-        username: test03
+        username: test02
         password: qwer1234
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.112/master
+        jdbc-url: jdbc:mysql://77.77.77.112/lonua
 
   servlet:
     multipart:
@@ -47,3 +63,4 @@ jwt:
   secret-key: abcdefghijklmnopqrstuvwxyz0123456789
   token:
     expired-time-ms: 3000000
+
