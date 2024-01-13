@@ -8,10 +8,12 @@ import com.example.lonua.exception.exception.CategoryException;
 import com.example.lonua.product.model.entity.ProductCount;
 import com.example.lonua.product.model.entity.ProductImage;
 import com.example.lonua.product.model.entity.ProductIntrodImage;
+import com.example.lonua.product.model.request.PatchUpdateProductReq;
 import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.response.GetListProductRes;
 import com.example.lonua.product.model.response.GetReadProductRes;
+import com.example.lonua.product.model.response.PatchUpdateProductRes;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
@@ -224,6 +226,42 @@ public class ProductService {
                     .isSuccess(false)
                     .message("요청 실패")
                     .result("잘못된 요청입니다.")
+                    .build();
+
+            return baseRes;
+        }
+    }
+
+    public BaseRes update(PatchUpdateProductReq patchUpdateProductReq) {
+        Optional<Product> result = productRepository.findByProductIdx(patchUpdateProductReq.getProductIdx());
+
+        if(result.isPresent()) {
+            Product product = result.get();
+
+            product.update(patchUpdateProductReq);
+            product.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+            productRepository.save(product);
+
+            PatchUpdateProductRes patchUpdateProductRes = PatchUpdateProductRes.builder()
+                    .productName(product.getProductName())
+                    .quantity(product.getQuantity())
+                    .price(product.getPrice())
+                    .build();
+
+            BaseRes baseRes = BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("수정 요청 성공")
+                    .result(patchUpdateProductRes)
+                    .build();
+
+            return baseRes;
+        } else {
+            BaseRes baseRes = BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("수정 요청 실패")
+                    .result("요청을 수행할 수 없습니다.")
                     .build();
 
             return baseRes;

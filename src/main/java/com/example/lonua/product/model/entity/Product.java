@@ -5,6 +5,7 @@ import com.example.lonua.cart.model.entity.Cart;
 import com.example.lonua.category.model.entity.Category;
 import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.orders.model.entity.Orders;
+import com.example.lonua.product.model.request.PatchUpdateProductReq;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
 import com.example.lonua.style.model.entity.Style;
@@ -87,4 +88,16 @@ public class Product {
 
     @Column(nullable = false)
     private Boolean status;
+
+    public void update(PatchUpdateProductReq patchUpdateProductReq) {
+        if (patchUpdateProductReq.getProductName() != null) {
+            this.productName = patchUpdateProductReq.getProductName();
+        }
+        if (patchUpdateProductReq.getQuantity() != null) {
+            this.quantity = patchUpdateProductReq.getQuantity();
+        }
+        if (patchUpdateProductReq.getPrice() != null) {
+            this.price = patchUpdateProductReq.getPrice();
+        }
+    }
 }

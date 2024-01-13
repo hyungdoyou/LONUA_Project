@@ -1,6 +1,7 @@
 package com.example.lonua.product.controller;
 
 import com.example.lonua.config.BaseRes;
+import com.example.lonua.product.model.request.PatchUpdateProductReq;
 import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.service.ProductService;
@@ -44,4 +45,14 @@ public class ProductController {
         BaseRes baseRes = productService.read(idx);
         return ResponseEntity.ok().body(baseRes);
     }
+
+    // 상품 정보 수정
+    @RequestMapping(method = RequestMethod.PATCH, value = "/update")
+    public ResponseEntity update(@RequestBody PatchUpdateProductReq patchUpdateProductReq) {
+
+        BaseRes baseRes = productService.update(patchUpdateProductReq);
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+
 }
