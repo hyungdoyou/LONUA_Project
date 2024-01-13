@@ -1,6 +1,7 @@
 package com.example.lonua.branch.controller;
 
 import com.example.lonua.branch.model.request.GetReadReq;
+import com.example.lonua.branch.model.request.PatchUpdateReq;
 import com.example.lonua.branch.model.request.PostRegisterReq;
 import com.example.lonua.branch.service.BranchService;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,8 @@ public class BranchController {
     ResponseEntity readBranch(GetReadReq request) {
         return ResponseEntity.ok().body(branchService.read(request));
     }
-        @RequestMapping(method = RequestMethod.PATCH, value = "/update")
-    ResponseEntity updateBranch( ) {
-        return ResponseEntity.ok().body("");
+    @RequestMapping(method = RequestMethod.PATCH, value = "/update")
+    ResponseEntity updateBranch(PatchUpdateReq request) {
+        return ResponseEntity.ok().body(branchService.update(request));
     }
 }

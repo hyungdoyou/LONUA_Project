@@ -2,9 +2,11 @@ package com.example.lonua.branch.service;
 
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.branch.model.request.GetReadReq;
+import com.example.lonua.branch.model.request.PatchUpdateReq;
 import com.example.lonua.branch.model.request.PostRegisterReq;
 import com.example.lonua.branch.model.response.GetListRes;
 import com.example.lonua.branch.model.response.GetReadRes;
+import com.example.lonua.branch.model.response.PatchUpdateRes;
 import com.example.lonua.branch.model.response.PostRegisterRes;
 import com.example.lonua.branch.repository.BranchRepository;
 import com.example.lonua.brand.model.entity.Brand;
@@ -88,7 +90,28 @@ public class BranchService {
 
     }
 
-    public void update() {
+    public BaseRes update(PatchUpdateReq request) {
+        Optional<Branch> bybranchName = branchRepository.findById(request.getBranchIdx());
 
+        if (bybranchName.isPresent()) {
+            Branch branch = bybranchName.get();
+            branch.setBranchName(request.getBranchName());
+            branch.setBranchAddress(request.getBranchAddress());
+
+            Branch result = branchRepository.save(branch);
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청성공")
+                    .result(PatchUpdateRes.builder()
+                            .branchIdx(result.getBranchIdx())
+                            .branchName(result.getBranchName())
+                            .branchAddress(result.getBranchAddress())
+                            .brandIdx(result.getBrand().getBrandIdx())
+                            .build())
+                    .build();
+        }
+        return null;
     }
 }
