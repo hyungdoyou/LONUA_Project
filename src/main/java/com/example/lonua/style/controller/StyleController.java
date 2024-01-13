@@ -1,8 +1,6 @@
 package com.example.lonua.style.controller;
 
-import com.example.lonua.grade.model.PostCreateReq;
 import com.example.lonua.style.model.PostRegReq;
-import com.example.lonua.style.repository.StyleRepository;
 import com.example.lonua.style.service.StyleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

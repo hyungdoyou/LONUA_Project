@@ -1,10 +1,7 @@
 package com.example.lonua.style.service;
 
 import com.example.lonua.exception.ErrorCode;
-import com.example.lonua.exception.exception.GradeException;
 import com.example.lonua.exception.exception.StyleException;
-import com.example.lonua.grade.model.PostCreateReq;
-import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.style.model.PostRegReq;
 import com.example.lonua.style.model.entity.Style;
 import com.example.lonua.style.repository.StyleRepository;

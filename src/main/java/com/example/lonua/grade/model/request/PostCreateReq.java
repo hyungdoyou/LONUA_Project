@@ -1,4 +1,4 @@
-package com.example.lonua.grade.model;
+package com.example.lonua.grade.model.request;
 
 
 import com.example.lonua.user.model.entity.User;
@@ -15,9 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class PostCreateReq {
-
     private String gradeType;
-
     private Integer discountRate;
-
 }
