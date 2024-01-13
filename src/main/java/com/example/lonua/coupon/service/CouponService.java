@@ -5,6 +5,7 @@ import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.config.BaseRes;
 import com.example.lonua.coupon.model.entity.Coupon;
 import com.example.lonua.coupon.model.request.PostRegisterReq;
+import com.example.lonua.coupon.model.response.GetListRes;
 import com.example.lonua.coupon.model.response.PostRegisterRes;
 import com.example.lonua.coupon.repository.CouponRepository;
 import com.example.lonua.user.model.entity.User;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,7 @@ public class CouponService {
                 .message("요청성공")
                 .result(PostRegisterRes.builder()
                         .userIdx(coupon.getUser().getUserIdx())
+                        .couponIdx(coupon.getCouponIdx())
                         .couponName(coupon.getCouponName())
                         .couponDiscountRate(coupon.getCouponDiscountRate())
                         .receivedDate(coupon.getReceivedDate())
@@ -54,8 +58,28 @@ public class CouponService {
 
     }
 
-    public void list() {
+    public BaseRes list() {
+        List<Coupon> all = couponRepository.findAll();
+        List<GetListRes> getListResList = new ArrayList<>();
 
+        for (Coupon coupon : all) {
+            GetListRes getListRes = GetListRes.builder()
+                    .couponIdx(coupon.getCouponIdx())
+                    .couponName(coupon.getCouponName())
+                    .couponDiscountRate(coupon.getCouponDiscountRate())
+                    .receivedDate(coupon.getReceivedDate())
+                    .couponExpirationDate(coupon.getCouponExpirationDate())
+                    .status(coupon.getStatus())
+                    .userIdx(coupon.getUser().getUserIdx())
+                    .build();
+            getListResList.add(getListRes);
+        }
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청성공")
+                .result(getListResList)
+                .build();
     }
 
     public void update() {

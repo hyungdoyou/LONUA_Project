@@ -19,4 +19,11 @@ public class CouponController {
     ResponseEntity registerCoupon(PostRegisterReq request) {
         return ResponseEntity.ok().body(couponService.create(request));
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    ResponseEntity listCoupon() {
+        return ResponseEntity.ok().body(couponService.list());
+    }
+
+
 }
