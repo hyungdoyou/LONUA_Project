@@ -16,7 +16,5 @@ public class PostRegisterRes {
     private Integer userIdx;
     private String createdAt;
     private String updatedAt;
-    private String productName;
-    private Integer price;
     private Boolean status;
 }

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +42,6 @@ public class CartService {
                 .message("요청성공")
                 .result(PostRegisterRes.builder()
                         .cartIdx(cart.getCartIdx())
-                        .productName(cart.getProduct().getProductName())
-                        .price(cart.getProduct().getPrice())
                         .createdAt(cart.getCreatedAt())
                         .updatedAt(cart.getUpdatedAt())
                         .userIdx(cart.getUser().getUserIdx())
