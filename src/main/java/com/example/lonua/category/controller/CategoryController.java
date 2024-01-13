@@ -2,7 +2,6 @@ package com.example.lonua.category.controller;
 
 import com.example.lonua.category.model.PostRegReq;
 import com.example.lonua.category.service.CategoryService;
-import com.example.lonua.grade.model.PostCreateReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
