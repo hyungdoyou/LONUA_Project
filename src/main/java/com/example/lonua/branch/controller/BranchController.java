@@ -16,13 +16,11 @@ public class BranchController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     ResponseEntity registerBranch(PostRegisterReq request) {
-
         return ResponseEntity.ok().body(branchService.create(request));
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/list")
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
     ResponseEntity listBranch() {
-
-        return ResponseEntity.ok().body("");
+        return ResponseEntity.ok().body(branchService.list());
     }
 }
