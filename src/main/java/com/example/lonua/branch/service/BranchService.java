@@ -1,6 +1,7 @@
 package com.example.lonua.branch.service;
 
 import com.example.lonua.branch.model.entity.Branch;
+import com.example.lonua.branch.model.request.GetReadReq;
 import com.example.lonua.branch.model.request.PostRegisterReq;
 import com.example.lonua.branch.model.response.GetListRes;
 import com.example.lonua.branch.model.response.GetReadRes;
@@ -43,8 +44,8 @@ public class BranchService {
                 .build();
     }
 
-    public BaseRes read(String branchName) {
-        Optional<Branch> bybranchName = branchRepository.findBybranchName(branchName);
+    public BaseRes read(GetReadReq request) {
+        Optional<Branch> bybranchName = branchRepository.findBybranchName(request.getBranchName());
         if (bybranchName.isPresent()) {
             Branch branch = bybranchName.get();
             return BaseRes.builder()
