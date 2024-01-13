@@ -23,4 +23,8 @@ public class BranchController {
     ResponseEntity listBranch() {
         return ResponseEntity.ok().body(branchService.list());
     }
+    @RequestMapping(method = RequestMethod.GET, value = "/read")
+    ResponseEntity readBranch(String branchName) {
+        return ResponseEntity.ok().body(branchService.read(branchName));
+    }
 }

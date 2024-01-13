@@ -2,7 +2,8 @@ package com.example.lonua.branch.service;
 
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.branch.model.request.PostRegisterReq;
-import com.example.lonua.branch.model.response.PostListRes;
+import com.example.lonua.branch.model.response.GetListRes;
+import com.example.lonua.branch.model.response.GetReadRes;
 import com.example.lonua.branch.model.response.PostRegisterRes;
 import com.example.lonua.branch.repository.BranchRepository;
 import com.example.lonua.brand.model.entity.Brand;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,30 +43,43 @@ public class BranchService {
                 .build();
     }
 
-    public BaseRes read() {
-
-
+    public BaseRes read(String branchName) {
+        Optional<Branch> bybranchName = branchRepository.findBybranchName(branchName);
+        if (bybranchName.isPresent()) {
+            Branch branch = bybranchName.get();
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청성공")
+                    .result(GetReadRes.builder()
+                            .branchIdx(branch.getBranchIdx())
+                            .branchName(branch.getBranchName())
+                            .branchAddress(branch.getBranchAddress())
+                            .brandIdx(branch.getBrand().getBrandIdx())
+                            .build())
+                    .build();
+        }
         return null;
     }
 
     public BaseRes list() {
         List<Branch> all = branchRepository.findAll();
-        List<PostListRes> postListResList = new ArrayList<>();
+        List<GetListRes> getListResList = new ArrayList<>();
         for (Branch branch : all) {
-            PostListRes postListRes = PostListRes.builder()
+            GetListRes getListRes = GetListRes.builder()
                     .branchIdx(branch.getBranchIdx())
                     .branchName(branch.getBranchName())
                     .branchAddress(branch.getBranchAddress())
                     .brandIdx(branch.getBrand().getBrandIdx())
                     .build();
-            postListResList.add(postListRes);
+            getListResList.add(getListRes);
         }
 
         return BaseRes.builder()
                 .code(200)
                 .isSuccess(true)
                 .message("요청성공")
-                .result(postListResList)
+                .result(getListResList)
                 .build();
     }
 
