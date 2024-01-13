@@ -1,6 +1,7 @@
 package com.example.lonua.grade.controller;
 
 
+import com.example.lonua.grade.model.request.GetReadReq;
 import com.example.lonua.grade.model.request.PostCreateReq;
 import com.example.lonua.grade.service.GradeService;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +17,17 @@ public class GradeController {
     private final GradeService gradeService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
-    public ResponseEntity create(PostCreateReq postCreateReq) {
+    public ResponseEntity registerGrade(PostCreateReq postCreateReq) {
         return ResponseEntity.ok().body(gradeService.create(postCreateReq));
     }
     @RequestMapping(method = RequestMethod.GET, value = "/list")
-    ResponseEntity listBranch() {
+    ResponseEntity listGrade() {
         return ResponseEntity.ok().body(gradeService.list());
     }
-//    @RequestMapping(method = RequestMethod.GET, value = "/read")
-//    ResponseEntity readBranch(GetReadReq request) {
-//        return ResponseEntity.ok().body(branchService.read(request));
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/read")
+    ResponseEntity readGrade(GetReadReq request) {
+        return ResponseEntity.ok().body(gradeService.read(request));
+    }
 //    @RequestMapping(method = RequestMethod.PATCH, value = "/update")
 //    ResponseEntity updateBranch(PatchUpdateReq request) {
 //        return ResponseEntity.ok().body(branchService.update(request));

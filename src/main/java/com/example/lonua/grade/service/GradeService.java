@@ -4,9 +4,11 @@ import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.config.BaseRes;
 import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.GradeException;
+import com.example.lonua.grade.model.request.GetReadReq;
 import com.example.lonua.grade.model.request.PostCreateReq;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.grade.model.response.GetListRes;
+import com.example.lonua.grade.model.response.GetReadRes;
 import com.example.lonua.grade.model.response.PostCreateRes;
 import com.example.lonua.grade.repository.GradeRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,5 +61,23 @@ public class GradeService {
                 .message("요청성공")
                 .result(getListResList)
                 .build();
+    }
+
+    public BaseRes read(GetReadReq request) {
+        Optional<Grade> byGradeType = gradeRepository.findByGradeType(request.getGradeType());
+        if (byGradeType.isPresent()) {
+            Grade grade = byGradeType.get();
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청성공")
+                    .result(GetReadRes.builder()
+                            .gradeIdx(grade.getGradeIdx())
+                            .gradeType(grade.getGradeType())
+                            .discountRate(grade.getDiscountRate())
+                            .build())
+                    .build();
+        }
+        return null;
     }
 }
