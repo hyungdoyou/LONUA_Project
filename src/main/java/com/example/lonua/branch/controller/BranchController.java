@@ -1,5 +1,6 @@
 package com.example.lonua.branch.controller;
 
+import com.example.lonua.branch.model.request.DeleteRemoveReq;
 import com.example.lonua.branch.model.request.GetReadReq;
 import com.example.lonua.branch.model.request.PatchUpdateReq;
 import com.example.lonua.branch.model.request.PostRegisterReq;
@@ -33,4 +34,10 @@ public class BranchController {
     ResponseEntity updateBranch(PatchUpdateReq request) {
         return ResponseEntity.ok().body(branchService.update(request));
     }
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
+    ResponseEntity deleteBranch(DeleteRemoveReq request) {
+        return ResponseEntity.ok().body(branchService.delete(request));
+    }
+
+
 }

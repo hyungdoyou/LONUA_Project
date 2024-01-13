@@ -1,6 +1,7 @@
 package com.example.lonua.branch.service;
 
 import com.example.lonua.branch.model.entity.Branch;
+import com.example.lonua.branch.model.request.DeleteRemoveReq;
 import com.example.lonua.branch.model.request.GetReadReq;
 import com.example.lonua.branch.model.request.PatchUpdateReq;
 import com.example.lonua.branch.model.request.PostRegisterReq;
@@ -86,8 +87,19 @@ public class BranchService {
                 .build();
     }
 
-    public void delete() {
+    public BaseRes delete(DeleteRemoveReq request) {
 
+        Branch branch = Branch.builder()
+                .branchIdx(request.getBranchIdx())
+                .build();
+
+        branchRepository.delete(branch);
+
+        return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청성공")
+                    .build();
     }
 
     public BaseRes update(PatchUpdateReq request) {
