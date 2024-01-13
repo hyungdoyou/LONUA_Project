@@ -2,10 +2,18 @@ package com.example.lonua.cart.model.entity;
 
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.user.model.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Cart {
 
@@ -22,11 +30,11 @@ public class Cart {
     private User user;
 
     @Column(nullable = false)
-    private Date createdAt;
+    private String createdAt;
 
     @Column(nullable = false)
-    private Date updatedAt;
+    private String updatedAt;
 
     @Column(nullable = false)
-    private Integer status;
+    private Boolean status;
 }
