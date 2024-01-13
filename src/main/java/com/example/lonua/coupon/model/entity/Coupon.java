@@ -1,10 +1,18 @@
 package com.example.lonua.coupon.model.entity;
 
 import com.example.lonua.user.model.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Entity
 public class Coupon {
 
@@ -23,12 +31,12 @@ public class Coupon {
     private Integer couponDiscountRate;
 
     @Column(nullable = false)
-    private Date receivedDate;
+    private String receivedDate;
 
     @Column(nullable = false)
-    private Date couponExpirationDate;
+    private String couponExpirationDate;
 
     @Column(nullable = false)
-    private Integer status;
+    private Boolean status;
 
 }

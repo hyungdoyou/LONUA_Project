@@ -1,0 +1,68 @@
+package com.example.lonua.coupon.service;
+
+
+import com.example.lonua.branch.model.entity.Branch;
+import com.example.lonua.config.BaseRes;
+import com.example.lonua.coupon.model.entity.Coupon;
+import com.example.lonua.coupon.model.request.PostRegisterReq;
+import com.example.lonua.coupon.model.response.PostRegisterRes;
+import com.example.lonua.coupon.repository.CouponRepository;
+import com.example.lonua.user.model.entity.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+@Service
+@RequiredArgsConstructor
+public class CouponService {
+
+    private final CouponRepository couponRepository;
+
+    public BaseRes create(PostRegisterReq request) {
+        Coupon coupon = couponRepository.save(Coupon.builder()
+                .couponName(request.getCouponName())
+                .couponDiscountRate(request.getCouponDiscountRate())
+                .status(request.getStatus())
+                .receivedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                // 만료날짜는 1년 후로 임의로 설정
+                // TODO 만료일을 어떻게 집어 넣을지 고민해봐야한다 일단 1년으로 간다
+                .couponExpirationDate(LocalDateTime.now().plusYears(1L).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .user(User.builder()
+                        .userIdx(request.getUserIdx())
+                        .build())
+                .build());
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청성공")
+                .result(PostRegisterRes.builder()
+                        .userIdx(coupon.getUser().getUserIdx())
+                        .couponName(coupon.getCouponName())
+                        .couponDiscountRate(coupon.getCouponDiscountRate())
+                        .receivedDate(coupon.getReceivedDate())
+                        .couponExpirationDate(coupon.getCouponExpirationDate())
+                        .status(coupon.getStatus())
+                        .build())
+                .build();
+
+    }
+
+    public void read() {
+
+    }
+
+    public void list() {
+
+    }
+
+    public void update() {
+
+    }
+
+    public void delete() {
+
+    }
+}
