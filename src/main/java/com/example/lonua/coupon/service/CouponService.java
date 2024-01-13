@@ -4,6 +4,7 @@ package com.example.lonua.coupon.service;
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.config.BaseRes;
 import com.example.lonua.coupon.model.entity.Coupon;
+import com.example.lonua.coupon.model.request.DeleteRemoveReq;
 import com.example.lonua.coupon.model.request.GetReadReq;
 import com.example.lonua.coupon.model.request.PostRegisterReq;
 import com.example.lonua.coupon.model.response.GetListRes;
@@ -104,11 +105,17 @@ public class CouponService {
                 .build();
     }
 
-    public void update() {
+    public BaseRes delete(DeleteRemoveReq request) {
+        Coupon coupon = Coupon.builder()
+                .couponIdx(request.getCouponIdx())
+                .build();
 
-    }
+        couponRepository.delete(coupon);
 
-    public void delete() {
-
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청성공")
+                .build();
     }
 }

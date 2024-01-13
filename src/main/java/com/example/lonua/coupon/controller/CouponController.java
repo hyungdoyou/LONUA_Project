@@ -1,5 +1,6 @@
 package com.example.lonua.coupon.controller;
 
+import com.example.lonua.coupon.model.request.DeleteRemoveReq;
 import com.example.lonua.coupon.model.request.GetReadReq;
 import com.example.lonua.coupon.model.request.PostRegisterReq;
 import com.example.lonua.coupon.service.CouponService;
@@ -29,14 +30,11 @@ public class CouponController {
     ResponseEntity readCoupon(GetReadReq request) {
         return ResponseEntity.ok().body(couponService.read(request));
     }
-//    @RequestMapping(method = RequestMethod.PATCH, value = "/update")
-//    ResponseEntity updateBranch(PatchUpdateReq request) {
-//        return ResponseEntity.ok().body(branchService.update(request));
-//    }
-//    @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
-//    ResponseEntity deleteBranch(DeleteRemoveReq request) {
-//        return ResponseEntity.ok().body(branchService.delete(request));
-//    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
+    ResponseEntity deleteCoupon(DeleteRemoveReq request) {
+        return ResponseEntity.ok().body(couponService.delete(request));
+    }
 
 
 }
