@@ -5,6 +5,7 @@ import com.example.lonua.config.BaseRes;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.orders.model.entity.OrdersProduct;
 import com.example.lonua.orders.model.request.PostCreateOrdersReq;
+import com.example.lonua.orders.model.response.GetCreateOrdersRes;
 import com.example.lonua.orders.model.response.GetListOrdersRes;
 import com.example.lonua.orders.model.response.GetReadOrdersRes;
 import com.example.lonua.orders.model.response.PostCreateOrdersRes;
@@ -12,22 +13,18 @@ import com.example.lonua.orders.repository.OrdersProductRepository;
 import com.example.lonua.orders.repository.OrdersRepository;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.entity.ProductCount;
-import com.example.lonua.product.model.response.GetReadOrdersProductRes;
 import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.user.model.entity.User;
-import com.example.lonua.user.model.entity.response.PostUserOrdersRes;
 import com.siot.IamportRestClient.IamportClient;
-import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.request.CancelData;
-import com.siot.IamportRestClient.response.IamportResponse;
-import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
+import org.springframework.data.domain.Page;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -55,7 +52,7 @@ public class OrdersService {
 
         orders = ordersRepository.save(orders);
 
-        List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
+        List<GetCreateOrdersRes> getCreateOrdersResList = new ArrayList<>();
 
         for (Integer idx : postCreateOrdersReq.getProductIdxList()) {
             Optional<Product> productIdx = productRepository.findByProductIdx(idx);
@@ -78,13 +75,13 @@ public class OrdersService {
                 Optional<Product> product = productRepository.findByProductIdx(idx);
                 Product userProduct = product.get();
 
-                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+                GetCreateOrdersRes getCreateOrdersRes = GetCreateOrdersRes.builder()
                         .brandName(userProduct.getBrand().getBrandName())
                         .productName(userProduct.getProductName())
                         .price(userProduct.getPrice())
                         .build();
 
-                getListOrdersResList.add(getListOrdersRes);
+                getCreateOrdersResList.add(getCreateOrdersRes);
             } else {
                 return BaseRes.builder()
                         .code(400)
@@ -102,7 +99,7 @@ public class OrdersService {
                 .totalAmount(postCreateOrdersReq.getAmount())
                 .impUid(postCreateOrdersReq.getImpUid())
                 .payMethod(postCreateOrdersReq.getPayMethod())
-                .productList(getListOrdersResList)
+                .productList(getCreateOrdersResList)
                 .build();
 
         return BaseRes.builder()
@@ -112,6 +109,84 @@ public class OrdersService {
                 .result(postCreateOrdersRes)
                 .build();
     }
+
+    // 주문 내역 조회
+    @Transactional
+    public BaseRes list(User user, Integer page, Integer size) {
+
+        Pageable pageable = PageRequest.of(page-1, size);
+//        Page<Orders> ordersList = ordersRepository.findList(pageable);
+
+        List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
+
+        for(Orders orders : user.getOrdersList()) {
+            if(orders.getUser().getUserIdx().equals(user.getUserIdx())) {
+
+                Page<OrdersProduct> ordersProductList = ordersProductRepository.findList(pageable);
+
+                for(OrdersProduct ordersProduct : ordersProductList) {
+                    GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+                            .brandName(ordersProduct.getProduct().getBrand().getBrandName())
+                            .productName(ordersProduct.getProduct().getProductName())
+                            .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
+                            .price(ordersProduct.getProduct().getPrice())
+                            .createdAt(ordersProduct.getOrders().getCreatedAt())
+                            .build();
+
+                    getListOrdersResList.add(getListOrdersRes);
+                }
+            }
+        }
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListOrdersResList)
+                .build();
+    }
+
+    // 주문 상세 내역 조회
+    public BaseRes read(User user, Integer idx) {
+        Optional<Orders> result = ordersRepository.findOrders(idx);
+
+        if (result.isPresent()){
+            Orders orders = result.get();
+
+            List<GetReadOrdersRes> getReadOrdersResList = new ArrayList<>();
+
+            List<OrdersProduct> ordersProductList = orders.getOrdersProductList();
+            for(OrdersProduct ordersProduct : ordersProductList) {
+                GetReadOrdersRes getReadOrdersRes = GetReadOrdersRes.builder()
+                        .brandName(ordersProduct.getProduct().getProductName())
+                        .productName(ordersProduct.getProduct().getProductName())
+                        .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
+                        .price(ordersProduct.getProduct().getPrice())
+                        .userName(orders.getUser().getName())
+                        .userPhoneNumber(orders.getUser().getUserPhoneNumber())
+                        .userAddr(orders.getUser().getUserAddr())
+                        .deliveryMassage("배송 잘 부탁드립니다.")
+                        .build();
+
+                getReadOrdersResList.add(getReadOrdersRes);
+            }
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(getReadOrdersResList)
+                    .build();
+
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(true)
+                    .message("요청 실패")
+                    .result("잘못된 요청입니다.")
+                    .build();
+        }
+    }
+
+
 
 
     //----------------------------------카카오페이 결제를 통한 주문------------------------------------------------
@@ -156,12 +231,12 @@ public class OrdersService {
 //        if(postCreateOrdersReq.getAmount().equals(totalPrice) ) {
 //            createOrder(user, postCreateOrdersReq);  // 주문 생성
 //
-//            List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
+//            List<GetCreateOrdersRes> getListOrdersResList = new ArrayList<>();
 //            for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
 //                Optional<Product> result = productRepository.findByProductIdx(idx);
 //
 //                Product product = result.get();
-//                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+//                GetCreateOrdersRes getListOrdersRes = GetCreateOrdersRes.builder()
 //                        .brandName(product.getBrand().getBrandName())
 //                        .productName(product.getProductName())
 //                        .price(product.getPrice())
@@ -206,34 +281,7 @@ public class OrdersService {
 //    }
     //--------------------------------------------여기까지---------------------------------------------------------
 
-//    public List<GetListOrdersRes> list() {
-//        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        Integer userIdx = user.getUserIdx();
-//
-//        List<Orders> result = ordersRepository.findAll();
-//
-//        List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
-//
-//        for(Orders orders : result) {
-//            User loginUser = orders.getUser();
-//
-//            if(loginUser.getUserIdx() == userIdx) {
-//                GetReadOrdersProductRes getReadOrdersProductRes = GetReadOrdersProductRes.builder()
-//                        .productIdx(orders.getProduct().getProductIdx())
-//                        .productName(orders.getProduct().getProductName())
-//                        .price(orders.getProduct().getPrice())
-//                        .build();
-//
-//                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
-//                        .ordersIdx(orders.getOrdersIdx())
-//                        .getReadOrdersProductRes(getReadOrdersProductRes)
-//                        .build();
-//
-//                getListOrdersResList.add(getListOrdersRes);
-//            }
-//        }
-//        return getListOrdersResList;
-//    }
+
 //
 //    public GetReadOrdersRes read(Integer ordersIdx) {
 //        Optional<Orders> result = ordersRepository.findByOrdersIdx(ordersIdx);

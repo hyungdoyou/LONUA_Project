@@ -1,6 +1,5 @@
 package com.example.lonua.orders.model.response;
 
-import com.example.lonua.product.model.entity.Product;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -19,5 +18,5 @@ public class PostCreateOrdersRes {
     private Integer totalAmount;
     private String impUid;
     private String payMethod;
-    private List<GetListOrdersRes> productList = new ArrayList<>();
+    private List<GetCreateOrdersRes> productList = new ArrayList<>();
 }

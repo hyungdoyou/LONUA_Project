@@ -10,9 +10,15 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class GetReadOrdersRes {
-    private Integer ordersIdx;
 
-    private PostUserOrdersRes postUserOrdersRes;
-    private GetReadOrdersProductRes getReadOrdersProductRes;
+    private String brandName;
+    private String productName;
+    private String productImage;
+    private Integer price;
+
+    private String userName;
+    private String userPhoneNumber;
+    private String userAddr;
+    private String deliveryMassage;
 
 }

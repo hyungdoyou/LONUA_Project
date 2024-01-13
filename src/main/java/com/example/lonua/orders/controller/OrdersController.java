@@ -29,6 +29,24 @@ public class OrdersController {
         return ResponseEntity.ok().body(baseRes);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    public ResponseEntity list(Integer page, Integer size){
+        User user = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        BaseRes baseRes = ordersService.list(user, page, size);
+
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/read/{idx}")
+    public ResponseEntity read(@PathVariable Integer idx){
+        User user = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        BaseRes baseRes = ordersService.read(user, idx);
+
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+
+
     // ---------------------카카오페이 결제를 통한 주문-----------------------------
 //    @RequestMapping(method = RequestMethod.POST, value = "/create")
 //    public ResponseEntity create(@RequestBody PostCreateOrdersReq postCreateOrdersReq) throws IamportResponseException, IOException {
@@ -39,15 +57,4 @@ public class OrdersController {
 //        return ResponseEntity.ok().body(baseRes);
 //    }
     // --------------------------------------------------------------------------
-
-//    @RequestMapping(method = RequestMethod.GET, value = "/list")
-//    public ResponseEntity list() {
-//        return ResponseEntity.ok().body(ordersService.list());
-//    }
-//
-//    @RequestMapping(method = RequestMethod.GET, value = "/read")
-//    public ResponseEntity read(Integer ordersIdx) {
-//
-//        return ResponseEntity.ok().body(ordersService.read(ordersIdx));
-//    }
 }
