@@ -6,7 +6,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,18 +25,19 @@ public class Orders {
     @JoinColumn(name = "User_idx")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Product_idx")
-    private Product product;
+    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY)
+    private List<OrdersProduct> ordersProductList = new ArrayList<>();
 
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+    @Column(nullable = false, length = 50, unique = true)
+    private String impUid;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private String createdAt;
 
     @Column(nullable = false)
-    private Integer status;
+    private String updatedAt;
+
+    @Column(nullable = false)
+    private Boolean status;
 
 }

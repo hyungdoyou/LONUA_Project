@@ -60,7 +60,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -96,3 +96,7 @@ cloud:
 project:
   upload:
     path: C:\lonua\brand
+
+imp:
+  imp-key: 7765128628442384
+  imp-secret: IxcluaywOlF5b0TL98DOqRsi49FVaDx7IGly2qAVz9jPy2okG8V7SKwi2JvauY0DOmsxZGl7Psbtq3zr

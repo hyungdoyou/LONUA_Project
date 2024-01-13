@@ -24,6 +24,4 @@ public class GetListUserRes {
     private Integer upperType;
     private Integer lowerType;
     private String gradeType;
-
-    private List<GetUserOrdersRes> getUserOrdersResList = new ArrayList<>();
 }

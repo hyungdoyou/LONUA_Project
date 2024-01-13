@@ -5,6 +5,7 @@ import com.example.lonua.cart.model.entity.Cart;
 import com.example.lonua.category.model.entity.Category;
 import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.orders.model.entity.Orders;
+import com.example.lonua.orders.model.entity.OrdersProduct;
 import com.example.lonua.product.model.request.PatchUpdateProductReq;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
@@ -37,8 +38,6 @@ public class Product {
     private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<Orders> ordersList = new ArrayList<>();
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
@@ -49,6 +48,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductIntrodImage> productIntrodImageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<OrdersProduct> ordersProductList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Brand_idx")

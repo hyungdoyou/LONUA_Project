@@ -11,6 +11,7 @@ import lombok.*;
 @Builder
 public class GetListOrdersRes {
 
-    private Integer ordersIdx;
-    private GetReadOrdersProductRes getReadOrdersProductRes;
+    private String brandName;
+    private String productName;
+    private Integer price;
 }

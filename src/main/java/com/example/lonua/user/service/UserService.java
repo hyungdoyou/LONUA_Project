@@ -93,22 +93,6 @@ public class UserService{
 
         List<GetListUserRes> getListUserResList = new ArrayList<>();
         for(User user : result) {
-            List<GetUserOrdersRes> getUserOrdersResList = new ArrayList<>();
-            List<Orders> ordersList = user.getOrdersList();
-
-            for(Orders orders : ordersList) {
-                GetUserOrdersRes getUserOrdersRes = GetUserOrdersRes.builder()
-                        .ordersIdx(orders.getOrdersIdx())
-                        .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
-                                .productIdx(orders.getProduct().getProductIdx())
-                                .brandName(orders.getProduct().getBrand().getBrandName())
-                                .productName(orders.getProduct().getProductName())
-                                .price(orders.getProduct().getPrice())
-                                .build())
-                        .build();
-
-                getUserOrdersResList.add(getUserOrdersRes);
-            }
 
             GetListUserRes getListUserRes = GetListUserRes.builder()
                     .userIdx(user.getUserIdx())
@@ -121,7 +105,6 @@ public class UserService{
                     .upperType(user.getUpperType())
                     .lowerType(user.getLowerType())
                     .gradeType(user.getGrade().getGradeType())
-                    .getUserOrdersResList(getUserOrdersResList)
                     .build();
 
             getListUserResList.add(getListUserRes);
@@ -137,45 +120,37 @@ public class UserService{
 
     public BaseRes read(String email) {
         Optional<User> result = userRepository.findByUserEmail(email);
-        User user = result.get();
+        if (result.isPresent()) {
+            User user = result.get();
 
-        List<GetUserOrdersRes> getUserOrdersResList = new ArrayList<>();
-        List<Orders> ordersList = user.getOrdersList();
-
-        for(Orders orders : ordersList) {
-            GetUserOrdersRes getUserOrdersRes = GetUserOrdersRes.builder()
-                    .ordersIdx(orders.getOrdersIdx())
-                    .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
-                            .productIdx(orders.getProduct().getProductIdx())
-                            .brandName(orders.getProduct().getBrand().getBrandName())
-                            .productName(orders.getProduct().getProductName())
-                            .price(orders.getProduct().getPrice())
-                            .build())
+            GetListUserRes getListUserRes = GetListUserRes.builder()
+                    .userIdx(user.getUserIdx())
+                    .userEmail(user.getUserEmail())
+                    .userName(user.getUsername())
+                    .userBirth(user.getUserBirth())
+                    .userGender(user.getUserGender())
+                    .userPhoneNumber(user.getUserPhoneNumber())
+                    .userAddr(user.getUserAddr())
+                    .preferStyle(user.getPreferStyle())
+                    .upperType(user.getUpperType())
+                    .lowerType(user.getLowerType())
+                    .gradeType(user.getGrade().getGradeType())
                     .build();
-            getUserOrdersResList.add(getUserOrdersRes);
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(getListUserRes)
+                    .build();
+        } else {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 실패")
+                    .result("회원을 찾을 수 없습니다.")
+                    .build();
         }
-
-        GetListUserRes getListUserRes = GetListUserRes.builder()
-                .userIdx(user.getUserIdx())
-                .userEmail(user.getUserEmail())
-                .userName(user.getUsername())
-                .userBirth(user.getUserBirth())
-                .userGender(user.getUserGender())
-                .userPhoneNumber(user.getUserPhoneNumber())
-                .userAddr(user.getUserAddr())
-                .preferStyle(user.getPreferStyle())
-                .upperType(user.getUpperType())
-                .lowerType(user.getLowerType())
-                .gradeType(user.getGrade().getGradeType())
-                .getUserOrdersResList(getUserOrdersResList)
-                .build();
-
-        return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("요청 성공")
-                .result(getListUserRes)
-                .build();
     }
 
     // 회원 로그인

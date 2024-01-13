@@ -1,240 +1,266 @@
 package com.example.lonua.orders.service;
 
 
+import com.example.lonua.config.BaseRes;
 import com.example.lonua.orders.model.entity.Orders;
-import com.example.lonua.orders.model.request.PostRegisterOrdersReq;
+import com.example.lonua.orders.model.entity.OrdersProduct;
+import com.example.lonua.orders.model.request.PostCreateOrdersReq;
 import com.example.lonua.orders.model.response.GetListOrdersRes;
 import com.example.lonua.orders.model.response.GetReadOrdersRes;
+import com.example.lonua.orders.model.response.PostCreateOrdersRes;
+import com.example.lonua.orders.repository.OrdersProductRepository;
 import com.example.lonua.orders.repository.OrdersRepository;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.product.model.entity.ProductCount;
 import com.example.lonua.product.model.response.GetReadOrdersProductRes;
+import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.model.entity.response.PostUserOrdersRes;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
-import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class OrdersService {
-    private final OrdersRepository ordersRepository;
+
+    private final IamportClient iamportClient;
     private final ProductRepository productRepository;
+    private final OrdersRepository ordersRepository;
+    private final OrdersProductRepository ordersProductRepository;
+    private final ProductCountRepository productCountRepository;
 
-    public OrdersService(OrdersRepository ordersRepository, ProductRepository productRepository) {
-        this.ordersRepository = ordersRepository;
-        this.productRepository = productRepository;
-    }
 
-    public void register(Integer userIdx, PostRegisterOrdersReq postRegisterOrdersReq) {
-
+    @Transactional
+    public BaseRes createOrder(User user, PostCreateOrdersReq postCreateOrdersReq) {
         Orders orders = Orders.builder()
-                .user(User.builder().userIdx(userIdx).build())
-                .product(Product.builder().productIdx(postRegisterOrdersReq.getProduct_idx()).build())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .status(1)
+                .user(user)
+                .impUid(postCreateOrdersReq.getImpUid())
+                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .status(true)
                 .build();
-    }
 
-    public List<GetListOrdersRes> list() {
-        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        Integer userIdx = user.getUserIdx();
-
-        List<Orders> result = ordersRepository.findAll();
+        orders = ordersRepository.save(orders);
 
         List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
 
-        for(Orders orders : result) {
-            User loginUser = orders.getUser();
+        for (Integer idx : postCreateOrdersReq.getProductIdxList()) {
+            Optional<Product> productIdx = productRepository.findByProductIdx(idx);
 
-            if(loginUser.getUserIdx() == userIdx) {
-                GetReadOrdersProductRes getReadOrdersProductRes = GetReadOrdersProductRes.builder()
-                        .productIdx(orders.getProduct().getProductIdx())
-                        .productName(orders.getProduct().getProductName())
-                        .price(orders.getProduct().getPrice())
+            if(productIdx.isPresent()) {
+                // 주문 상품 DB에 추가
+                OrdersProduct ordersProduct = OrdersProduct.builder()
+                        .orders(orders)
+                        .product(Product.builder().productIdx(idx).build())
                         .build();
 
+                ordersProductRepository.save(ordersProduct);
+
+                // 회원 상, 하체 유형에 따라 상품의 카운트 수 증가
+                Optional<ProductCount> result = productCountRepository.findByProduct_ProductIdx(idx);
+                ProductCount productCount = result.get();
+                productCount.increaseUpperCount(user.getUpperType());
+                productCount.increaseLowerCount(user.getLowerType());
+
+                Optional<Product> product = productRepository.findByProductIdx(idx);
+                Product userProduct = product.get();
+
                 GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
-                        .ordersIdx(orders.getOrdersIdx())
-                        .getReadOrdersProductRes(getReadOrdersProductRes)
+                        .brandName(userProduct.getBrand().getBrandName())
+                        .productName(userProduct.getProductName())
+                        .price(userProduct.getPrice())
                         .build();
 
                 getListOrdersResList.add(getListOrdersRes);
-            }
-        }
-        return getListOrdersResList;
-    }
-
-    public GetReadOrdersRes read(Integer ordersIdx) {
-        Optional<Orders> result = ordersRepository.findByOrdersIdx(ordersIdx);
-
-        if(result.isPresent()) {
-            Orders orders = result.get();
-
-            GetReadOrdersRes response = GetReadOrdersRes.builder()
-                    .ordersIdx(orders.getOrdersIdx())
-                    .postUserOrdersRes(PostUserOrdersRes.builder()
-                            .userIdx(orders.getUser().getUserIdx())
-                            .userEmail(orders.getUser().getUserEmail())
-                            .userName(orders.getUser().getUsername())
-                            .userPhoneNumber(orders.getUser().getUserPhoneNumber())
-                            .userAddr(orders.getUser().getUserAddr())
-                            .build())
-                    .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
-                            .productIdx(orders.getProduct().getProductIdx())
-                            .brandName(orders.getProduct().getBrand().getBrandName())
-                            .productName(orders.getProduct().getProductName())
-                            .price(orders.getProduct().getPrice())
-                            .build())
-                    .build();
-
-            return response;
-        } else {
-            return null;
-        }
-    }
-
-    // ---------------여기부터 결제 기능---------------
-    public String getToken() throws IOException {
-        HttpsURLConnection conn = null;
-
-        URL url = new URL("https://api.iamport.kr/users/getToken");
-        conn = (HttpsURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-type", "application/json");
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setDoOutput(true);
-
-        JsonObject json = new JsonObject();
-        json.addProperty("imp_key", "7765128628442384");
-        json.addProperty("imp_secret", "IxcluaywOlF5b0TL98DOqRsi49FVaDx7IGly2qAVz9jPy2okG8V7SKwi2JvauY0DOmsxZGl7Psbtq3zr");
-
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-        bw.write(json.toString());
-        bw.flush();
-        bw.close();
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-        Gson gson = new Gson();
-        String response = gson.fromJson(br.readLine(), Map.class).get("response").toString();
-
-        String token = gson.fromJson(response, Map.class).get("access_token").toString();
-        br.close();
-        conn.disconnect();
-
-        return token;
-    }
-
-    public Map<String, String> getPaymentInfo(String impUid) throws IOException {
-        String token = getToken();
-        HttpsURLConnection conn = null;
-
-        URL url = new URL("https://api.iamport.kr/payments/" + impUid);
-        conn = (HttpsURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Authorization", token);
-        conn.setDoOutput(true);
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-        Gson gson = new Gson();
-        String response = gson.fromJson(br.readLine(), Map.class).get("response").toString();
-
-        //System.out.println(response);
-        br.close();
-        conn.disconnect();
-
-        String amount = response.split("amount")[1].split(",")[0].replace("=", "");
-        //System.out.println(amount);
-        String name = response.split(" name")[1].split(",")[0].replace("=", "");
-        //System.out.println(name);
-        String custom_data = response.split(" custom_data")[1].split(", customer_uid")[0].replace("=", "");
-        //System.out.println(custom_data);
-
-        Map<String, String> result = new HashMap<>();
-        result.put("name", name);
-        result.put("amount", amount);
-        result.put("custom_data", custom_data);
-
-        return result;
-
-    }
-
-    public String paymentValidation(String impUid) throws IOException {
-
-        Map<String, String> paymentResult = getPaymentInfo(impUid);
-
-        System.out.println(paymentResult.get("custom_data"));
-        String custom_data = paymentResult.get("custom_data");
-        Gson gson = new Gson();
-
-        Integer productAmount = Integer.valueOf(Integer.valueOf(paymentResult.get("amount").split("\\.")[0]));
-        Integer realAmount = 0;
-
-        List<Map<String, Object>> orderInfo = gson.fromJson(custom_data, List.class);
-        //System.out.println(orderInfo);
-        //System.out.println(orderInfo.get(0));
-        //System.out.println(orderInfo.get(1));
-        for(int i=0; i<orderInfo.size(); i++) {
-            String productName = (String)orderInfo.get(i).get("name");
-
-            Double productPrice = ((Double)orderInfo.get(i).get("price")); // Double 형
-            Integer resultPrice = productPrice.intValue();  // Double 형을 Integer 로 변경
-
-            Optional<Product> result = productRepository.findByProductName(productName);
-            Product product = result.get();
-
-            if(resultPrice.equals(product.getPrice())) {
-                realAmount += product.getPrice();
+            } else {
+                return BaseRes.builder()
+                        .code(400)
+                        .isSuccess(false)
+                        .message("상품 주문 실패")
+                        .result("잘못된 요청입니다.")
+                        .build();
             }
         }
 
-        if(productAmount.equals(realAmount)) {
-            return "ok";
-        } else {
-            String token = getToken();
-            cancelPayment(token, impUid, productAmount);
-            return "error";
-        }
+        PostCreateOrdersRes postCreateOrdersRes = PostCreateOrdersRes.builder()
+                .userName(user.getName())
+                .userAddr(user.getUserAddr())
+                .userPhoneNumber(user.getUserPhoneNumber())
+                .totalAmount(postCreateOrdersReq.getAmount())
+                .impUid(postCreateOrdersReq.getImpUid())
+                .payMethod(postCreateOrdersReq.getPayMethod())
+                .productList(getListOrdersResList)
+                .build();
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("상품 주문 성공")
+                .result(postCreateOrdersRes)
+                .build();
     }
 
-    // 환불처리
-    public void cancelPayment(String token, String impUid, Integer amount) throws IOException {
-        HttpsURLConnection conn = null;
 
-        URL url = new URL("https://api.iamport.kr/payments/cancel");
-        conn = (HttpsURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-type", "application/json");
-        conn.setRequestProperty("Authorization", token);
-        conn.setDoOutput(true);  // 출력 스트림 사용
-
-        // 요청할 json 데이터
-        JsonObject json = new JsonObject();
-        json.addProperty("imp_uid", impUid);
-        json.addProperty("amount", amount);
-        json.addProperty("reason", "결제 금액 에러");
-
-        // json 데이터를 서버로 전송
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-        bw.write(json.toString());
-        bw.flush();
-        bw.close();
-
-//        // 서버로부터 응답 json 데이터를 전달받음
-//        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-//        Gson gson = new Gson();
-//        String response = gson.fromJson(br.readLine(), Map.class).get("response").toString();
+    //----------------------------------카카오페이 결제를 통한 주문------------------------------------------------
+//    @Transactional
+//    public void createOrder(User user, PostCreateOrdersReq postCreateOrdersReq) {
+//        Orders orders = Orders.builder()
+//                .user(user)
+//                .impUid(postCreateOrdersReq.getImpUid())
+//                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+//                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+//                .status(true)
+//                .build();
 //
-//        System.out.println(response);
-//        br.close();
-//        conn.disconnect();
-    }
-    // ---------------여기까지 결제 기능---------------
+//        orders = ordersRepository.save(orders);
+//
+//        for (Integer idx : postCreateOrdersReq.getProductIdxList()) {
+//            // 주문 상품 DB에 추가
+//            ordersProductRepository.save(OrdersProduct.builder()
+//                    .orders(orders)
+//                    .product(Product.builder().productIdx(idx).build())
+//                    .build());
+//
+//            // 회원 상, 하체 유형에 따라 상품의 카운트 수 증가
+//            Optional<ProductCount> result = productCountRepository.findByProduct_ProductIdx(idx);
+//            ProductCount productCount = result.get();
+//            productCount.increaseUpperCount(user.getUpperType());
+//            productCount.increaseLowerCount(user.getLowerType());
+//        }
+//    }
+//
+//    public BaseRes paymentValidation(User user, PostCreateOrdersReq postCreateOrdersReq) throws IamportResponseException, IOException {
+//
+//        Integer totalPrice = 0;
+//        for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
+//            Optional<Product> result = productRepository.findByProductIdx(idx);
+//            if(result.isPresent()) {
+//                Product product = result.get();
+//                totalPrice += product.getPrice();
+//            }
+//        }
+//
+//        if(postCreateOrdersReq.getAmount().equals(totalPrice) ) {
+//            createOrder(user, postCreateOrdersReq);  // 주문 생성
+//
+//            List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
+//            for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
+//                Optional<Product> result = productRepository.findByProductIdx(idx);
+//
+//                Product product = result.get();
+//                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+//                        .brandName(product.getBrand().getBrandName())
+//                        .productName(product.getProductName())
+//                        .price(product.getPrice())
+//                        .build();
+//
+//                getListOrdersResList.add(getListOrdersRes);
+//            }
+//
+//            PostCreateOrdersRes postCreateOrdersRes = PostCreateOrdersRes.builder()
+//                    .userName(user.getName())
+//                    .userAddr(user.getUserAddr())
+//                    .userPhoneNumber(user.getUserPhoneNumber())
+//                    .totalAmount(postCreateOrdersReq.getAmount())
+//                    .impUid(postCreateOrdersReq.getImpUid())
+//                    .payMethod(postCreateOrdersReq.getPayMethod())
+//                    .productList(getListOrdersResList)
+//                    .build();
+//
+//            BaseRes baseRes = BaseRes.builder()
+//                    .code(200)
+//                    .isSuccess(true)
+//                    .message("상품 주문 성공")
+//                    .result(postCreateOrdersRes)
+//                    .build();
+//
+//            return baseRes;
+//        } else{
+//            cancelPayment(postCreateOrdersReq.getImpUid());  // 취소 기능
+//            return null;
+//        }
+//    }
+//
+//    public IamportResponse getPaymentInfo(String impUid) throws IamportResponseException, IOException {
+//        IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);
+//
+//        return response;
+//    }
+//
+//    public void cancelPayment(String impUid) throws IamportResponseException, IOException {
+//        CancelData cancelData = new CancelData(impUid,true);
+//        iamportClient.cancelPaymentByImpUid(cancelData);
+//    }
+    //--------------------------------------------여기까지---------------------------------------------------------
+
+//    public List<GetListOrdersRes> list() {
+//        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        Integer userIdx = user.getUserIdx();
+//
+//        List<Orders> result = ordersRepository.findAll();
+//
+//        List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
+//
+//        for(Orders orders : result) {
+//            User loginUser = orders.getUser();
+//
+//            if(loginUser.getUserIdx() == userIdx) {
+//                GetReadOrdersProductRes getReadOrdersProductRes = GetReadOrdersProductRes.builder()
+//                        .productIdx(orders.getProduct().getProductIdx())
+//                        .productName(orders.getProduct().getProductName())
+//                        .price(orders.getProduct().getPrice())
+//                        .build();
+//
+//                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+//                        .ordersIdx(orders.getOrdersIdx())
+//                        .getReadOrdersProductRes(getReadOrdersProductRes)
+//                        .build();
+//
+//                getListOrdersResList.add(getListOrdersRes);
+//            }
+//        }
+//        return getListOrdersResList;
+//    }
+//
+//    public GetReadOrdersRes read(Integer ordersIdx) {
+//        Optional<Orders> result = ordersRepository.findByOrdersIdx(ordersIdx);
+//
+//        if(result.isPresent()) {
+//            Orders orders = result.get();
+//
+//            GetReadOrdersRes response = GetReadOrdersRes.builder()
+//                    .ordersIdx(orders.getOrdersIdx())
+//                    .postUserOrdersRes(PostUserOrdersRes.builder()
+//                            .userIdx(orders.getUser().getUserIdx())
+//                            .userEmail(orders.getUser().getUserEmail())
+//                            .userName(orders.getUser().getUsername())
+//                            .userPhoneNumber(orders.getUser().getUserPhoneNumber())
+//                            .userAddr(orders.getUser().getUserAddr())
+//                            .build())
+//                    .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
+//                            .productIdx(orders.getProduct().getProductIdx())
+//                            .brandName(orders.getProduct().getBrand().getBrandName())
+//                            .productName(orders.getProduct().getProductName())
+//                            .price(orders.getProduct().getPrice())
+//                            .build())
+//                    .build();
+//
+//            return response;
+//        } else {
+//            return null;
+//        }
+//    }
 }
