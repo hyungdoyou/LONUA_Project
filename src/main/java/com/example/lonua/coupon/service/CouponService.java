@@ -4,8 +4,10 @@ package com.example.lonua.coupon.service;
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.config.BaseRes;
 import com.example.lonua.coupon.model.entity.Coupon;
+import com.example.lonua.coupon.model.request.GetReadReq;
 import com.example.lonua.coupon.model.request.PostRegisterReq;
 import com.example.lonua.coupon.model.response.GetListRes;
+import com.example.lonua.coupon.model.response.GetReadRes;
 import com.example.lonua.coupon.model.response.PostRegisterRes;
 import com.example.lonua.coupon.repository.CouponRepository;
 import com.example.lonua.user.model.entity.User;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +57,26 @@ public class CouponService {
 
     }
 
-    public void read() {
+    public BaseRes read(GetReadReq request) {
+        Optional<Coupon> byId = couponRepository.findById(request.getCouponIdx());
+        if (byId.isPresent()) {
+            Coupon coupon = byId.get();
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청성공")
+                    .result(GetReadRes.builder()
+                            .couponIdx(coupon.getCouponIdx())
+                            .couponName(coupon.getCouponName())
+                            .couponDiscountRate(coupon.getCouponDiscountRate())
+                            .receivedDate(coupon.getReceivedDate())
+                            .couponExpirationDate(coupon.getCouponExpirationDate())
+                            .status(coupon.getStatus())
+                            .userIdx(coupon.getUser().getUserIdx())
+                            .build())
+                    .build();
+        }
+        return null;
 
     }
 
