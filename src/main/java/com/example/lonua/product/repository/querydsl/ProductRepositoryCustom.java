@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepositoryCustom {
     Page<Product> findList(Pageable pageable);
+
+    Optional<Product> findProduct(Integer idx);
 }

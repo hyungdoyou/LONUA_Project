@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, Prod
     public Optional<Product> findByProductName(String productName);
 
     public Optional<Product> findByProductIdx(Integer productIdx);
+
+    public Integer deleteByProductIdx(Integer idx);
 }

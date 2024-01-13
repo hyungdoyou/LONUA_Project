@@ -16,6 +16,8 @@ import com.example.lonua.product.model.response.GetReadProductRes;
 import com.example.lonua.product.model.response.PatchUpdateProductRes;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.repository.ProductCountRepository;
+import com.example.lonua.product.repository.ProductImageRepository;
+import com.example.lonua.product.repository.ProductIntrodImageRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.style.model.entity.Style;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,8 @@ public class ProductService {
     private final ProductImageService productImageService;
     private final ProductIntrodImageService productIntrodImageService;
     private final ProductCountRepository productCountRepository;
+    private final ProductIntrodImageRepository productIntrodImageRepository;
+    private final ProductImageRepository productImageRepository;
 
 
     @Transactional
@@ -167,7 +171,7 @@ public class ProductService {
 //    @Transactional(readOnly = true)
     @Transactional
     public BaseRes read(Integer idx) {
-        Optional<Product> result = productRepository.findByProductIdx(idx);
+        Optional<Product> result = productRepository.findProduct(idx);
 
         if(result.isPresent()) {
             Product product = result.get();
@@ -265,6 +269,30 @@ public class ProductService {
                     .build();
 
             return baseRes;
+        }
+    }
+
+    @Transactional
+    public BaseRes delete(Integer idx) {
+        Integer result1 = productImageRepository.deleteAllByProduct_ProductIdx(idx);
+        Integer result2 = productIntrodImageRepository.deleteAllByProduct_ProductIdx(idx);
+        Integer result3 = productCountRepository.deleteByProduct_ProductIdx(idx);
+        Integer result4 = productRepository.deleteByProductIdx(idx);
+
+        if(!result1.equals(0) && !result2.equals(0) && !result3.equals(0)&& !result4.equals(0)) {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result("상품이 삭제되었습니다.")
+                    .build();
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("요청 실패")
+                    .result("상품을 찾을 수 없습니다.")
+                    .build();
         }
     }
 }

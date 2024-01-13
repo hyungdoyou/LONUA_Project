@@ -54,5 +54,12 @@ public class ProductController {
         return ResponseEntity.ok().body(baseRes);
     }
 
+    // 상품 삭제
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{productIdx}")
+    public ResponseEntity delete(@PathVariable Integer productIdx) {
+
+        BaseRes baseRes = productService.delete(productIdx);
+        return ResponseEntity.ok().body(baseRes);
+    }
 
 }

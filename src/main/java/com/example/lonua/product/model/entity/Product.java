@@ -10,6 +10,9 @@ import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
 import com.example.lonua.style.model.entity.Style;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -27,24 +30,24 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productIdx;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Cart> cartList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Likes> likesList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Orders> ordersList = new ArrayList<>();
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Review> reviewList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductImage> productImageList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductIntrodImage> productIntrodImageList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -59,7 +62,7 @@ public class Product {
     @JoinColumn(name = "Style_idx")
     private Style style;
 
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private ProductCount productCount;
 
     @Column(nullable = false, length = 45)
