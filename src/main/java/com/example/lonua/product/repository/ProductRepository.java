@@ -13,6 +13,5 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer>, ProductRepositoryCustom {
     public Optional<Product> findByProductName(String productName);
 
-    @Lock(LockModeType.OPTIMISTIC)
     public Optional<Product> findByProductIdx(Integer productIdx);
 }

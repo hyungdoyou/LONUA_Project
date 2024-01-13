@@ -1,5 +1,6 @@
 package com.example.lonua.product.model.response;
 
+import com.example.lonua.brand.model.entity.Brand;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -12,10 +13,10 @@ import java.util.List;
 @Builder
 public class GetReadProductRes {
     private Integer productIdx;
-    private String brandName;
     private String productName;
-    private String productImage;
-    private List<GetProductIntrodRes> getProductIntrodResList = new ArrayList<>();
+    private List<String> productImages;
+    private List<String> productIntrodImages;
+
     private Integer price;
 
     private Float shoulderWidth;
@@ -29,4 +30,15 @@ public class GetReadProductRes {
     private Float crotchLength;
     private Float hemLength;
     private Float totalBottomLength;
+
+    private Integer likeCount;
+
+    private String brandName;
+    private String brandImage;
+    private String businessAddress;
+    private String brandPhoneNumber;
+    private String businessRegistration;
+    private String returnAddress;
+    private Integer returnCost;
+    private String returnCourier;
 }

@@ -16,6 +16,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+    // 상품 등록
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     public ResponseEntity register(
             @RequestPart(value = "product") PostRegisterProductReq postRegisterProductReq,
@@ -27,6 +28,7 @@ public class ProductController {
         return ResponseEntity.ok().body(baseRes);
     }
 
+    // 페이징 별 상품 조회
     @RequestMapping(method = RequestMethod.GET, value = "/list")
     public ResponseEntity list(Integer page, Integer size) {
 
@@ -34,10 +36,12 @@ public class ProductController {
         return ResponseEntity.ok().body(baseRes);
     }
 
-//
-//    @RequestMapping(method = RequestMethod.GET, value = "/read")
-//    public ResponseEntity read(Integer productIdx) {
-//
-//        return ResponseEntity.ok().body(productService.read(productIdx));
-//    }
+
+    // 상품 세부 조회
+    @RequestMapping(method = RequestMethod.GET, value = "/{idx}")
+    public ResponseEntity read(@PathVariable Integer idx) {
+
+        BaseRes baseRes = productService.read(idx);
+        return ResponseEntity.ok().body(baseRes);
+    }
 }

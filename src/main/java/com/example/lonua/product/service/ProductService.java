@@ -1,7 +1,5 @@
 package com.example.lonua.product.service;
 
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.lonua.brand.model.entity.Brand;
 import com.example.lonua.category.model.entity.Category;
 import com.example.lonua.config.BaseRes;
@@ -14,29 +12,24 @@ import com.example.lonua.product.model.request.PostRegisterProductReq;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.response.GetListProductRes;
 import com.example.lonua.product.model.response.GetReadProductRes;
-import com.example.lonua.product.model.response.GetProductIntrodRes;
 import com.example.lonua.product.model.response.PostRegisterProductRes;
 import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.style.model.entity.Style;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -130,6 +123,8 @@ public class ProductService {
     }
 
     // 상품 리스트 출력(페이지 별)
+
+//    @Transactional(readOnly = true)
     public BaseRes list(Integer page, Integer size) {
 
         // 페이징 기능 사용(QueryDSL)
@@ -164,6 +159,75 @@ public class ProductService {
                 .build();
 
         return baseRes;
+    }
+
+    // 상품 세부 정보 조회(read 역할)
+//    @Transactional(readOnly = true)
+    @Transactional
+    public BaseRes read(Integer idx) {
+        Optional<Product> result = productRepository.findByProductIdx(idx);
+
+        if(result.isPresent()) {
+            Product product = result.get();
+
+            List<ProductImage> productImageList = product.getProductImageList();
+            List<ProductIntrodImage> productIntrodImageList = product.getProductIntrodImageList();
+
+            List<String> productImages = new ArrayList<>();
+            for(ProductImage productImage : productImageList) {
+                productImages.add(productImage.getProductImage());
+            }
+
+            List<String> productIntrodImages = new ArrayList<>();
+            for(ProductIntrodImage productIntrodImage : productIntrodImageList) {
+                productIntrodImages.add(productIntrodImage.getProductIntrodImage());
+            }
+
+            GetReadProductRes getReadProductRes = GetReadProductRes.builder()
+                    .productIdx(product.getProductIdx())
+                    .productName(product.getProductName())
+                    .productImages(productImages)
+                    .productIntrodImages(productIntrodImages)
+                    .price(product.getPrice())
+                    .shoulderWidth(product.getShoulderWidth())
+                    .chestSize(product.getChestSize())
+                    .armLength(product.getArmLength())
+                    .topLength(product.getTopLength())
+                    .waistline(product.getWaistline())
+                    .hipCircumference(product.getHipCircumference())
+                    .thighCircumference(product.getThighCircumference())
+                    .crotchLength(product.getCrotchLength())
+                    .hemLength(product.getHemLength())
+                    .totalBottomLength(product.getTotalBottomLength())
+                    .brandName(product.getBrand().getBrandName())
+                    .brandImage(product.getBrand().getBrandImage())
+                    .brandPhoneNumber(product.getBrand().getPhoneNumber())
+                    .businessAddress(product.getBrand().getBusinessAddress())
+                    .businessRegistration(product.getBrand().getBusinessRegistration())
+                    .returnAddress(product.getBrand().getReturnAddress())
+                    .returnCost(product.getBrand().getReturnCost())
+                    .returnCourier(product.getBrand().getReturnCourier())
+                    .likeCount(product.getProductCount().getLikeCount())
+                    .build();
+
+            BaseRes baseRes = BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(getReadProductRes)
+                    .build();
+
+            return baseRes;
+        } else {
+            BaseRes baseRes = BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("요청 실패")
+                    .result("잘못된 요청입니다.")
+                    .build();
+
+            return baseRes;
+        }
     }
 }
 
