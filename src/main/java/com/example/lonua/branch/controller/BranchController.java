@@ -19,4 +19,10 @@ public class BranchController {
 
         return ResponseEntity.ok().body(branchService.create(request));
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/list")
+    ResponseEntity listBranch() {
+
+        return ResponseEntity.ok().body("");
+    }
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostRegisterReq {
+    private Integer branchIdx;
     private String branchName;
     private String branchAddress;
 }
