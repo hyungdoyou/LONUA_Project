@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class PostRegisterRes {
-
+public class GetListRes {
     private Integer cartIdx;
-    private Integer productIdx;
-    private Integer userIdx;
-    private String createdAt;
-    private String updatedAt;
     private String productName;
     private Integer price;
-    private Boolean status;
 }
