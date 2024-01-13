@@ -98,5 +98,5 @@ project:
     path: C:\lonua\brand
 
 imp:
-  imp-key: 7765128628442384
-  imp-secret: IxcluaywOlF5b0TL98DOqRsi49FVaDx7IGly2qAVz9jPy2okG8V7SKwi2JvauY0DOmsxZGl7Psbtq3zr
+  imp-key: ${MY_KEY}
+  imp-secret: ${MY_SECRET_KEY}
