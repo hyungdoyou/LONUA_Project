@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrdersProductRepository extends JpaRepository<OrdersProduct, Integer>, OrdersProductRepositoryCustom {
+    public Integer deleteByOrders_OrdersIdx(Integer idx);
+
 }

@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Integer>, OrdersRepositoryCustom {
-    public Optional<Orders> findByOrdersIdx(Integer OrdersIdx);
+    public Integer deleteByOrdersIdx(Integer idx);
 }

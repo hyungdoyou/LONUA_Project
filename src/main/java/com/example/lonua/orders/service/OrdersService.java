@@ -39,7 +39,6 @@ public class OrdersService {
     private final OrdersProductRepository ordersProductRepository;
     private final ProductCountRepository productCountRepository;
 
-
     @Transactional
     public BaseRes createOrder(User user, PostCreateOrdersReq postCreateOrdersReq) {
         Orders orders = Orders.builder()
@@ -186,7 +185,27 @@ public class OrdersService {
         }
     }
 
+    @Transactional
+    public BaseRes delete(Integer idx) {
+        Integer result1 = ordersProductRepository.deleteByOrders_OrdersIdx(idx);
+        Integer result2 = ordersRepository.deleteByOrdersIdx(idx);
 
+        if(!result1.equals(0) && !result2.equals(0)) {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result("상품이 삭제되었습니다.")
+                    .build();
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("요청 실패")
+                    .result("상품을 찾을 수 없습니다.")
+                    .build();
+        }
+    }
 
 
     //----------------------------------카카오페이 결제를 통한 주문------------------------------------------------
@@ -280,35 +299,4 @@ public class OrdersService {
 //        iamportClient.cancelPaymentByImpUid(cancelData);
 //    }
     //--------------------------------------------여기까지---------------------------------------------------------
-
-
-//
-//    public GetReadOrdersRes read(Integer ordersIdx) {
-//        Optional<Orders> result = ordersRepository.findByOrdersIdx(ordersIdx);
-//
-//        if(result.isPresent()) {
-//            Orders orders = result.get();
-//
-//            GetReadOrdersRes response = GetReadOrdersRes.builder()
-//                    .ordersIdx(orders.getOrdersIdx())
-//                    .postUserOrdersRes(PostUserOrdersRes.builder()
-//                            .userIdx(orders.getUser().getUserIdx())
-//                            .userEmail(orders.getUser().getUserEmail())
-//                            .userName(orders.getUser().getUsername())
-//                            .userPhoneNumber(orders.getUser().getUserPhoneNumber())
-//                            .userAddr(orders.getUser().getUserAddr())
-//                            .build())
-//                    .getReadOrdersProductRes(GetReadOrdersProductRes.builder()
-//                            .productIdx(orders.getProduct().getProductIdx())
-//                            .brandName(orders.getProduct().getBrand().getBrandName())
-//                            .productName(orders.getProduct().getProductName())
-//                            .price(orders.getProduct().getPrice())
-//                            .build())
-//                    .build();
-//
-//            return response;
-//        } else {
-//            return null;
-//        }
-//    }
 }

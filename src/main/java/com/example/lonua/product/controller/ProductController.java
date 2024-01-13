@@ -55,10 +55,10 @@ public class ProductController {
     }
 
     // 상품 삭제
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{productIdx}")
-    public ResponseEntity delete(@PathVariable Integer productIdx) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{idx}")
+    public ResponseEntity delete(@PathVariable Integer idx) {
 
-        BaseRes baseRes = productService.delete(productIdx);
+        BaseRes baseRes = productService.delete(idx);
         return ResponseEntity.ok().body(baseRes);
     }
 

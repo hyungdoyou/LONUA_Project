@@ -45,7 +45,11 @@ public class OrdersController {
         return ResponseEntity.ok().body(baseRes);
     }
 
-
+    @RequestMapping(method = RequestMethod.DELETE, value = "/cancle/{idx}")
+    public ResponseEntity delete(@PathVariable Integer idx) {
+        BaseRes baseRes = ordersService.delete(idx);
+        return ResponseEntity.ok().body(baseRes);
+    }
 
     // ---------------------카카오페이 결제를 통한 주문-----------------------------
 //    @RequestMapping(method = RequestMethod.POST, value = "/create")
