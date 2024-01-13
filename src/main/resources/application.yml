@@ -73,14 +73,25 @@ logging:
   level:
     org.springframework.security: DEBUG
 
-project:
-  upload:
-    path: C:\lonua\brand
-    product-path: C:\lonua\product\images
-    product-introduction-path: C:\lonua\product\introductionimages
-
 jwt:
   secret-key: abcdefghijklmnopqrstuvwxyz0123456789
   token:
     expired-time-ms: 3000000
 
+cloud:
+  aws:
+    s3:
+      product-bucket: lonua-product
+      productIntrod-bucket: lonua-productintrod
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+project:
+  upload:
+    path: C:\lonua\brand

@@ -11,7 +11,6 @@ import com.example.lonua.style.model.entity.Style;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,10 @@ public class Product {
     private List<Review> reviewList = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
-    private List<ProductIntrod> productIntrodList = new ArrayList<>();
+    private List<ProductImage> productImageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductIntrodImage> productIntrodImageList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Brand_idx")
@@ -58,9 +60,6 @@ public class Product {
 
     @Column(nullable = false, length = 45)
     private String productName;
-
-    @Column(nullable = false, length = 200, unique = true)
-    private String productImage;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -80,23 +79,56 @@ public class Product {
     private Float hemLength;  // 밑단 길이
     private Float totalBottomLength;  // 하의 총 길이
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
     @Column(nullable = false)
-    private Integer status;
+    private Boolean status;
 
-    @Version // 낙관적 락을 걸어 주기 위한 것
+    @Version
     private Integer likeCount; // "격리성" 실습을 위한 좋아요 수
+
+    private Integer upperType1Count;  // 상체 마름 회원이 구매한 수
+    private Integer upperType2Count;  // 상체 보통 회원이 구매한 수
+    private Integer upperType3Count;  // 상체 비만 회원이 구매한 수
+
+    private Integer lowerType1Count;  // 하체 마름 회원이 구매한 수
+    private Integer lowerType2Count;  // 하체 보통 회원이 구매한 수
+    private Integer lowerType3Count;  // 하체 비만 회원이 구매한 수
+
     public void increaseLikeCount() {
         this.likeCount = this.likeCount + 1;
     }
 
-    private Integer upperType1Count;  // 상체 마름
-    private Integer upperType2Count;  // 상체 보통
-    private Integer upperType3Count;  // 상체 비만
+    public void increaseUpperCount(Integer upperType) {
+        switch (upperType) {
+            case 1:
+                this.upperType1Count = this.upperType1Count + 1;
+                break;
+            case 2:
+                this.upperType2Count = this.upperType2Count + 1;
+                break;
+            case 3:
+                this.upperType3Count = this.upperType3Count + 1;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid upperType : " + upperType);
+        }
+    }
 
-    private Integer lowerType1Count;  // 하체 마름
-    private Integer lowerType2Count;  // 하체 보통
-    private Integer lowerType3Count;  // 하체 비만
+    public void increaseLowerCount(Integer lowerType) {
+        switch (lowerType) {
+            case 1:
+                this.lowerType1Count = this.lowerType1Count + 1;
+                break;
+            case 2:
+                this.lowerType2Count = this.lowerType2Count + 1;
+                break;
+            case 3:
+                this.lowerType3Count = this.lowerType3Count + 1;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid lowerType : " + lowerType);
+        }
+    }
 }

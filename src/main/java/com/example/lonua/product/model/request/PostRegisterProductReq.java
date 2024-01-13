@@ -21,9 +21,6 @@ public class PostRegisterProductReq {
 
     private String productName;
 
-    private MultipartFile productImage;
-    private MultipartFile productIntroductionImage;
-
     private Integer quantity;
     private Integer price;
 
@@ -38,7 +35,4 @@ public class PostRegisterProductReq {
     private Float crotchLength;
     private Float hemLength;
     private Float totalBottomLength;
-
-    List<GetProductIntrodRes> getProductIntrodResList = new ArrayList<>();
-
 }
