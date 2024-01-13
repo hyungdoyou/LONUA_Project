@@ -15,4 +15,5 @@ public class GetListProductRes {
     private String productName;
     private String productImage;
     private Integer price;
+    private Integer likeCount;
 }

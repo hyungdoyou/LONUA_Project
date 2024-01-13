@@ -23,7 +23,6 @@ public class LikesController {
             likesService.createLikes(user, idx);
         } catch (Exception e) {
             System.out.println("동시성 에러 발생");
-            likesService.createLikes(user, idx); // 예외 처리 시 다시 실행토록 하면, 2가 오르겠지만 비관적 락과 마찬가지로 성능이 느려질 것이다.
         }
          return ResponseEntity.ok().body("ok");
     }

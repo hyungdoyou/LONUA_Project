@@ -27,11 +27,13 @@ public class ProductController {
         return ResponseEntity.ok().body(baseRes);
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/list")
-//    public ResponseEntity list() {
-//
-//        return ResponseEntity.ok().body(productService.list());
-//    }
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    public ResponseEntity list(Integer page, Integer size) {
+
+        BaseRes baseRes = productService.list(page, size);
+        return ResponseEntity.ok().body(baseRes);
+    }
+
 //
 //    @RequestMapping(method = RequestMethod.GET, value = "/read")
 //    public ResponseEntity read(Integer productIdx) {

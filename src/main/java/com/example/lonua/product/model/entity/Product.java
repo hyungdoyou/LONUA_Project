@@ -58,6 +58,9 @@ public class Product {
     @JoinColumn(name = "Style_idx")
     private Style style;
 
+    @OneToOne(mappedBy = "product")
+    private ProductCount productCount;
+
     @Column(nullable = false, length = 45)
     private String productName;
 
@@ -84,51 +87,4 @@ public class Product {
 
     @Column(nullable = false)
     private Boolean status;
-
-    @Version
-    private Integer likeCount; // "격리성" 실습을 위한 좋아요 수
-
-    private Integer upperType1Count;  // 상체 마름 회원이 구매한 수
-    private Integer upperType2Count;  // 상체 보통 회원이 구매한 수
-    private Integer upperType3Count;  // 상체 비만 회원이 구매한 수
-
-    private Integer lowerType1Count;  // 하체 마름 회원이 구매한 수
-    private Integer lowerType2Count;  // 하체 보통 회원이 구매한 수
-    private Integer lowerType3Count;  // 하체 비만 회원이 구매한 수
-
-    public void increaseLikeCount() {
-        this.likeCount = this.likeCount + 1;
-    }
-
-    public void increaseUpperCount(Integer upperType) {
-        switch (upperType) {
-            case 1:
-                this.upperType1Count = this.upperType1Count + 1;
-                break;
-            case 2:
-                this.upperType2Count = this.upperType2Count + 1;
-                break;
-            case 3:
-                this.upperType3Count = this.upperType3Count + 1;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid upperType : " + upperType);
-        }
-    }
-
-    public void increaseLowerCount(Integer lowerType) {
-        switch (lowerType) {
-            case 1:
-                this.lowerType1Count = this.lowerType1Count + 1;
-                break;
-            case 2:
-                this.lowerType2Count = this.lowerType2Count + 1;
-                break;
-            case 3:
-                this.lowerType3Count = this.lowerType3Count + 1;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid lowerType : " + lowerType);
-        }
-    }
 }
