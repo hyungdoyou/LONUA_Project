@@ -1,6 +1,7 @@
 package com.example.lonua.review.controller;
 
 
+import com.example.lonua.config.BaseRes;
 import com.example.lonua.review.model.request.PostReviewReq;
 import com.example.lonua.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -18,23 +19,25 @@ public class ReviewController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     public ResponseEntity readReview(PostReviewReq request) {
-
-        return ResponseEntity.ok().body(reviewService.registerReview(request));
+        BaseRes baseRes = reviewService.registerReview(request);
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/read")
     public ResponseEntity readReview(Integer reviewIdx) {
-        return ResponseEntity.ok().body(reviewService.readReview(reviewIdx));
+        BaseRes baseRes = reviewService.readReview(reviewIdx);
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/update")
     public ResponseEntity updateReview(PostReviewReq request) {
-        return ResponseEntity.ok().body(reviewService.updateReview(request));
+        BaseRes baseRes = reviewService.updateReview(request);
+        return ResponseEntity.ok().body(baseRes);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
     public ResponseEntity deleteReview(Integer reviewIdx) {
-        reviewService.deleteReview(reviewIdx);
-        return ResponseEntity.ok().body("리뷰가 삭제 되었습니다.");
+        BaseRes baseRes =  reviewService.deleteReview(reviewIdx);
+        return ResponseEntity.ok().body(baseRes);
     }
 }
