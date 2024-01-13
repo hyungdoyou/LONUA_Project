@@ -5,10 +5,12 @@ import com.example.lonua.config.BaseRes;
 import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.GradeException;
 import com.example.lonua.grade.model.request.GetReadReq;
+import com.example.lonua.grade.model.request.PatchUpdateReq;
 import com.example.lonua.grade.model.request.PostCreateReq;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.grade.model.response.GetListRes;
 import com.example.lonua.grade.model.response.GetReadRes;
+import com.example.lonua.grade.model.response.PatchUpdateRes;
 import com.example.lonua.grade.model.response.PostCreateRes;
 import com.example.lonua.grade.repository.GradeRepository;
 import lombok.RequiredArgsConstructor;
@@ -80,4 +82,27 @@ public class GradeService {
         }
         return null;
     }
+    public BaseRes update(PatchUpdateReq request) {
+        Optional<Grade> byId = gradeRepository.findById(request.getGradeIdx());
+
+        if (byId.isPresent()) {
+            Grade grade = byId.get();
+            grade.setGradeType(request.getGradeType());
+            grade.setDiscountRate(request.getDiscountRate());
+            Grade result = gradeRepository.save(grade);
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청성공")
+                    .result(PatchUpdateRes.builder()
+                            .gradeIdx(result.getGradeIdx())
+                            .gradeType(result.getGradeType())
+                            .discountRate(result.getDiscountRate())
+                            .build())
+                    .build();
+        }
+        return null;
+    }
+
 }
