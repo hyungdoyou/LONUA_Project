@@ -34,6 +34,10 @@ public class ProductCount {
         this.likeCount = this.likeCount + 1;
     }
 
+    public void decreaseLikeCount() {
+        this.likeCount = this.likeCount - 1;
+    }
+
     public void increaseUpperCount(Integer upperType) {
         switch (upperType) {
             case 1:

@@ -3,6 +3,7 @@ package com.example.lonua.likes.service;
 
 import com.example.lonua.config.BaseRes;
 import com.example.lonua.likes.model.entity.Likes.Likes;
+import com.example.lonua.likes.model.request.PostCancelLikesReq;
 import com.example.lonua.likes.model.response.GetListLikesRes;
 import com.example.lonua.likes.repository.LikesRepository;
 import com.example.lonua.product.model.entity.Product;
@@ -75,11 +76,18 @@ public class LikesService {
     }
 
     @Transactional
-    public BaseRes cancle(User user, Integer idx){
+    public BaseRes cancle(User user, PostCancelLikesReq postCancelLikesReq){
 
-        Integer result = likesRepository.deleteByLikesIdxAndUser(idx, user);
+        Integer result = likesRepository.deleteByLikesIdxAndUser(postCancelLikesReq.getLikesIdx(), user);
 
         if(!result.equals(0)) {
+            Optional<Product> product = productRepository.findByProductIdx(postCancelLikesReq.getProductIdx());
+
+            Product cancelProduct = product.get();
+            ProductCount productCount = cancelProduct.getProductCount();
+            productCount.decreaseLikeCount();
+            productCountRepository.save(productCount);
+
             return BaseRes.builder()
                     .code(200)
                     .isSuccess(true)

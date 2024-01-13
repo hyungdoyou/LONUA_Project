@@ -2,16 +2,14 @@ package com.example.lonua.likes.controller;
 
 
 import com.example.lonua.config.BaseRes;
+import com.example.lonua.likes.model.request.PostCancelLikesReq;
 import com.example.lonua.likes.service.LikesService;
 import com.example.lonua.user.model.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,10 +43,11 @@ public class LikesController {
         return ResponseEntity.ok().body(baseRes);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/cancel/{idx}")
-    public ResponseEntity in(@PathVariable Integer idx) {
+    @RequestMapping(method = RequestMethod.POST, value = "/cancel")
+    public ResponseEntity in(@RequestBody PostCancelLikesReq postCancelLikesReq) {
         User user = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        BaseRes baseRes = likesService.cancle(user, postCancelLikesReq);
 
-        return ResponseEntity.ok().body(likesService.cancle(user, idx));
+        return ResponseEntity.ok().body(baseRes);
     }
 }
