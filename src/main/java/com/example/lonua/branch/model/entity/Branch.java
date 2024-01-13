@@ -2,11 +2,19 @@ package com.example.lonua.branch.model.entity;
 
 import com.example.lonua.brand.model.entity.Brand;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class Branch {
 
     @Id
