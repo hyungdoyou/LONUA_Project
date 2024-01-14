@@ -31,31 +31,49 @@ public class LikesService {
     private final LikesRepository likesRepository;
 
     @Transactional
-    public void createLikes(User user, Integer idx) {
+    public BaseRes createLikes(User user, Integer idx) {
         Optional<Product> result = productRepository.findByProductIdx(idx);
-
-        if(result.isPresent()) {
+        // Todo 이 제품에 좋아요를 눌렀던적이 있는지 확인하는 로직 추가
+        if (result.isPresent()) {
             Product product = result.get();
-            ProductCount productCount = product.getProductCount();
-            productCount.increaseLikeCount();
-            productCountRepository.save(productCount);
 
-            likesRepository.save(Likes.builder()
-                            .product(product)
-                            .user(user)
-                            .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-                            .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-                            .status(true)
-                    .build());
+            Optional<Likes> byUserAndProduct = likesRepository.findByUserAndProduct(user, product);
+            if (byUserAndProduct.isPresent()) {
+                return BaseRes.builder()
+                        .code(200)
+                        .isSuccess(true)
+                        .message("요청 성공")
+                        .result("좋아요를 누른적이 있습니다.")
+                        .build();
+            } else {
+                ProductCount productCount = product.getProductCount();
+                productCount.increaseLikeCount();
+                productCountRepository.save(productCount);
+
+                likesRepository.save(Likes.builder()
+                        .product(product)
+                        .user(user)
+                        .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                        .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                        .status(true)
+                        .build());
+                return BaseRes.builder()
+                        .code(200)
+                        .isSuccess(true)
+                        .message("요청 성공")
+                        .result("좋아요를 추가하였습니다.")
+                        .build();
+            }
         }
+        return null;
     }
 
-    public BaseRes list(User user){
+    public BaseRes list(User user) {
         List<Likes> likesList = likesRepository.findAll();
 
         List<GetListLikesRes> getListLikesResList = new ArrayList<>();
         for (Likes likes : likesList) {
-            if(likes.getUser().getUserIdx().equals(user.getUserIdx())) {
+            if (likes.getUser().getUserIdx().equals(user.getUserIdx())) {
                 GetListLikesRes getListLikesRes = GetListLikesRes.builder()
                         .brandName(likes.getProduct().getBrand().getBrandName())
                         .productName(likes.getProduct().getProductName())
@@ -76,11 +94,11 @@ public class LikesService {
     }
 
     @Transactional
-    public BaseRes cancle(User user, PostCancelLikesReq postCancelLikesReq){
+    public BaseRes cancle(User user, PostCancelLikesReq postCancelLikesReq) {
 
         Integer result = likesRepository.deleteByLikesIdxAndUser(postCancelLikesReq.getLikesIdx(), user);
 
-        if(!result.equals(0)) {
+        if (!result.equals(0)) {
             Optional<Product> product = productRepository.findByProductIdx(postCancelLikesReq.getProductIdx());
 
             Product cancelProduct = product.get();
