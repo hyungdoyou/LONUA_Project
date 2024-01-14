@@ -23,8 +23,8 @@ public class CartController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/list")
-    ResponseEntity listCart() {
-        return ResponseEntity.ok().body(cartService.list());
+    ResponseEntity listCart(Integer page, Integer size) {
+        return ResponseEntity.ok().body(cartService.list(page, size));
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
