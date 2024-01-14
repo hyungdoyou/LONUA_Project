@@ -1,21 +1,18 @@
-package com.example.lonua.brand.model.response;
+package com.example.lonua.brand.model.request;
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
-public class PostRegisterBrandRes {
+public class PatchUpdateBrandReq {
+    private Integer brandIdx;
 
     private String brandName;
 
     private String brandIntroduction;
-
-    private String brandImage;
 
     private String brandStyle;
 
