@@ -10,6 +10,9 @@ import com.example.lonua.config.BaseRes;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.user.model.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -51,8 +54,10 @@ public class CartService {
                 .build();
     }
 
-    public BaseRes list() {
-        List<Cart> all = cartRepository.findAll();
+    public BaseRes list(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Cart> all = cartRepository.findList(pageable);
         List<GetListRes> getListResList = new ArrayList<>();
 
         for (Cart cart : all) {
