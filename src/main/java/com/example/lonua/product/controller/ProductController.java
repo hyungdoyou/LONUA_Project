@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     // 페이징 별 상품 조회
-    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    @RequestMapping(method = RequestMethod.GET, value = "/list/{page}/{size}")
     public ResponseEntity list(Integer page, Integer size) {
 
         BaseRes baseRes = productService.list(page, size);
@@ -59,6 +59,15 @@ public class ProductController {
     public ResponseEntity delete(@PathVariable Integer idx) {
 
         BaseRes baseRes = productService.delete(idx);
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+    //----------------------검색 기능-------------------------
+    // 1. 카테고리 별 상품 리스트 검색(최신 등록 순)
+    @RequestMapping(method = RequestMethod.GET, value = "/categorylist/{categoryIdx}/{page}/{size}")
+    public ResponseEntity list(@PathVariable Integer categoryIdx, @PathVariable Integer page, @PathVariable Integer size) {
+
+        BaseRes baseRes = productService.categoryProductlist(categoryIdx, page, size);
         return ResponseEntity.ok().body(baseRes);
     }
 

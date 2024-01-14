@@ -295,5 +295,39 @@ public class ProductService {
                     .build();
         }
     }
+    @Transactional
+    public BaseRes categoryProductlist(Integer categoryIdx, Integer page, Integer size) {
+
+        // 페이징 기능 사용(QueryDSL)
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Product> productList = productRepository.findCategoryList(pageable, categoryIdx);
+
+        List<GetListProductRes> getListProductResList = new ArrayList<>();
+        for(Product product : productList) {
+
+            List<ProductImage> productImageList = product.getProductImageList();
+            ProductImage productImage = productImageList.get(0);
+            String image = productImage.getProductImage();
+            // 상품의 이미지중 첫번 째 이미지만 뽑아옴
+
+            GetListProductRes getListProductRes = GetListProductRes.builder()
+                    .brandName(product.getBrand().getBrandName())
+                    .productIdx(product.getProductIdx())
+                    .productName(product.getProductName())
+                    .productImage(image)
+                    .price(product.getPrice())
+                    .likeCount(product.getProductCount().getLikeCount())
+                    .build();
+
+            getListProductResList.add(getListProductRes);
+        }
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListProductResList)
+                .build();
+    }
 }
 
