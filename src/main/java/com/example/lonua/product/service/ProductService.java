@@ -360,7 +360,6 @@ public class ProductService {
 
             getListProductResList.add(getListProductRes);
         }
-
         return BaseRes.builder()
                 .code(200)
                 .isSuccess(true)
@@ -368,7 +367,5 @@ public class ProductService {
                 .result(getListProductResList)
                 .build();
     }
-
-
 }
 

@@ -34,7 +34,7 @@ public class UserController {
 
     // 메일 이증
     @RequestMapping(method = RequestMethod.GET, value = "/verify")
-    public ResponseEntity veriify(GetEmailVerifyReq getEmailVerifyReq) {
+    public ResponseEntity verify(GetEmailVerifyReq getEmailVerifyReq) {
         if (emailVerifyService.verify(getEmailVerifyReq)) {
             BaseRes baseRes = userService.updateStatus(getEmailVerifyReq.getEmail()); // 이메일 인증이 완료되면 회원의 status를 바꿔줌
             return ResponseEntity.ok().body(baseRes);
