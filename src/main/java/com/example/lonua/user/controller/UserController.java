@@ -11,10 +11,7 @@ import com.example.lonua.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +23,7 @@ public class UserController {
 
     // 회원가입
     @RequestMapping(method = RequestMethod.POST, value = "/signup")
-    public ResponseEntity signup(PostSignUpReq postSignUpReq) {
+    public ResponseEntity signup(@RequestBody PostSignUpReq postSignUpReq) {
         BaseRes baseRes = userService.signup(postSignUpReq);
 
         // 인증메일 발송
@@ -54,7 +51,7 @@ public class UserController {
 
     // 로그인
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public ResponseEntity login(PostUserLoginReq postUserLoginReq) {
+    public ResponseEntity login(@RequestBody PostUserLoginReq postUserLoginReq) {
 
         BaseRes baseRes = userService.login(postUserLoginReq);
         return ResponseEntity.ok().body(baseRes);
@@ -77,7 +74,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/update")
-    public ResponseEntity update(PatchUserUpdateReq patchUserUpdateReq) {
+    public ResponseEntity update(@RequestBody PatchUserUpdateReq patchUserUpdateReq) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         BaseRes baseRes = userService.update(user.getUserEmail(), patchUserUpdateReq);

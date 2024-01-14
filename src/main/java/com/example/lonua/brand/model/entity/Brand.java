@@ -1,9 +1,13 @@
 package com.example.lonua.brand.model.entity;
 
 import com.example.lonua.branch.model.entity.Branch;
+import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
+import com.example.lonua.brand.service.BrandService;
 import com.example.lonua.product.model.entity.Product;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -63,11 +67,48 @@ public class Brand {
     private String returnCourier;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
     @Column(nullable = false)
-    private Integer status;
+    private Boolean status;
+
+    public void update(PatchUpdateBrandReq patchUpdateBrandReq, String brandFileName) {
+        if (patchUpdateBrandReq.getBrandName() != null) {
+            this.brandName = patchUpdateBrandReq.getBrandName();
+        }
+        if (patchUpdateBrandReq.getBrandIntroduction() != null) {
+            this.brandIntroduction = patchUpdateBrandReq.getBrandIntroduction();
+        }
+        if (patchUpdateBrandReq.getBrandStyle() != null) {
+            this.brandStyle = patchUpdateBrandReq.getBrandStyle();
+        }
+        if (patchUpdateBrandReq.getBusinessAddress() != null) {
+            this.businessAddress = patchUpdateBrandReq.getBusinessAddress();
+        }
+        if (patchUpdateBrandReq.getPhoneNumber() != null) {
+            this.phoneNumber = patchUpdateBrandReq.getPhoneNumber();
+        }
+        if (patchUpdateBrandReq.getBusinessRegistration() != null) {
+            this.businessRegistration = patchUpdateBrandReq.getBusinessRegistration();
+        }
+        if (patchUpdateBrandReq.getBankAccountNumber() != null) {
+            this.bankAccountNumber = patchUpdateBrandReq.getBankAccountNumber();
+        }
+        if (patchUpdateBrandReq.getReturnAddress() != null) {
+            this.returnAddress = patchUpdateBrandReq.getReturnAddress();
+        }
+        if (patchUpdateBrandReq.getReturnCost() != null) {
+            this.returnCost = patchUpdateBrandReq.getReturnCost();
+        }
+        if (patchUpdateBrandReq.getReturnCourier() != null) {
+            this.returnCourier = patchUpdateBrandReq.getReturnCourier();
+        }
+        if (brandFileName != null) {
+            this.brandImage = brandFileName;
+        }
+
+    }
 }

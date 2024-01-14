@@ -84,6 +84,7 @@ cloud:
     s3:
       product-bucket: lonua-product
       productIntrod-bucket: lonua-productintrod
+      brand-bucket: lonua-brand
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
@@ -92,10 +93,6 @@ cloud:
       auto: false
     stack:
       auto: false
-
-project:
-  upload:
-    path: C:\lonua\brand
 
 imp:
   imp-key: ${MY_KEY}
