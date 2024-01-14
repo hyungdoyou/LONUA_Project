@@ -1,6 +1,8 @@
 package com.example.lonua.category.model.entity;
 
+import com.example.lonua.category.model.request.PostCategoryReq;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.product.model.request.PatchUpdateProductReq;
 import io.swagger.models.auth.In;
 import lombok.*;
 
@@ -29,12 +31,17 @@ public class Category {
     private String categoryName;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private String updatedAt;
 
     @Column(nullable = false)
-    private Integer status;
+    private Boolean status;
 
+    public void update(PostCategoryReq postCategoryReq) {
+        if (postCategoryReq.getCategoryName() != null) {
+            this.categoryName = postCategoryReq.getCategoryName();
+        }
+    }
 }

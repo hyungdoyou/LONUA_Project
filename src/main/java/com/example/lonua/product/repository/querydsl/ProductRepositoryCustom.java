@@ -12,5 +12,7 @@ import java.util.Optional;
 public interface ProductRepositoryCustom {
     Page<Product> findList(Pageable pageable);
 
+    Page<Product> findCategoryList(Pageable pageable, Integer idx);
+
     Optional<Product> findProduct(Integer idx);
 }

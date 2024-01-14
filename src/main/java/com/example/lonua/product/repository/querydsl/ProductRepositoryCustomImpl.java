@@ -41,6 +41,29 @@ public class ProductRepositoryCustomImpl extends QuerydslRepositorySupport imple
     }
 
     @Override
+    public Page<Product> findCategoryList(Pageable pageable, Integer idx) {
+        QProduct product = new QProduct("product");
+        QProductImage productImage = new QProductImage("productImage");
+        QProductCount productCount = new QProductCount("productCount");
+        QBrand brand = new QBrand("brand");
+        QCategory category = new QCategory("category");
+
+        List<Product> result = from(product)
+                .leftJoin(product.productImageList, productImage).fetchJoin()
+                .leftJoin(product.productCount, productCount).fetchJoin()
+                .leftJoin(product.brand, brand).fetchJoin()
+                .leftJoin(product.category, category).fetchJoin()
+                .where(category.categoryIdx.eq(idx))
+                .orderBy(product.createdAt.desc())
+                .distinct()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch().stream().distinct().collect(Collectors.toList());
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Override
     public Optional<Product> findProduct(Integer idx) {
         QProduct product = new QProduct("product");
         QProductImage productImage = new QProductImage("productImage");
