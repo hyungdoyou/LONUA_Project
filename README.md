@@ -19,9 +19,6 @@
 &nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/MySQL InnoDB-4479A1?style=flat&logo=MySQL&logoColor=white"/></a>
 &nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/CentOS   8-262577?style=flat&logo=centos&logoColor=white&color=purple"/></a></a>
 &nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat&logo=springBoot&logoColor=white&color=green"/></a></a>
-
-&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/Spring Cloud-6DB33F?style=flat&logo=spring&logoColor=white&color=dargreen"/></a></a>
-&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/Apache kafka-231F20F?style=flat&logo=ApacheKafka&logoColor=black&color=white"/></a></a>
 &nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=flat&logo=AmazonAWS&logoColor=black&color=orange"/></a></a>
 
 ---
