@@ -1,6 +1,8 @@
 package com.example.lonua.question.model.entity;
 
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.question.model.request.PatchUpdateQuestionReq;
+import com.example.lonua.reply.model.entity.Reply;
 import com.example.lonua.user.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,16 +30,43 @@ public class Question {
     @JoinColumn(name = "User_idx")
     private User user;
 
-    @Column(nullable = false, length = 45)
+    @OneToOne(mappedBy = "question")
+    private Reply reply;
+
+    @Column(nullable = false, length = 7)
     private String questionType;
+
+    @Column(nullable = false, length = 45)
+    private String questionTitle;
 
     @Column(nullable = false, length = 500)
     private String questionContent;
 
     @Column(nullable = false, length = 1)
-    private String hasAnswer;
+    private Boolean hasAnswer;
 
     @Column(nullable = false, length = 1)
-    private String isSecret;
+    private Boolean isSecret;
+
+    @Column(nullable = false)
+    private String createdAt;
+
+    @Column(nullable = false)
+    private String updatedAt;
+
+        public void update(PatchUpdateQuestionReq patchUpdateQuestionReq) {
+        if (patchUpdateQuestionReq.getQuestionType() != null) {
+            this.questionType = patchUpdateQuestionReq.getQuestionType();
+        }
+        if (patchUpdateQuestionReq.getQuestionTitle() != null) {
+            this.questionTitle = patchUpdateQuestionReq.getQuestionTitle();
+        }
+        if (patchUpdateQuestionReq.getQuestionContent() != null) {
+            this.questionContent = patchUpdateQuestionReq.getQuestionContent();
+        }
+        if (patchUpdateQuestionReq.getIsSecret() != null) {
+            this.isSecret = patchUpdateQuestionReq.getIsSecret();
+        }
+    }
 
 }

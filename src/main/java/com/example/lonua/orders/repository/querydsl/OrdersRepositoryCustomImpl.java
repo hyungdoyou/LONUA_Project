@@ -44,15 +44,21 @@ public class OrdersRepositoryCustomImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public Optional<Orders> findOrders(Integer idx) {
+    public Optional<Orders> findOrders(Integer orderIdx, Integer productIdx) {
         QOrders orders = new QOrders("orders");
         QOrdersProduct ordersProduct = new QOrdersProduct("ordersProduct");
+        QProduct product = new QProduct("product");
+        QProductCount productCount = new QProductCount("productCount");
 
         Optional<Orders> result = Optional.ofNullable(from(orders)
                 .leftJoin(orders.ordersProductList, ordersProduct).fetchJoin()
-                .where(orders.ordersIdx.eq(idx))
+                .leftJoin(ordersProduct.product, product).fetchJoin()
+                .leftJoin(product.productCount, productCount).fetchJoin()
+                .where(orders.ordersIdx.eq(orderIdx), product.productIdx.eq(productIdx))
                 .fetchOne()
         );
+
+        // TODO : MultiBag 에러 해결을 통한 상품 이미지 테이블도 조인
 
         return result;
     }

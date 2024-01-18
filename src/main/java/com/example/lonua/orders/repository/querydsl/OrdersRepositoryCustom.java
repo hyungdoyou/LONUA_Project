@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface OrdersRepositoryCustom  {
     Page<Orders> findList(Pageable pageable);
 
-    Optional<Orders> findOrders(Integer idx);
+    Optional<Orders> findOrders(Integer ordersIdx, Integer productIdx);
 }

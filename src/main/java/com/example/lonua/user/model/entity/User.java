@@ -7,6 +7,7 @@ import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.review.model.entity.Review;
+import com.example.lonua.user.model.entity.request.PatchUserUpdateReq;
 import io.swagger.models.auth.In;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,22 +34,22 @@ public class User implements UserDetails {
     @JoinColumn(name = "Grade_idx")
     private Grade grade;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Cart> cartList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Coupon> couponList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Likes> likesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Orders> ordersList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Review> reviewList = new ArrayList<>();
 
 
@@ -76,7 +77,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 45)
     private String userAddr;
 
-    @Column(length = 10)
+    @Column(length = 7)
     private String preferStyle;
 
     @Column(nullable = false)
@@ -132,21 +133,21 @@ public class User implements UserDetails {
         return userPassword;
     }
 
-    public void update(String userAddr, String userPhoneNumber, String preferStyle, Integer upperType, Integer lowerType) {
-        if (userAddr != null) {
-            this.userAddr = userAddr;
+    public void update(PatchUserUpdateReq patchUserUpdateReq) {
+        if (patchUserUpdateReq.getUserAddr() != null) {
+            this.userAddr = patchUserUpdateReq.getUserAddr();
         }
-        if (userPhoneNumber != null) {
-            this.userPhoneNumber = userPhoneNumber;
+        if (patchUserUpdateReq.getUserPhoneNumber() != null) {
+            this.userPhoneNumber = patchUserUpdateReq.getUserPhoneNumber();
         }
-        if (preferStyle != null) {
-            this.preferStyle = preferStyle;
+        if (patchUserUpdateReq.getPreferStyle() != null) {
+            this.preferStyle = patchUserUpdateReq.getPreferStyle();
         }
-        if (upperType != null) {
-            this.upperType = upperType;
+        if (patchUserUpdateReq.getUpperType() != null) {
+            this.upperType = patchUserUpdateReq.getUpperType();
         }
-        if (lowerType != null) {
-            this.lowerType = lowerType;
+        if (patchUserUpdateReq.getLowerType() != null) {
+            this.lowerType = patchUserUpdateReq.getLowerType();
         }
     }
 

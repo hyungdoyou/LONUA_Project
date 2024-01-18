@@ -1,7 +1,7 @@
 package com.example.lonua.likes.service;
 
 
-import com.example.lonua.config.BaseRes;
+import com.example.lonua.common.BaseRes;
 import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.likes.model.request.PostCancelLikesReq;
 import com.example.lonua.likes.model.response.GetListLikesRes;
@@ -12,11 +12,9 @@ import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.user.model.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.LockModeType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class LikesService {
     private final ProductCountRepository productCountRepository;
     private final LikesRepository likesRepository;
 
-    @Transactional
+    @Transactional(readOnly = false)
     public BaseRes createLikes(User user, Integer idx) {
         Optional<Product> result = productRepository.findByProductIdx(idx);
         // Todo 이 제품에 좋아요를 눌렀던적이 있는지 확인하는 로직 추가
@@ -68,6 +66,7 @@ public class LikesService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public BaseRes list(User user) {
         List<Likes> likesList = likesRepository.findAll();
 
@@ -93,7 +92,7 @@ public class LikesService {
         return response;
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public BaseRes cancle(User user, PostCancelLikesReq postCancelLikesReq) {
 
         Integer result = likesRepository.deleteByLikesIdxAndUser(postCancelLikesReq.getLikesIdx(), user);

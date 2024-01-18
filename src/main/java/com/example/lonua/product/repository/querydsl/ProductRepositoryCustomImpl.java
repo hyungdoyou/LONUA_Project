@@ -85,6 +85,26 @@ public class ProductRepositoryCustomImpl extends QuerydslRepositorySupport imple
         return new PageImpl<>(result, pageable, result.size());
     }
 
+    @Override
+    public Page<Product> findBrandList(Pageable pageable, Integer brandIdx) {
+        QProduct product = new QProduct("product");
+        QProductImage productImage = new QProductImage("productImage");
+        QProductCount productCount = new QProductCount("productCount");
+        QBrand brand = new QBrand("brand");
+
+        List<Product> result = from(product)
+                .leftJoin(product.productImageList, productImage).fetchJoin()
+                .leftJoin(product.productCount, productCount).fetchJoin()
+                .leftJoin(product.brand, brand).fetchJoin()
+                .where(brand.brandIdx.eq(brandIdx))
+                .distinct()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch().stream().distinct().collect(Collectors.toList());
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
     private NumberExpression<Integer> getUpperTypeCount(Integer upperType) {
         switch (upperType) {
             case 1:
@@ -114,6 +134,7 @@ public class ProductRepositoryCustomImpl extends QuerydslRepositorySupport imple
     public Optional<Product> findProduct(Integer idx) {
         QProduct product = new QProduct("product");
         QProductImage productImage = new QProductImage("productImage");
+        QProductIntrodImage productIntrodImage = new QProductIntrodImage("productIntrodImage");
         QProductCount productCount = new QProductCount("productCount");
         QBrand brand = new QBrand("brand");
 

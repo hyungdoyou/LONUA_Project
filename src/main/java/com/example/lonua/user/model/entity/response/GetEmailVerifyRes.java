@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class GetEmailVerifyRes {
+
     private String email;
     private Boolean status;
 }

@@ -1,35 +1,39 @@
 package com.example.lonua.cart.service;
 
 import com.example.lonua.cart.model.entity.Cart;
-import com.example.lonua.cart.model.request.DeleteRemoveReq;
-import com.example.lonua.cart.model.request.PostRegisterReq;
-import com.example.lonua.cart.model.response.GetListRes;
-import com.example.lonua.cart.model.response.PostRegisterRes;
+import com.example.lonua.cart.model.request.DeleteCartRemoveReq;
+import com.example.lonua.cart.model.request.PostCartRegisterReq;
+import com.example.lonua.cart.model.response.GetCartListRes;
+import com.example.lonua.cart.model.response.PostCartRegisterRes;
 import com.example.lonua.cart.repository.CartRepository;
-import com.example.lonua.config.BaseRes;
+import com.example.lonua.common.BaseRes;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.product.model.entity.QProduct;
 import com.example.lonua.user.model.entity.User;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
     private final CartRepository cartRepository;
 
-    public BaseRes create(PostRegisterReq request) {
+
+    @Transactional(readOnly = false)
+    public BaseRes create(User user, PostCartRegisterReq request) {
         Cart cart = cartRepository.save(Cart.builder()
                 .user(User.builder()
-                        .userIdx(request.getUserIdx())
+                        .userIdx(user.getUserIdx())
                         .build())
                 .product(Product.builder()
                         .productIdx(request.getProductIdx())
@@ -42,8 +46,8 @@ public class CartService {
         return BaseRes.builder()
                 .code(200)
                 .isSuccess(true)
-                .message("요청성공")
-                .result(PostRegisterRes.builder()
+                .message("요청 성공")
+                .result(PostCartRegisterRes.builder()
                         .cartIdx(cart.getCartIdx())
                         .createdAt(cart.getCreatedAt())
                         .updatedAt(cart.getUpdatedAt())
@@ -54,30 +58,32 @@ public class CartService {
                 .build();
     }
 
-    public BaseRes list(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+    @Transactional(readOnly = true)
+    public BaseRes list(User user, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<Cart> all = cartRepository.findList(pageable);
-        List<GetListRes> getListResList = new ArrayList<>();
+        Page<Cart> all = cartRepository.findList(pageable, user.getUserIdx());
+        List<GetCartListRes> getListResCartList = new ArrayList<>();
 
         for (Cart cart : all) {
-            GetListRes build = GetListRes.builder()
+            GetCartListRes build = GetCartListRes.builder()
                     .cartIdx(cart.getCartIdx())
                     .productName(cart.getProduct().getProductName())
                     .price(cart.getProduct().getPrice())
                     .build();
-            getListResList.add(build);
+            getListResCartList.add(build);
         }
 
         return BaseRes.builder()
                 .code(200)
                 .isSuccess(true)
-                .message("요청성공")
-                .result(getListResList)
+                .message("요청 성공")
+                .result(getListResCartList)
                 .build();
     }
 
-    public BaseRes delete(DeleteRemoveReq request) {
+    @Transactional(readOnly = false)
+    public BaseRes delete(DeleteCartRemoveReq request) {
 
         Cart cart = Cart.builder()
                 .cartIdx(request.getCartIdx())
@@ -88,17 +94,22 @@ public class CartService {
         return BaseRes.builder()
                 .code(200)
                 .isSuccess(true)
-                .message("요청성공")
+                .message("장바구니 1개 상품 삭제 성공")
+                .result("요청 성공")
                 .build();
     }
 
-    public BaseRes deleteAll() {
-        cartRepository.deleteAll();
+
+    @Transactional(readOnly = false)
+    public BaseRes deleteAll(User user) {
+
+        cartRepository.deleteAllByUserIdx(user.getUserIdx());
 
         return BaseRes.builder()
                 .code(200)
                 .isSuccess(true)
-                .message("요청성공")
+                .message("장바구니 전체 상품 삭제 성공")
+                .result("요청 성공")
                 .build();
     }
 }

@@ -1,11 +1,9 @@
 package com.example.lonua.user.service;
 
-import com.example.lonua.config.BaseRes;
+import com.example.lonua.common.BaseRes;
 import com.example.lonua.exception.ErrorCode;
 import com.example.lonua.exception.exception.UserException;
 import com.example.lonua.grade.model.entity.Grade;
-import com.example.lonua.orders.model.entity.Orders;
-import com.example.lonua.product.model.response.GetReadOrdersProductRes;
 import com.example.lonua.user.config.utils.JwtUtils;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
@@ -15,12 +13,16 @@ import com.example.lonua.user.model.entity.response.*;
 import com.example.lonua.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserService{
+public class UserService {
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -44,11 +46,12 @@ public class UserService{
 
 
     // 회원가입
+    @Transactional(readOnly = false)
     public BaseRes signup(PostSignUpReq postSignUpReq) {
         // 중복된 ID에 대한 예외처리 추가
         Optional<User> result = userRepository.findByUserEmail(postSignUpReq.getUserEmail());
 
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             throw new UserException(ErrorCode.DUPLICATED_USER, String.format("Email is %s", postSignUpReq.getUserEmail()));
         }
 
@@ -88,18 +91,23 @@ public class UserService{
         return baseRes;
     }
 
-    public BaseRes list() {
-        List<User> result = userRepository.findAll();
+    @Transactional(readOnly = true)
+    public BaseRes list(Integer page, Integer size) {
+
+        Pageable pageable = PageRequest.of(page-1, size);
+
+        Page<User> userList = userRepository.findUserList(pageable);
 
         List<GetListUserRes> getListUserResList = new ArrayList<>();
-        for(User user : result) {
+        for (User user : userList) {
 
             GetListUserRes getListUserRes = GetListUserRes.builder()
                     .userIdx(user.getUserIdx())
                     .userEmail(user.getUserEmail())
-                    .userName(user.getUsername())
+                    .name(user.getName())
                     .userBirth(user.getUserBirth())
                     .userGender(user.getUserGender())
+                    .userAddr(user.getUserAddr())
                     .userPhoneNumber(user.getUserPhoneNumber())
                     .preferStyle(user.getPreferStyle())
                     .upperType(user.getUpperType())
@@ -118,15 +126,16 @@ public class UserService{
                 .build();
     }
 
+    @Transactional(readOnly = true)
     public BaseRes read(String email) {
-        Optional<User> result = userRepository.findByUserEmail(email);
+        Optional<User> result = userRepository.findUser(email);
         if (result.isPresent()) {
             User user = result.get();
 
             GetListUserRes getListUserRes = GetListUserRes.builder()
                     .userIdx(user.getUserIdx())
                     .userEmail(user.getUserEmail())
-                    .userName(user.getUsername())
+                    .name(user.getName())
                     .userBirth(user.getUserBirth())
                     .userGender(user.getUserGender())
                     .userPhoneNumber(user.getUserPhoneNumber())
@@ -145,7 +154,7 @@ public class UserService{
                     .build();
         } else {
             return BaseRes.builder()
-                    .code(200)
+                    .code(400)
                     .isSuccess(true)
                     .message("요청 실패")
                     .result("회원을 찾을 수 없습니다.")
@@ -154,6 +163,7 @@ public class UserService{
     }
 
     // 회원 로그인
+    @Transactional(readOnly = false)
     public BaseRes login(PostUserLoginReq postUserLoginReq) {
         Optional<User> result = userRepository.findByUserEmail(postUserLoginReq.getEmail());
         if (result.isPresent()) {
@@ -187,6 +197,7 @@ public class UserService{
     }
 
     // 인증메일 발송
+    @Transactional(readOnly = false)
     public void sendEmail(PostSignUpReq postSignUpReq) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(postSignUpReq.getUserEmail());
@@ -200,9 +211,10 @@ public class UserService{
     }
 
     // 메일 인증 완료 후 회원 상태 수정
+    @Transactional(readOnly = false)
     public BaseRes updateStatus(String email) {
         Optional<User> result = userRepository.findByUserEmail(email);
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             User user = result.get();
             user.setStatus(true);
             userRepository.save(user);
@@ -222,6 +234,7 @@ public class UserService{
     }
 
     // 카카오 회원가입
+    @Transactional(readOnly = false)
     public void kakaoSignup(String nickName) {
 
         User user = User.builder()
@@ -258,13 +271,14 @@ public class UserService{
     }
 
     // 회원정보 수정
+    @Transactional(readOnly = false)
     public BaseRes update(String userEmail, PatchUserUpdateReq patchUserUpdateReq) {
         Optional<User> result = userRepository.findByUserEmail(userEmail);
 
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             User user = result.get();
 
-            user.update(patchUserUpdateReq.getUserAddr(), patchUserUpdateReq.getUserPhoneNumber(), patchUserUpdateReq.getPreferStyle(), patchUserUpdateReq.getUpperType(), patchUserUpdateReq.getLowerType());
+            user.update(patchUserUpdateReq);
             user.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
             userRepository.save(user);
 
@@ -287,12 +301,12 @@ public class UserService{
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = false)
     public BaseRes delete(Integer idx) {
 
         Integer result = userRepository.deleteByUserIdx(idx);
 
-        if(!result.equals(0)) {
+        if (!result.equals(0)) {
             return BaseRes.builder()
                     .code(200)
                     .isSuccess(true)
@@ -307,5 +321,31 @@ public class UserService{
                     .result("회원을 찾을 수 없습니다.")
                     .build();
         }
+    }
+
+    @Transactional(readOnly = false)
+    public BaseRes cancle(Integer userIdx) {
+        Optional<User> byUserIdx = userRepository.findByUserIdx(userIdx);
+
+        if (byUserIdx.isPresent()) {
+            User loginUser = byUserIdx.get();
+            loginUser.setStatus(false);
+            userRepository.save(loginUser);
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result("회원의 상태가 탈퇴 상태로 변경되었습니다.")
+                    .build();
+
+        }
+
+        return BaseRes.builder()
+                .code(400)
+                .isSuccess(false)
+                .message("요청 실패")
+                .result("회원정보를 찾을 수 없습니다.")
+                .build();
     }
 }

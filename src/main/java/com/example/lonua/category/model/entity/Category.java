@@ -1,15 +1,12 @@
 package com.example.lonua.category.model.entity;
 
-import com.example.lonua.category.model.request.PostCategoryReq;
+import com.example.lonua.category.model.request.PatchUpdateCategoryReq;
+import com.example.lonua.category.model.request.PostRegisterCategoryReq;
 import com.example.lonua.product.model.entity.Product;
-import com.example.lonua.product.model.request.PatchUpdateProductReq;
-import io.swagger.models.auth.In;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -39,9 +36,9 @@ public class Category {
     @Column(nullable = false)
     private Boolean status;
 
-    public void update(PostCategoryReq postCategoryReq) {
-        if (postCategoryReq.getCategoryName() != null) {
-            this.categoryName = postCategoryReq.getCategoryName();
+    public void update(PatchUpdateCategoryReq patchUpdateCategoryReq) {
+        if (patchUpdateCategoryReq.getCategoryName() != null) {
+            this.categoryName = patchUpdateCategoryReq.getCategoryName();
         }
     }
 }

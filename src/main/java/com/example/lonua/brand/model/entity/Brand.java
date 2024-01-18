@@ -4,6 +4,7 @@ import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
 import com.example.lonua.brand.service.BrandService;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.reply.model.entity.Reply;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,6 +34,9 @@ public class Brand {
     @OneToMany(mappedBy = "brand")
     private List<Product> productList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "brand")
+    protected List<Reply> replyList = new ArrayList<>();
+
     @Column(nullable = false, unique = true, length = 45)
     private String brandName;
 
@@ -51,7 +55,7 @@ public class Brand {
     @Column(nullable = false, unique = true, length = 20)
     private String phoneNumber;
 
-    @Column(nullable = false, unique = true, length = 45)
+    @Column(nullable = false, unique = true, length = 10)
     private String businessRegistration;
 
     @Column(nullable = false, unique = true, length = 45)

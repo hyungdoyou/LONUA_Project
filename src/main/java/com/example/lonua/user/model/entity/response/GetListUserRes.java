@@ -13,12 +13,11 @@ import java.util.List;
 @Builder
 public class GetListUserRes {
     private Integer userIdx;
-    private String userId;
-    private String userName;
+    private String userEmail;
+    private String name;
     private String userBirth;
     private String userGender;
     private String userPhoneNumber;
-    private String userEmail;
     private String userAddr;
     private String preferStyle;
     private Integer upperType;

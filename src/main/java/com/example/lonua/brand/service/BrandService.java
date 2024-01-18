@@ -11,7 +11,7 @@ import com.example.lonua.brand.model.response.GetListBrandRes;
 import com.example.lonua.brand.model.response.PatchUpdateBrandRes;
 import com.example.lonua.brand.model.response.PostRegisterBrandRes;
 import com.example.lonua.brand.repository.BrandRepository;
-import com.example.lonua.config.BaseRes;
+import com.example.lonua.common.BaseRes;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductImageRepository;

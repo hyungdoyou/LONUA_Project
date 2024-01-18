@@ -28,6 +28,7 @@ public class OrdersProductRepositoryCustomImpl extends QuerydslRepositorySupport
         QOrdersProduct ordersProduct = new QOrdersProduct("ordersProduct");
         QOrders orders  = new QOrders("orders");
         QProduct product = new QProduct("product");
+        QUser user = new QUser("user");
 
         List<OrdersProduct> result = from(ordersProduct)
                 .leftJoin(ordersProduct.orders, orders).fetchJoin()

@@ -4,11 +4,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.entity.ProductIntrodImage;
-import com.example.lonua.product.model.request.PostRegisterProductIntrodReq;
 import com.example.lonua.product.repository.ProductIntrodImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -61,6 +61,8 @@ public class ProductIntrodImageService {
         }
         return s3.getUrl(productIntrodBucket, saveFileName.replace(File.separator, "/")).toString();
     }
+
+    @Transactional(readOnly = false)
     public List<String> registerProductIntrodImage(Product product, MultipartFile[] uploadFiles) {
 
         List<String> productIntrodImageList = new ArrayList<>();

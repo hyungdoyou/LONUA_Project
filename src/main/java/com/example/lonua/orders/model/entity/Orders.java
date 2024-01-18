@@ -1,5 +1,6 @@
 package com.example.lonua.orders.model.entity;
 
+import com.example.lonua.orders.model.request.PatchUpdateOrdersReq;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.user.model.entity.User;
 import lombok.*;
@@ -37,7 +38,13 @@ public class Orders {
     @Column(nullable = false)
     private String updatedAt;
 
-    @Column(nullable = false)
-    private Boolean status;
+    @Column(nullable = false, length = 10, unique = true)
+    private String status;
+
+    public void updateStatus(PatchUpdateOrdersReq patchUpdateOrdersReq) {
+        if(patchUpdateOrdersReq.getStatus() != null) {
+            this.status= patchUpdateOrdersReq.getStatus();
+        }
+    }
 
 }

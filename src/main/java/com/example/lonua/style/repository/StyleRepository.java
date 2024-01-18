@@ -8,4 +8,7 @@ import java.util.Optional;
 
 public interface StyleRepository extends JpaRepository<Style, Integer> {
     public Optional<Style> findByStyleType(String styleType);
+    public Optional<Style> findByStyleIdx(Integer idx);
+
+    public Integer deleteByStyleIdx(Integer idx);
 }
