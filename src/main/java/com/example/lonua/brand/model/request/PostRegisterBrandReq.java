@@ -22,6 +22,11 @@ public class PostRegisterBrandReq {
     private String brandName;
 
     @NotNull
+    @Length(min=1, max=45)
+    @ApiModelProperty(value = "브랜드 고유 키(45자 이하)", example = "uniqueKey", required = true)
+    private String brandUniqueKey;
+
+    @NotNull
     @Length(min=1, max=500)
     @ApiModelProperty(value = "브랜드 소개글(500자 이하)", example = "스파오는 좋은 소재와 기본에 충실하면서도 트렌디한 디자인으로 남녀노소 누구나 일상 속에서 편안하게 입을 수 있는 패션 라이프를 제안하는 국내 최초 글로벌 SPA 브랜드입니다.", required = true)
     private String brandIntroduction;

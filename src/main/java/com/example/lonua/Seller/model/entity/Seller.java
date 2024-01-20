@@ -29,7 +29,7 @@ public class Seller implements UserDetails {
     @Column(nullable = false, length = 45, unique = true)
     private String sellerEmail;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 45)
     private String sellerPassword;
 
     @Column(nullable = false)

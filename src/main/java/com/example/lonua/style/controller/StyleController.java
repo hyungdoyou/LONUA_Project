@@ -1,8 +1,8 @@
 package com.example.lonua.style.controller;
 
 import com.example.lonua.common.BaseRes;
-import com.example.lonua.style.model.entity.request.PatchUpdateStyleReq;
-import com.example.lonua.style.model.entity.request.PostRegisterStyleReq;
+import com.example.lonua.style.model.request.PatchUpdateStyleReq;
+import com.example.lonua.style.model.request.PostRegisterStyleReq;
 import com.example.lonua.style.service.StyleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

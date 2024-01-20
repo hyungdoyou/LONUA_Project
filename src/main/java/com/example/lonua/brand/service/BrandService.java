@@ -100,6 +100,7 @@ public class BrandService {
         if(!brandRepository.findByBrandName(postRegisterBrandReq.getBrandName()).isPresent()) {
             Brand brand = Brand.builder()
                     .brandName(postRegisterBrandReq.getBrandName())
+                    .brandUniqueKey(postRegisterBrandReq.getBrandUniqueKey())
                     .brandIntroduction(postRegisterBrandReq.getBrandIntroduction())
                     .brandImage(saveFileName.replace(File.separator, "/"))
                     .brandStyle(postRegisterBrandReq.getBrandStyle())
