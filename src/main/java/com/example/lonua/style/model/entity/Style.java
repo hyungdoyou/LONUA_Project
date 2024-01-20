@@ -22,7 +22,7 @@ public class Style {
     @OneToMany(mappedBy = "style")
     private List<Product> productList = new ArrayList<>();
 
-    @Column(nullable = false, length = 10, unique = true)
+    @Column(nullable = false, length = 15, unique = true)
     private String styleType;
 
 }

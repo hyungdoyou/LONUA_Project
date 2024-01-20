@@ -15,9 +15,9 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class PostRegisterStyleReq {
 
-    @NotNull
-    @Length(max=7)
-    @Pattern(regexp = "^[가-힣]*$")
+    @NotNull(message = "스타일 유형은 필수 입력 항목입니다.")
+    @Length(max=15, message = "스타일 유형은 최대 15글자 이하여야 합니다.")
+    @Pattern(regexp = "^[가-힣]*$", message = "스타일 유형은 한글만 입력해야 합니다.")
     @ApiModelProperty(value = "스타일 유형", example = "댄디", required = true)
     private String styleType;
 }
