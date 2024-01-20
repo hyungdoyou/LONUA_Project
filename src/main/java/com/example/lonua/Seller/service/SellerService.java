@@ -1,5 +1,8 @@
 package com.example.lonua.Seller.service;
 
+import com.example.lonua.Seller.exception.SellerAccountException;
+import com.example.lonua.Seller.exception.SellerEmailDuplicateException;
+import com.example.lonua.Seller.exception.SellerNotFoundException;
 import com.example.lonua.Seller.model.entity.Seller;
 import com.example.lonua.Seller.model.request.PatchUpdateSellerReq;
 import com.example.lonua.Seller.model.request.PostLoginSellerReq;
@@ -8,6 +11,7 @@ import com.example.lonua.Seller.model.response.GetListSellerRes;
 import com.example.lonua.Seller.model.response.PostLoginSellerRes;
 import com.example.lonua.Seller.model.response.PostSignupSellerRes;
 import com.example.lonua.Seller.repository.SellerRepository;
+import com.example.lonua.brand.exception.BrandNotFoundException;
 import com.example.lonua.brand.model.entity.Brand;
 import com.example.lonua.brand.repository.BrandRepository;
 import com.example.lonua.common.BaseRes;
@@ -45,7 +49,7 @@ public class SellerService {
         Optional<Seller> sellerResult = sellerRepository.findBySellerEmail(postSignupSellerReq.getSellerEmail());
 
         if(sellerResult.isPresent()) {
-            // TODO : 이메일 중복 예외처리 추가
+            throw new SellerEmailDuplicateException(postSignupSellerReq.getSellerEmail());
         }
 
         Optional<Brand> brandResult = brandRepository.findByBrandIdx(postSignupSellerReq.getBrandIdx());
@@ -69,12 +73,10 @@ public class SellerService {
                         .result(PostSignupSellerRes.builder().sellerEmail(postSignupSellerReq.getSellerEmail()).build())
                         .build();
             } else {
-                //TODO : 브랜드 고유번호가 일치하지 않을 시 예외처리 추가
-                return null;
+                throw SellerAccountException.forInvalidUniqueKey(postSignupSellerReq.getBrandUniqueKey());
             }
         } else {
-            //TODO : 브랜드IDX 로 브랜드를 찾을 수 없을 시 예외처리 추가
-            return null;
+            throw BrandNotFoundException.forIdx(postSignupSellerReq.getBrandIdx());
         }
     }
 
@@ -82,8 +84,7 @@ public class SellerService {
         Optional<Seller> result = sellerRepository.findBySellerEmail(postLoginSellerReq.getSellerEmail());
 
         if(result.isEmpty()) {
-            // TODO : 예외처리 추가
-            return null;
+            throw SellerNotFoundException.forEmail(postLoginSellerReq.getSellerEmail());
         }
 
         Seller seller = result.get();
@@ -99,8 +100,7 @@ public class SellerService {
                     .result(postLoginSellerRes)
                     .build();
         } else {
-            // TODO : 예외처리 추가
-            return null;
+            throw SellerAccountException.forInvalidPassword(postLoginSellerReq.getSellerPassword());
         }
     }
     @Transactional(readOnly = true)
@@ -145,8 +145,7 @@ public class SellerService {
                     .result("판매자 계정 정보 수정을 성공하였습니다.")
                     .build();
         } else {
-            // TODO : 예외처리 추가
-            return null;
+            throw SellerNotFoundException.forIdx(patchUpdateSellerReq.getSellerIdx());
         }
     }
 
@@ -162,8 +161,7 @@ public class SellerService {
                     .result("판매자 계정을 삭제하였습니다.")
                     .build();
         } else {
-            // TODO : 예외처리 추가
-            return null;
+            throw SellerNotFoundException.forIdx(idx);
         }
     }
 }

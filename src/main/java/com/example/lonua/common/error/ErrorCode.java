@@ -17,8 +17,16 @@ public enum ErrorCode {
     DUPLICATE_SIGNUP_EMAIL(HttpStatus.BAD_REQUEST, "USER-001", "회원 이메일이 중복된 경우"),
     DUPLICATE_SIGNUP_PHONENUMBER(HttpStatus.BAD_REQUEST, "USER-002", "회원 전화번호가 중복된 경우"),
     USER_NOT_EXISTS(HttpStatus.NOT_FOUND, "USER-003", "회원을 찾을 수 없는 경우"),
-
     DIFFERENT_USER_PASSWORD(HttpStatus.BAD_REQUEST, "USER-004", "회원의 패스워드가 저장된 데이터와 다른 경우"),
+
+    // 판매자
+    DUPLICATE_SELLER_SIGNUP_EMAIL(HttpStatus.BAD_REQUEST, "SELLER-001", "판매자 이메일이 중복된 경우"),
+    SELLER_NOT_EXISTS(HttpStatus.NOT_FOUND, "SELLER-002", "판매자 계정을 찾을 수 없는 경우"),
+    DIFFERENT_SELLER_PASSWORD(HttpStatus.BAD_REQUEST, "SELLER-003", "판매자의 패스워드가 저장된 데이터와 다른 경우"),
+    DIFFERENT_BRAND_UNIQUEKEY(HttpStatus.BAD_REQUEST, "SELLER-004", "판매자의 브랜드 고유키가 저장된 데이터와 다른 경우"),
+
+    // 브랜드
+    BRAND_NOT_EXISTS(HttpStatus.NOT_FOUND, "BRAND-001", "브랜드를 찾을 수 없는 경우"),
 
     // 스타일
     DUPLICATE_STYLE_TYPE(HttpStatus.BAD_REQUEST, "STYLE-001", "스타일 유형이 중복된 경우"),
@@ -27,6 +35,9 @@ public enum ErrorCode {
     // 카테고리
     DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "CATEGORY-001", "카테고리 이름이 중복된 경우"),
     CATEGORY_NOT_EXISTS(HttpStatus.NOT_FOUND, "CATEGORY-002", "카테고리를 찾을 수 없는 경우");
+
+
+
     private final HttpStatus status;  // 헤더로 반환할 Http 상태 코드
     private final String code;    // 페이로드로 반환할 에러 코드
     private final String description;  // 에러 코드 문서화를 위한 설명
