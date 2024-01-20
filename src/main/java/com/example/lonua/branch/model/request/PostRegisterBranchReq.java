@@ -15,20 +15,20 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostBranchRegisterReq {
+public class PostRegisterBranchReq {
 
-    @NotNull
-    @Min(value = 1)
+    @NotNull(message = "브랜드 고유번호는 필수 입력항목입니다.")
+    @Min(value = 1, message = "브랜드 고유번호는 1이상의 숫자여야 합니다.")
     @ApiModelProperty(value = "브랜드Idx", example = "1", required = true)
     private Integer brandIdx;
 
-    @NotNull
-    @Length(max = 50)
+    @NotNull(message = "지점명은 필수 입력항목입니다.")
+    @Length(max = 30, message = "지점명은 최대 30글자 이하여야 합니다.")
     @ApiModelProperty(value = "추가할 지점 이름", example = "강남점", required = true)
     private String branchName;
 
-    @NotNull
-    @Length(max = 50)
+    @NotNull(message = "지점주소는 필수 입력항목입니다.")
+    @Length(max = 100, message = "지점주소는 최대 100글자 이하여야 합니다.")
     @ApiModelProperty(value = "추가할 지점 주소", example = "서울시 강남구", required = true)
     private String branchAddress;
 }

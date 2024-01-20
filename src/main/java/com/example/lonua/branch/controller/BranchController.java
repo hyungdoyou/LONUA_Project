@@ -31,7 +31,7 @@ public class BranchController {
             @ApiResponse(responseCode = "200", description = "지점 등록 성공", content = @Content(mediaType = "application/json",schema = @Schema(implementation = BaseRes.class)))}
     )
     @RequestMapping(method = RequestMethod.POST, value = "/register")
-    ResponseEntity registerBranch(@RequestBody @Valid PostBranchRegisterReq request) {
+    ResponseEntity registerBranch(@RequestBody @Valid PostRegisterBranchReq request) {
         return ResponseEntity.ok().body(branchService.create(request));
     }
     @ApiOperation(value = "지점 모두 조회", response = BaseRes.class, notes = "판매자가 지점을 모두 조회한다.")

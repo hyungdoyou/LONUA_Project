@@ -24,7 +24,7 @@ public class BranchService {
     private final BranchRepository branchRepository;
 
     @Transactional(readOnly = false)
-    public BaseRes create(PostBranchRegisterReq request) {
+    public BaseRes create(PostRegisterBranchReq request) {
         Branch branch = branchRepository.save(Branch.builder()
                 .brand(Brand.builder()
                         .brandIdx(request.getBrandIdx())

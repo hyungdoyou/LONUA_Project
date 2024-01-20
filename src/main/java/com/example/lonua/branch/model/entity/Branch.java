@@ -25,9 +25,9 @@ public class Branch {
     @JoinColumn(name = "Brand_idx")
     private Brand brand;
 
-    @Column(nullable = true, length = 30)
+    @Column(nullable = true, length = 30, unique = true)
     private String branchName;
 
-    @Column(nullable = true, length = 100)
+    @Column(nullable = true, length = 100, unique = true)
     private String branchAddress;
 }
