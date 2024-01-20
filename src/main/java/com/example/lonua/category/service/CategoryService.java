@@ -1,12 +1,12 @@
 package com.example.lonua.category.service;
 
+import com.example.lonua.category.exception.CategoryDuplicateException;
+import com.example.lonua.category.exception.CategoryNotFoundException;
 import com.example.lonua.category.model.request.PatchUpdateCategoryReq;
 import com.example.lonua.category.model.request.PostRegisterCategoryReq;
 import com.example.lonua.category.model.entity.Category;
 import com.example.lonua.category.repository.CategoryRepository;
 import com.example.lonua.common.BaseRes;
-import com.example.lonua.exception.ErrorCode;
-import com.example.lonua.exception.exception.CategoryException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +25,9 @@ public class CategoryService {
     @Transactional(readOnly = false)
     public BaseRes register(PostRegisterCategoryReq postRegReqCategoryReq) {
         Optional<Category> result = categoryRepository.findByCategoryName(postRegReqCategoryReq.getCategoryName());
+
         if(result.isPresent()) {
-            throw new CategoryException(ErrorCode.DUPLICATED_USER, String.format("Category is %s", postRegReqCategoryReq.getCategoryName()));
+            throw new CategoryDuplicateException(postRegReqCategoryReq.getCategoryName());
         }
 
         categoryRepository.save(Category.builder()
@@ -48,46 +49,36 @@ public class CategoryService {
     public BaseRes update(PatchUpdateCategoryReq patchUpdateCategoryReq) {
         Optional<Category> reuslt = categoryRepository.findByCategoryIdx(patchUpdateCategoryReq.getCategoryIdx());
 
-        if(reuslt.isPresent()) {
-            Category category = reuslt.get();
-            category.update(patchUpdateCategoryReq);
-            category.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
-            categoryRepository.save(category);
-
-            return BaseRes.builder()
-                    .code(200)
-                    .isSuccess(true)
-                    .message("카테고리 수정 성공")
-                    .result(category.getCategoryName())
-                    .build();
-        } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("카테고리 수정 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+        if(reuslt.isEmpty()) {
+            throw new CategoryNotFoundException(patchUpdateCategoryReq.getCategoryIdx());
         }
+
+        Category category = reuslt.get();
+        category.update(patchUpdateCategoryReq);
+        category.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+        categoryRepository.save(category);
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("카테고리 수정 성공")
+                .result(category.getCategoryName())
+                .build();
     }
 
     @Transactional(readOnly = false)
     public BaseRes delete(Integer idx) {
         Integer result = categoryRepository.deleteByCategoryIdx(idx);
 
-        if(!result.equals(0)) {
-            return BaseRes.builder()
-                    .code(200)
-                    .isSuccess(true)
-                    .message("카테고리 삭제 성공")
-                    .result("정상 처리 되었습니다.")
-                    .build();
-        } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("카테고리 삭제 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+        if(result.equals(0)) {
+            throw new CategoryNotFoundException(idx);
         }
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("카테고리 삭제 성공")
+                .result("정상 처리 되었습니다.")
+                .build();
     }
 }

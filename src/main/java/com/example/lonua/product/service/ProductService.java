@@ -3,8 +3,6 @@ package com.example.lonua.product.service;
 import com.example.lonua.brand.model.entity.Brand;
 import com.example.lonua.category.model.entity.Category;
 import com.example.lonua.common.BaseRes;
-import com.example.lonua.exception.ErrorCode;
-import com.example.lonua.exception.exception.CategoryException;
 import com.example.lonua.product.model.entity.ProductCount;
 import com.example.lonua.product.model.entity.ProductImage;
 import com.example.lonua.product.model.entity.ProductIntrodImage;
@@ -52,9 +50,6 @@ public class ProductService {
     public BaseRes register(PostRegisterProductReq postRegisterProductReq, MultipartFile[] productFiles, MultipartFile[] productIntrodFiles) {
 
         Optional<Product> result = productRepository.findByProductName(postRegisterProductReq.getProductName());
-        if(result.isPresent()) {
-            throw new CategoryException(ErrorCode.DUPLICATED_PRODUCT, String.format("Product Name is %s", postRegisterProductReq.getProductName()));
-        }
 
         Product product = Product.builder()
                 .brand(Brand.builder()

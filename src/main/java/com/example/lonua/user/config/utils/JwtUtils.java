@@ -1,11 +1,13 @@
 package com.example.lonua.user.config.utils;
 
+import com.example.lonua.user.exception.UserAccountException;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 
 import java.security.Key;
@@ -65,10 +67,14 @@ public class JwtUtils {
 
     // 토근에서 정보를 가져오는 코드가 계속 중복되어 사용되기 때문에 별도의 메서드로 만들어서 사용하기 위한 것
     public static Claims extractAllClaims(String token, String key) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSignKey(key))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSignKey(key))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (SignatureException e) {
+            throw UserAccountException.forInvalidToken(token);
+        }
     }
 }

@@ -1,0 +1,18 @@
+package com.example.lonua.user.exception;
+
+import com.example.lonua.common.error.ErrorCode;
+import com.example.lonua.common.error.exception.BusinessException;
+
+public class UserAccountException extends BusinessException {
+    public UserAccountException(ErrorCode errorCode, String message) {
+        super(errorCode, message);
+    }
+
+    public static UserAccountException forTokenNotExists(String token) {
+        return new UserAccountException(ErrorCode.TOKEN_NOT_EXISTS, String.format("Token [ %s ] is not exists.", token));
+    }
+
+    public static UserAccountException forInvalidToken(String token) {
+        return new UserAccountException(ErrorCode.INVALID_TOKEN, String.format("Token [ %s ] is invalid.", token));
+    }
+}

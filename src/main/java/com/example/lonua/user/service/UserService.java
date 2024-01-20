@@ -1,10 +1,9 @@
 package com.example.lonua.user.service;
 
 import com.example.lonua.common.BaseRes;
-import com.example.lonua.exception.ErrorCode;
-import com.example.lonua.exception.exception.UserException;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.user.config.utils.JwtUtils;
+import com.example.lonua.user.exception.UserDuplicateException;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.User;
@@ -48,11 +47,17 @@ public class UserService {
     // 회원가입
     @Transactional(readOnly = false)
     public BaseRes signup(PostSignUpReq postSignUpReq) {
-        // 중복된 ID에 대한 예외처리 추가
-        Optional<User> result = userRepository.findByUserEmail(postSignUpReq.getUserEmail());
+        Optional<User> resultEmail = userRepository.findByUserEmail(postSignUpReq.getUserEmail());
+        Optional<User> resultPhoneNumber = userRepository.findByUserPhoneNumber(postSignUpReq.getUserPhoneNumber());
 
-        if (result.isPresent()) {
-            throw new UserException(ErrorCode.DUPLICATED_USER, String.format("Email is %s", postSignUpReq.getUserEmail()));
+        // 중복된 이메일에 대한 예외처리
+        if (resultEmail.isPresent()) {
+            throw UserDuplicateException.forSignupEmail(postSignUpReq.getUserEmail());
+        }
+
+        // 중복된 휴대전화번호에 대한 예외처리
+        if(resultPhoneNumber.isPresent()) {
+            throw UserDuplicateException.forPhoneNumber(postSignUpReq.getUserPhoneNumber());
         }
 
         User user = User.builder()

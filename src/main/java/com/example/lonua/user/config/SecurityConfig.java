@@ -2,17 +2,22 @@ package com.example.lonua.user.config;
 
 import com.example.lonua.user.config.filter.JwtFilter;
 import com.example.lonua.user.config.handler.OAuth2AuthenticationSuccessHandler;
+import com.example.lonua.user.exception.CustomAccessDeniedHandler;
+import com.example.lonua.user.exception.CustomAuthenticationEntryPoint;
 import com.example.lonua.user.repository.UserRepository;
 import com.example.lonua.user.service.UserOAuth2Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -25,6 +30,8 @@ public class SecurityConfig{
     private final UserRepository userRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final UserOAuth2Service userOAuth2Service;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 
     @Bean
@@ -39,32 +46,34 @@ public class SecurityConfig{
         try {
             http.csrf().disable()
                     .authorizeHttpRequests()
-//                        .antMatchers("/login","/user/signup", "/grade/*", "/*").permitAll()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/branch/*").hasRole("USER")
-                    .antMatchers("/brand/*").hasRole("USER")
-                    .antMatchers("/cart/*").hasRole("USER")
-                    .antMatchers("/category/*").hasRole("ADMIN")
-                    .antMatchers("/coupon/register/*").hasRole("ADMIN")
-                    .antMatchers("/coupon/delete/*").hasRole("ADMIN")
-                    .antMatchers("/coupon/list/*").hasRole("USER")
-                    .antMatchers("/grade/*").hasRole("ADMIN")
-                    .antMatchers("/likes/*").hasRole("USER")
-                    .antMatchers("/orders/*").hasRole("USER")
-                    .antMatchers("/product/*").hasRole("USER")
-                    .antMatchers("/question/*").hasRole("USER")
-                    .antMatchers("/reply/*").hasRole("USER")
-                    .antMatchers("/review/*").hasRole("USER")
-                    .antMatchers("/style/*").hasRole("ADMIN")
-                    .antMatchers("/user/list/*").hasRole("ADMIN")
-                    .antMatchers("/user/delete/*").hasRole("ADMIN")
-                    .antMatchers("/user/signup/*").permitAll()
-                    .antMatchers("/user/verify/*").permitAll()
-                    .antMatchers("/user/login/*").permitAll()
-                    .antMatchers("/user/read/*").hasRole("USER")
-                    .antMatchers("/user/update/*").hasRole("USER")
-                    .antMatchers("/user/cancle/*").hasRole("USER")
-                    .anyRequest().permitAll()
+                    .antMatchers("/user/signup/**").permitAll()
+                    .antMatchers("/user/verify/**").permitAll()
+                    .antMatchers("/user/login/**").permitAll()
+                    .antMatchers("/branch/**").hasRole("USER")
+                    .antMatchers("/brand/**").hasRole("USER")
+                    .antMatchers("/cart/**").hasRole("USER")
+                    .antMatchers("/coupon/list/**").hasRole("USER")
+                    .antMatchers("/likes/**").hasRole("USER")
+                    .antMatchers("/orders/**").hasRole("USER")
+                    .antMatchers("/product/**").hasRole("USER")
+                    .antMatchers("/question/**").hasRole("USER")
+                    .antMatchers("/reply/**").hasRole("USER")
+                    .antMatchers("/review/**").hasRole("USER")
+                    .antMatchers("/user/read/**").hasRole("USER")
+                    .antMatchers("/user/update/**").hasRole("USER")
+                    .antMatchers("/user/cancle/**").hasRole("USER")
+                    .antMatchers("/category/**").hasRole("ADMIN")
+                    .antMatchers("/coupon/register/**").hasRole("ADMIN")
+                    .antMatchers("/coupon/delete/**").hasRole("ADMIN")
+                    .antMatchers("/grade/**").hasRole("ADMIN")
+                    .antMatchers("/style/**").hasRole("ADMIN")
+                    .antMatchers("/user/list/**").hasRole("ADMIN")
+                    .antMatchers("/user/delete/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+                    .and()
+                    .exceptionHandling()
+                    .accessDeniedHandler(customAccessDeniedHandler) // 인가에 대한 예외 처리
+                    .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증에 대한 예외 처리
                     .and()
                     .formLogin().disable()
                     .addFilterBefore(new JwtFilter(secretKey, userRepository), UsernamePasswordAuthenticationFilter.class)

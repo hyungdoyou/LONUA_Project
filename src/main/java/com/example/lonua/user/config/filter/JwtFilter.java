@@ -1,6 +1,7 @@
 package com.example.lonua.user.config.filter;
 
 import com.example.lonua.user.config.utils.JwtUtils;
+import com.example.lonua.user.exception.UserAccountException;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,8 +1,8 @@
 package com.example.lonua.style.service;
 
 import com.example.lonua.common.BaseRes;
-import com.example.lonua.exception.ErrorCode;
-import com.example.lonua.exception.exception.StyleException;
+import com.example.lonua.style.exception.StyleDuplicateException;
+import com.example.lonua.style.exception.StyleNotFoundException;
 import com.example.lonua.style.model.entity.request.PatchUpdateStyleReq;
 import com.example.lonua.style.model.entity.request.PostRegisterStyleReq;
 import com.example.lonua.style.model.entity.Style;
@@ -25,8 +25,9 @@ public class StyleService {
     public BaseRes register(PostRegisterStyleReq postRegisterStyleReq) {
         Optional<Style> result = styleRepository.findByStyleType(postRegisterStyleReq.getStyleType());
 
+        // 스타일 유형 중복 예외 처리
         if(result.isPresent()) {
-            throw new StyleException(ErrorCode.DUPLICATED_USER, String.format("Style is %s", postRegisterStyleReq.getStyleType()));
+            throw new StyleDuplicateException(postRegisterStyleReq.getStyleType());
         }
 
         styleRepository.save(Style.builder()
@@ -66,44 +67,36 @@ public class StyleService {
     public BaseRes update(PatchUpdateStyleReq patchUpdateStyleReq) {
         Optional<Style> result = styleRepository.findByStyleIdx(patchUpdateStyleReq.getStyleIdx());
 
-        if(result.isPresent()) {
-            Style style = result.get();
-            style.setStyleType(patchUpdateStyleReq.getStyleType());
-
-            return BaseRes.builder()
-                    .code(200)
-                    .isSuccess(true)
-                    .message("수정 성공")
-                    .result(patchUpdateStyleReq.getStyleType())
-                    .build();
-        } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("수정 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+        // DB에서 스타일을 못찾을때 에러 처리
+        if(result.isEmpty()) {
+            throw new StyleNotFoundException(patchUpdateStyleReq.getStyleIdx());
         }
+
+        Style style = result.get();
+        style.setStyleType(patchUpdateStyleReq.getStyleType());
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("수정 성공")
+                .result(patchUpdateStyleReq.getStyleType())
+                .build();
     }
 
     @Transactional(readOnly = false)
     public BaseRes delete(Integer idx) {
         Integer result = styleRepository.deleteByStyleIdx(idx);
 
-        if(!result.equals(0)) {
-            return BaseRes.builder()
-                    .code(200)
-                    .isSuccess(true)
-                    .message("삭제 성공")
-                    .result("요청 성공")
-                    .build();
-        } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("삭제 실패")
-                    .result("요청 실패")
-                    .build();
+        // DB에서 삭제처리가 안된 경우 예외 처리
+        if(result.equals(0)) {
+            throw new StyleNotFoundException(idx);
         }
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("삭제 성공")
+                .result("요청 성공")
+                .build();
     }
 }

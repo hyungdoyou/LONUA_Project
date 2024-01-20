@@ -48,10 +48,10 @@ spring:
         jdbc-url: jdbc:mysql://77.77.77.111/lonua
     slave:
       hikari:
-        username: test02
+        username: test01
         password: qwer1234
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.112/lonua
+        jdbc-url: jdbc:mysql://77.77.77.111/lonua
 
   servlet:
     multipart:
@@ -85,6 +85,7 @@ cloud:
       product-bucket: lonua-product
       productIntrod-bucket: lonua-productintrod
       brand-bucket: lonua-brand
+      review-bucket: lonua-review
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
