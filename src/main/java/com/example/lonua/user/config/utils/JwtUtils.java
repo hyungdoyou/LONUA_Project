@@ -1,5 +1,6 @@
 package com.example.lonua.user.config.utils;
 
+import com.example.lonua.Seller.model.entity.Seller;
 import com.example.lonua.user.exception.UserAccountException;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.repository.UserRepository;
@@ -42,6 +43,26 @@ public class JwtUtils {
         Claims claims = Jwts.claims();
         claims.put("email", nickName);
         claims.put("ROLE", "ROLE_USER");
+
+        byte[] secretBytes = secretKey.getBytes();
+
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expiredTimeMs))
+                .signWith(Keys.hmacShaKeyFor(secretBytes), SignatureAlgorithm.HS256)
+                .compact();
+
+        return token;
+    }
+
+    // 브랜드 판매자 토큰 생성
+    public static String generateAccessTokenForSeller(Seller seller, String secretKey, Long expiredTimeMs) {
+
+        Claims claims = Jwts.claims();
+        claims.put("idx", seller.getSellerIdx());
+        claims.put("email", seller.getSellerEmail());
+        claims.put("ROLE", seller.getAuthority());
 
         byte[] secretBytes = secretKey.getBytes();
 

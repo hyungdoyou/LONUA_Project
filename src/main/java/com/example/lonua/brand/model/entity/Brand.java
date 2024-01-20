@@ -1,5 +1,6 @@
 package com.example.lonua.brand.model.entity;
 
+import com.example.lonua.Seller.model.entity.Seller;
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
 import com.example.lonua.brand.service.BrandService;
@@ -36,6 +37,12 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand")
     protected List<Reply> replyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "brand")
+    protected List<Seller> sellerList = new ArrayList<>();
+
+    @Column(nullable = false, unique = true, length = 45)
+    private String brandUniqueKey;
 
     @Column(nullable = false, unique = true, length = 45)
     private String brandName;
@@ -113,6 +120,5 @@ public class Brand {
         if (brandFileName != null) {
             this.brandImage = brandFileName;
         }
-
     }
 }
