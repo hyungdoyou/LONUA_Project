@@ -15,4 +15,8 @@ public class UserAccountException extends BusinessException {
     public static UserAccountException forInvalidToken(String token) {
         return new UserAccountException(ErrorCode.INVALID_TOKEN, String.format("Token [ %s ] is invalid.", token));
     }
+
+    public static UserAccountException forInvalidPassword(String password) {
+        return new UserAccountException(ErrorCode.DIFFERENT_USER_PASSWORD, String.format("User Password [ %s ] is different.", password));
+    }
 }

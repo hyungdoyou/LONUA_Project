@@ -16,14 +16,17 @@ public enum ErrorCode {
     // 회원
     DUPLICATE_SIGNUP_EMAIL(HttpStatus.BAD_REQUEST, "USER-001", "회원 이메일이 중복된 경우"),
     DUPLICATE_SIGNUP_PHONENUMBER(HttpStatus.BAD_REQUEST, "USER-002", "회원 전화번호가 중복된 경우"),
+    USER_NOT_EXISTS(HttpStatus.NOT_FOUND, "USER-003", "회원을 찾을 수 없는 경우"),
+
+    DIFFERENT_USER_PASSWORD(HttpStatus.BAD_REQUEST, "USER-004", "회원의 패스워드가 저장된 데이터와 다른 경우"),
 
     // 스타일
     DUPLICATE_STYLE_TYPE(HttpStatus.BAD_REQUEST, "STYLE-001", "스타일 유형이 중복된 경우"),
-    STYLE_IDX_NOT_EXISTS(HttpStatus.BAD_REQUEST, "STYLE-002", "스타일이 존재하지 않는 경우"),
+    STYLE_NOT_EXISTS(HttpStatus.NOT_FOUND, "STYLE-002", "스타일을 찾을 수 없는 경우"),
 
     // 카테고리
     DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "CATEGORY-001", "카테고리 이름이 중복된 경우"),
-    CATEGORY_IDX_NOT_EXISTS(HttpStatus.BAD_REQUEST, "CATEGORY-002", "카테고리가 존재하지 않는 경우");
+    CATEGORY_NOT_EXISTS(HttpStatus.NOT_FOUND, "CATEGORY-002", "카테고리를 찾을 수 없는 경우");
     private final HttpStatus status;  // 헤더로 반환할 Http 상태 코드
     private final String code;    // 페이로드로 반환할 에러 코드
     private final String description;  // 에러 코드 문서화를 위한 설명

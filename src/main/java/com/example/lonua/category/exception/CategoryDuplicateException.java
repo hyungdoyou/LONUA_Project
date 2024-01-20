@@ -5,6 +5,6 @@ import com.example.lonua.common.error.exception.EntityDuplicateException;
 
 public class CategoryDuplicateException extends EntityDuplicateException {
     public CategoryDuplicateException(String categoryName) {
-        super(ErrorCode.DUPLICATE_CATEGORY_NAME, String.format("Category name [ (%s) ] is duplicated.", categoryName));
+        super(ErrorCode.DUPLICATE_CATEGORY_NAME, String.format("Category name [ %s ] is duplicated.", categoryName));
     }
 }

@@ -3,7 +3,9 @@ package com.example.lonua.user.service;
 import com.example.lonua.common.BaseRes;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.user.config.utils.JwtUtils;
+import com.example.lonua.user.exception.UserAccountException;
 import com.example.lonua.user.exception.UserDuplicateException;
+import com.example.lonua.user.exception.UserNotFoundException;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.User;
@@ -134,7 +136,8 @@ public class UserService {
     @Transactional(readOnly = true)
     public BaseRes read(String email) {
         Optional<User> result = userRepository.findUser(email);
-        if (result.isPresent()) {
+
+        if(result.isPresent()) {
             User user = result.get();
 
             GetListUserRes getListUserRes = GetListUserRes.builder()
@@ -158,12 +161,7 @@ public class UserService {
                     .result(getListUserRes)
                     .build();
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(true)
-                    .message("요청 실패")
-                    .result("회원을 찾을 수 없습니다.")
-                    .build();
+            throw UserNotFoundException.forEmail(email);
         }
     }
 
@@ -171,34 +169,26 @@ public class UserService {
     @Transactional(readOnly = false)
     public BaseRes login(PostUserLoginReq postUserLoginReq) {
         Optional<User> result = userRepository.findByUserEmail(postUserLoginReq.getEmail());
-        if (result.isPresent()) {
-            User user = result.get();
-            if (passwordEncoder.matches(postUserLoginReq.getPassword(), user.getPassword())) {
-                PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
-                        .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
-                        .build();
 
-                return BaseRes.builder()
-                        .code(200)
-                        .isSuccess(true)
-                        .message("로그인에 성공하였습니다.")
-                        .result(postUserLoginRes)
-                        .build();
-            } else {
-                return BaseRes.builder()
-                        .code(400)
-                        .isSuccess(false)
-                        .message("로그인에 실패하였습니다.")
-                        .result("Access Denied")
-                        .build();
-            }
+        if(result.isEmpty()) {
+            throw UserNotFoundException.forEmail(postUserLoginReq.getEmail());
         }
-        return BaseRes.builder()
-                .code(400)
-                .isSuccess(false)
-                .message("로그인에 실패하였습니다.")
-                .result("Access Denied")
-                .build();
+
+        User user = result.get();
+        if (passwordEncoder.matches(postUserLoginReq.getPassword(), user.getPassword())) {
+            PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
+                    .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
+                    .build();
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("로그인에 성공하였습니다.")
+                    .result(postUserLoginRes)
+                    .build();
+        } else {
+            throw UserAccountException.forInvalidPassword(postUserLoginReq.getPassword());
+        }
     }
 
     // 인증메일 발송
@@ -234,7 +224,7 @@ public class UserService {
                             .build())
                     .build();
         } else {
-            return null;
+            throw UserNotFoundException.forEmail(email);
         }
     }
 
@@ -269,10 +259,12 @@ public class UserService {
     // 회원 이메일 검증
     public User getUserEmail(String email) {
         Optional<User> result = userRepository.findByUserEmail(email);
+
         if (result.isPresent()) {
             return result.get();
+        } else {
+            return null;  // 카카오 로그인 시 null이 반환되면 가입 진행토록 설정
         }
-        return null;
     }
 
     // 회원정보 수정
@@ -302,8 +294,7 @@ public class UserService {
                     .result(patchUserUpdateRes)
                     .build();
         } else {
-            return null;
-        }
+            throw UserNotFoundException.forEmail(userEmail);        }
     }
 
     @Transactional(readOnly = false)
@@ -319,12 +310,7 @@ public class UserService {
                     .result("회원이 삭제되었습니다.")
                     .build();
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("요청 실패")
-                    .result("회원을 찾을 수 없습니다.")
-                    .build();
+            throw UserNotFoundException.forIdx(idx);
         }
     }
 
@@ -344,13 +330,8 @@ public class UserService {
                     .result("회원의 상태가 탈퇴 상태로 변경되었습니다.")
                     .build();
 
+        } else {
+            throw UserNotFoundException.forIdx(userIdx);
         }
-
-        return BaseRes.builder()
-                .code(400)
-                .isSuccess(false)
-                .message("요청 실패")
-                .result("회원정보를 찾을 수 없습니다.")
-                .build();
     }
 }

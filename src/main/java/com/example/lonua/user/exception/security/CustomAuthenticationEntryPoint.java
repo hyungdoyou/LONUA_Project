@@ -1,4 +1,4 @@
-package com.example.lonua.user.exception;
+package com.example.lonua.user.exception.security;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
