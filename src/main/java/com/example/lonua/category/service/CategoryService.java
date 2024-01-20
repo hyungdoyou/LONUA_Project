@@ -49,36 +49,36 @@ public class CategoryService {
     public BaseRes update(PatchUpdateCategoryReq patchUpdateCategoryReq) {
         Optional<Category> reuslt = categoryRepository.findByCategoryIdx(patchUpdateCategoryReq.getCategoryIdx());
 
-        if(reuslt.isEmpty()) {
+        if(reuslt.isPresent()) {
+            Category category = reuslt.get();
+            category.update(patchUpdateCategoryReq);
+            category.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+            categoryRepository.save(category);
+
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("카테고리 수정 성공")
+                    .result(category.getCategoryName())
+                    .build();
+        } else {
             throw new CategoryNotFoundException(patchUpdateCategoryReq.getCategoryIdx());
         }
-
-        Category category = reuslt.get();
-        category.update(patchUpdateCategoryReq);
-        category.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
-        categoryRepository.save(category);
-
-        return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("카테고리 수정 성공")
-                .result(category.getCategoryName())
-                .build();
     }
 
     @Transactional(readOnly = false)
     public BaseRes delete(Integer idx) {
         Integer result = categoryRepository.deleteByCategoryIdx(idx);
 
-        if(result.equals(0)) {
+        if(!result.equals(0)) {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("카테고리 삭제 성공")
+                    .result("정상 처리 되었습니다.")
+                    .build();
+        } else {
             throw new CategoryNotFoundException(idx);
         }
-
-        return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("카테고리 삭제 성공")
-                .result("정상 처리 되었습니다.")
-                .build();
     }
 }
