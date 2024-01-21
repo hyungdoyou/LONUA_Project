@@ -2,6 +2,7 @@ package com.example.lonua.common.error.exception;
 
 import com.example.lonua.common.error.ErrorCode;
 import com.example.lonua.common.error.ErrorResponse;
+import com.example.lonua.user.exception.UserAccountException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -46,6 +47,7 @@ public class GlobalExceptionHandler {
         ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
         return new ResponseEntity<>(response, errorCode.getStatus());
     }
+
 
     // 제약조건에 대한 예외
     @ExceptionHandler(ConstraintViolationException.class)

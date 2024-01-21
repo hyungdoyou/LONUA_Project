@@ -10,9 +10,10 @@ public enum ErrorCode {
 
     // 계정
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "ACCOUNT-001", "인증에 실패한 경우"),
-    ROLE_NOT_EXISTS(HttpStatus.FORBIDDEN, "ACCOUNT-002", "권한이 없는 경우"),
-    TOKEN_NOT_EXISTS(HttpStatus.UNAUTHORIZED, "ACCOUNT-003", "토큰이 존재하지 않는 경우"),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "ACCOUNT-004", "토큰이 유효하지 않은 경우"),
+    TOKEN_NOT_EXISTS(HttpStatus.UNAUTHORIZED, "ACCOUNT-002", "토큰이 존재하지 않는 경우"),
+    INVALID_VERIFICATION_TOKEN(HttpStatus.UNAUTHORIZED, "ACCOUNT-003", "토큰이 유효하지 않은 경우"),
+    EXPIRED_VERIFICATION_TOKEN(HttpStatus.UNAUTHORIZED, "ACCOUNT-004", "토큰의 유효기간이 만료된 경우"),
+
 
     // 회원
     DUPLICATE_SIGNUP_EMAIL(HttpStatus.BAD_REQUEST, "USER-001", "회원 이메일이 중복된 경우"),

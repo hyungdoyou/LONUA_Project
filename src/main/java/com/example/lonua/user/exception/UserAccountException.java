@@ -13,10 +13,14 @@ public class UserAccountException extends BusinessException {
     }
 
     public static UserAccountException forInvalidToken(String token) {
-        return new UserAccountException(ErrorCode.INVALID_TOKEN, String.format("Token [ %s ] is invalid.", token));
+        return new UserAccountException(ErrorCode.INVALID_VERIFICATION_TOKEN, String.format("Token [ %s ] is invalid.", token));
     }
 
     public static UserAccountException forInvalidPassword(String password) {
         return new UserAccountException(ErrorCode.DIFFERENT_USER_PASSWORD, String.format("User Password [ %s ] is different.", password));
+    }
+
+    public static UserAccountException forExpiredToken(String token) {
+        return new UserAccountException(ErrorCode.EXPIRED_VERIFICATION_TOKEN, String.format("Verification Token [ %s ] is expired.", token));
     }
 }

@@ -1,16 +1,23 @@
 package com.example.lonua.user.config.utils;
 
 import com.example.lonua.Seller.model.entity.Seller;
+import com.example.lonua.common.error.ErrorCode;
+import com.example.lonua.common.error.ErrorResponse;
 import com.example.lonua.user.exception.UserAccountException;
 import com.example.lonua.user.model.entity.User;
 import com.example.lonua.user.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
@@ -100,6 +107,8 @@ public class JwtUtils {
                     .getBody();
         } catch (SignatureException e) {
             throw UserAccountException.forInvalidToken(token);
+        } catch (ExpiredJwtException e) {
+            throw UserAccountException.forExpiredToken(token);
         }
     }
 }
