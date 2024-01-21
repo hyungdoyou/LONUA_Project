@@ -1,17 +1,17 @@
 package com.example.lonua.Seller.model.entity;
 
 
-import com.example.lonua.Seller.model.request.PatchUpdateSellerReq;
 import com.example.lonua.brand.model.entity.Brand;
+import com.example.lonua.answer.model.entity.Answer;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,11 +28,17 @@ public class Seller implements UserDetails {
     @JoinColumn(name = "Brand_idx")
     private Brand brand;
 
+    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
+    private List<Answer> answerList = new ArrayList<>();
+
     @Column(nullable = false, length = 45, unique = true)
     private String sellerEmail;
 
     @Column(nullable = false, length = 200)
     private String sellerPassword;
+
+    @Column(nullable = false, length = 45)
+    private String sellerName;
 
     @Column(nullable = false)
     private String authority;

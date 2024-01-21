@@ -15,9 +15,9 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class PatchUpdateSellerReq {
 
-    @NotNull(message = "판매자 Idx는 필수 입력 항목입니다.")
-    @Min(value=1, message = "판매자 Idx 최소 1 이상의 숫자여야 합니다.")
-    @ApiModelProperty(value = "판매자 Idx", example = "1", required = true)
+    @NotNull(message = "판매자 IDX는 필수 입력 항목입니다.")
+    @Min(value=1, message = "판매자 IDX는 최소 1 이상의 숫자여야 합니다.")
+    @ApiModelProperty(value = "판매자 IDX", example = "1", required = true)
     private Integer sellerIdx;
 
     @Length(min=8, max=45 , message = "패스워드는 8글자 이상, 45글자 이하여야 합니다.")

@@ -14,4 +14,6 @@ public interface QuestionRepository extends JpaRepository<Question, Integer>, Qu
 
      Integer deleteByQuestionIdxAndUser_userIdx(Integer questionIdx, Integer userIdx);
 
+     Optional<Question> findByQuestionIdx(Integer questionIdx);
+
 }

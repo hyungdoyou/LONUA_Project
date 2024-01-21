@@ -67,7 +67,7 @@ public class SecurityConfig{
                     .antMatchers("/question/list/**").hasAnyRole("SELLER", "USER")
                     .antMatchers("/question/**").hasRole("USER")
 
-                    .antMatchers("/reply/**").hasRole("SELLER")
+                    .antMatchers("/answer/**").hasRole("SELLER")
 
                     .antMatchers("/review/list/**", "/review/read/**").hasAnyRole("SELLER", "USER")
                     .antMatchers("/review/**").hasRole("USER")

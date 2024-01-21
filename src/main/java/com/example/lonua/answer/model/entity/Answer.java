@@ -1,5 +1,6 @@
-package com.example.lonua.reply.model.entity;
+package com.example.lonua.answer.model.entity;
 
+import com.example.lonua.Seller.model.entity.Seller;
 import com.example.lonua.brand.model.entity.Brand;
 import com.example.lonua.question.model.entity.Question;
 import lombok.AllArgsConstructor;
@@ -14,22 +15,22 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Reply {
+public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer replyIdx;
+    private Integer answerIdx;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Question_idx")
     private Question question;
 
-    @ManyToOne
-    @JoinColumn(name = "Brand_idx")
-    private Brand brand;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Seller_idx")
+    private Seller seller;
 
-    @Column(nullable = false)
-    private String replyContent;
+    @Column(nullable = false, length = 500)
+    private String answerContent;
 
     @Column(nullable = false)
     private String createdAt;

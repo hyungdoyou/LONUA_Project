@@ -2,7 +2,7 @@ package com.example.lonua.question.model.entity;
 
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.question.model.request.PatchUpdateQuestionReq;
-import com.example.lonua.reply.model.entity.Reply;
+import com.example.lonua.answer.model.entity.Answer;
 import com.example.lonua.user.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +31,7 @@ public class Question {
     private User user;
 
     @OneToOne(mappedBy = "question")
-    private Reply reply;
+    private Answer answer;
 
     @Column(nullable = false, length = 7)
     private String questionType;

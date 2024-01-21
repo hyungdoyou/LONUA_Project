@@ -29,8 +29,8 @@ public class PostSignupSellerReq {
     private String sellerPassword;
 
     @NotNull(message = "브랜드 Idx는 필수 입력 항목입니다.")
-    @Min(value=1, message = "브랜드 Idx 최소 1 이상의 숫자여야 합니다.")
-    @ApiModelProperty(value = "본인 브랜드 Idx", example = "1", required = true)
+    @Min(value=1, message = "브랜드 IDX는 최소 1 이상의 숫자여야 합니다.")
+    @ApiModelProperty(value = "본인 브랜드 IDX", example = "1", required = true)
     private Integer brandIdx;
 
     @NotNull(message = "브랜드 고유키는 필수 입력 항목입니다.")

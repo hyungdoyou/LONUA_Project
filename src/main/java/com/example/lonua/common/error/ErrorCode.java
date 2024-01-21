@@ -27,6 +27,12 @@ public enum ErrorCode {
     DIFFERENT_SELLER_PASSWORD(HttpStatus.BAD_REQUEST, "SELLER-003", "판매자의 패스워드가 저장된 데이터와 다른 경우"),
     DIFFERENT_BRAND_UNIQUEKEY(HttpStatus.BAD_REQUEST, "SELLER-004", "판매자의 브랜드 고유키가 저장된 데이터와 다른 경우"),
 
+    // 질문
+    QUESTION_NOT_EXISTS(HttpStatus.NOT_FOUND, "QUESTION-001", "질문을 찾을 수 없는 경우"),
+
+    // 답변
+    ANSWER_NOT_EXISTS(HttpStatus.NOT_FOUND, "ANSWER-001", "답변을 찾을 수 없는 경우"),
+
     // 브랜드
     BRAND_NOT_EXISTS(HttpStatus.NOT_FOUND, "BRAND-001", "브랜드를 찾을 수 없는 경우"),
 

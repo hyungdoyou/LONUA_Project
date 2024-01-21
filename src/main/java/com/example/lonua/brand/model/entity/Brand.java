@@ -3,18 +3,12 @@ package com.example.lonua.brand.model.entity;
 import com.example.lonua.Seller.model.entity.Seller;
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
-import com.example.lonua.brand.service.BrandService;
 import com.example.lonua.product.model.entity.Product;
-import com.example.lonua.reply.model.entity.Reply;
+import com.example.lonua.answer.model.entity.Answer;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,9 +28,6 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand")
     private List<Product> productList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "brand")
-    protected List<Reply> replyList = new ArrayList<>();
 
     @OneToMany(mappedBy = "brand")
     protected List<Seller> sellerList = new ArrayList<>();
