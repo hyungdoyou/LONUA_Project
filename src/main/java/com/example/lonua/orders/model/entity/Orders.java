@@ -38,7 +38,7 @@ public class Orders {
     @Column(nullable = false)
     private String updatedAt;
 
-    @Column(nullable = false, length = 10, unique = true)
+    @Column(nullable = false, length = 10)
     private String status;
 
     public void updateStatus(PatchUpdateOrdersReq patchUpdateOrdersReq) {

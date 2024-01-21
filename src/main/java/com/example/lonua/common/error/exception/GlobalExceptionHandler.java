@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
@@ -42,6 +43,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
         ErrorCode errorCode = e.getErrorCode();
+        ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+
+    // 제약조건에 대한 예외
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
+        ErrorCode errorCode = ErrorCode.CONSTRAINT_VIOLATION;
         ErrorResponse response = new ErrorResponse(errorCode.getCode(), e.getMessage());
         return new ResponseEntity<>(response, errorCode.getStatus());
     }

@@ -114,26 +114,21 @@ public class OrdersService {
     public BaseRes list(User user, Integer page, Integer size) {
 
         Pageable pageable = PageRequest.of(page-1, size);
-//        Page<Orders> ordersList = ordersRepository.findList(pageable);
+        Page<Orders> ordersList = ordersRepository.findList(pageable, user.getUserIdx());
 
         List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
 
-        for(Orders orders : user.getOrdersList()) {
-            if(orders.getUser().getUserIdx().equals(user.getUserIdx())) {
+        for(Orders orders : ordersList) {
+            for(OrdersProduct ordersProduct : orders.getOrdersProductList()) {
+                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+                        .brandName(ordersProduct.getProduct().getBrand().getBrandName())
+                        .productName(ordersProduct.getProduct().getProductName())
+                        .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
+                        .price(ordersProduct.getProduct().getPrice())
+                        .createdAt(ordersProduct.getOrders().getCreatedAt())
+                        .build();
 
-                Page<OrdersProduct> ordersProductList = ordersProductRepository.findList(pageable);
-
-                for(OrdersProduct ordersProduct : ordersProductList) {
-                    GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
-                            .brandName(ordersProduct.getProduct().getBrand().getBrandName())
-                            .productName(ordersProduct.getProduct().getProductName())
-                            .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
-                            .price(ordersProduct.getProduct().getPrice())
-                            .createdAt(ordersProduct.getOrders().getCreatedAt())
-                            .build();
-
-                    getListOrdersResList.add(getListOrdersRes);
-                }
+                getListOrdersResList.add(getListOrdersRes);
             }
         }
         return BaseRes.builder()
@@ -147,42 +142,34 @@ public class OrdersService {
     // 주문 상세 내역 조회
     @Transactional(readOnly = true)
     public BaseRes read(User user, Integer ordersIdx, Integer productIdx) {
-        Optional<Orders> result = ordersRepository.findOrders(ordersIdx, productIdx);
+        Optional<OrdersProduct> result = ordersProductRepository.findOrdersProduct(user.getUserIdx(), ordersIdx, productIdx);
 
-        if (result.isPresent()){
-            Orders orders = result.get();
+        if (result.isPresent()) {
+            OrdersProduct ordersProduct = result.get();
 
-            List<GetReadOrdersRes> getReadOrdersResList = new ArrayList<>();
-
-            List<OrdersProduct> ordersProductList = orders.getOrdersProductList();
-            for(OrdersProduct ordersProduct : ordersProductList) {
-                GetReadOrdersRes getReadOrdersRes = GetReadOrdersRes.builder()
-                        .brandName(ordersProduct.getProduct().getProductName())
-                        .productName(ordersProduct.getProduct().getProductName())
-                        .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
-                        .price(ordersProduct.getProduct().getPrice())
-                        .userName(orders.getUser().getName())
-                        .userPhoneNumber(orders.getUser().getUserPhoneNumber())
-                        .userAddr(orders.getUser().getUserAddr())
-                        .deliveryMassage("배송 잘 부탁드립니다.")
-                        .build();
-
-                getReadOrdersResList.add(getReadOrdersRes);
-            }
+            GetReadOrdersRes getReadOrdersRes = GetReadOrdersRes.builder()
+                    .brandName(ordersProduct.getProduct().getProductName())
+                    .productName(ordersProduct.getProduct().getProductName())
+                    .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
+                    .price(ordersProduct.getProduct().getPrice())
+                    .userName(ordersProduct.getOrders().getUser().getName())
+                    .userPhoneNumber(ordersProduct.getOrders().getUser().getUserPhoneNumber())
+                    .userAddr(ordersProduct.getOrders().getUser().getUserAddr())
+                    .deliveryMassage("배송 잘 부탁드립니다.")
+                    .build();
             return BaseRes.builder()
                     .code(200)
                     .isSuccess(true)
                     .message("요청 성공")
-                    .result(getReadOrdersResList)
+                    .result(getReadOrdersRes)
                     .build();
-
-        } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(true)
-                    .message("요청 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+            } else {
+                return BaseRes.builder()
+                        .code(400)
+                        .isSuccess(true)
+                        .message("요청 실패")
+                        .result("잘못된 요청입니다.")
+                        .build();
         }
     }
 

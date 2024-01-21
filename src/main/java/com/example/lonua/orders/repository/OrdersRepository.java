@@ -1,6 +1,7 @@
 package com.example.lonua.orders.repository;
 
 import com.example.lonua.orders.model.entity.Orders;
+import com.example.lonua.orders.repository.querydsl.OrdersProductRepositoryCustom;
 import com.example.lonua.orders.repository.querydsl.OrdersRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

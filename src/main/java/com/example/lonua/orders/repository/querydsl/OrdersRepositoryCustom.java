@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrdersRepositoryCustom  {
-    Page<Orders> findList(Pageable pageable);
+    Page<Orders> findList(Pageable pageable, Integer idx);
 
-    Optional<Orders> findOrders(Integer ordersIdx, Integer productIdx);
+    Optional<Orders> findOrders(Integer userIdx, Integer ordersIdx, Integer productIdx);
 }
