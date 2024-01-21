@@ -108,7 +108,7 @@ public class SellerService {
 
         Pageable pageable = PageRequest.of(page-1, size);
 
-        Page<Seller> sellerList = sellerRepository.findAll(pageable);
+        Page<Seller> sellerList = sellerRepository.findSellerList(pageable);
 
         List<GetListSellerRes> getListSellerResList = new ArrayList<>();
         for(Seller seller : sellerList) {
