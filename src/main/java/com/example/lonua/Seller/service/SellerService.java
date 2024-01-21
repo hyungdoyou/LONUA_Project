@@ -135,7 +135,7 @@ public class SellerService {
 
         if(result.isPresent()) {
             Seller seller = result.get();
-            seller.update(patchUpdateSellerReq);
+            seller.update(passwordEncoder.encode(patchUpdateSellerReq.getSellerPassword()));
             seller.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
 
             return BaseRes.builder()

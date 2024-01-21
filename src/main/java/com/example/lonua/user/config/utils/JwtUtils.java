@@ -86,6 +86,10 @@ public class JwtUtils {
         return extractAllClaims(token, key).get("email", String.class);
     }
 
+    public static String getAuthority(String token, String key) {
+        return extractAllClaims(token, key).get("ROLE", String.class);
+    }
+
     // 토근에서 정보를 가져오는 코드가 계속 중복되어 사용되기 때문에 별도의 메서드로 만들어서 사용하기 위한 것
     public static Claims extractAllClaims(String token, String key) {
         try {

@@ -15,6 +15,11 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class PatchUserUpdateReq {
 
+    @Length(min=8, max=45 , message = "패스워드는 8글자 이상, 45글자 이하여야 합니다.")
+    @Pattern(regexp="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\\\",.<>/?]).{8,}$", message = "패스워드는 대/소문자, 특수문자, 숫자를 반드시 포함한 8글자 이상이어야 합니다.")
+    @ApiModelProperty(value = "패스워드(최소 길이 : 8글자 / 적어도 한개의 대문자, 소문자, 특수문자, 숫자를 포함)", example = "Qwer1234@", required = true)
+    private String userPassword;
+
     @Length(max=45, message = "주소는 최대 45글자 이하여야 합니다.")
     @ApiModelProperty(value = "주소", example = "서울 동작구 보라매로 87 ", required = true)
     private String userAddr;
@@ -29,7 +34,8 @@ public class PatchUserUpdateReq {
     private String preferStyle;
 
     @Range(min = 1,max = 3, message = "상체 유형은 1 ~ 3까지만 입력 가능합니다.")
-    @ApiModelProperty(value = "상체 유형(1 ~ 3)", example = "1", required = true)    private Integer upperType;
+    @ApiModelProperty(value = "상체 유형(1 ~ 3)", example = "1", required = true)
+    private Integer upperType;
 
     @Range(min = 1,max = 3, message = "하체 유형은 1 ~ 3까지만 입력 가능합니다.")
     @ApiModelProperty(value = "하체 유형(1 ~ 3)", example = "1", required = true)

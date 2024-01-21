@@ -64,7 +64,7 @@ public class SellerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.PATCH, value = "/update")
-    public ResponseEntity update(@RequestBody PatchUpdateSellerReq patchUpdateSellerReq) {
+    public ResponseEntity update(@RequestBody @Valid PatchUpdateSellerReq patchUpdateSellerReq) {
         BaseRes baseRes = sellerService.update(patchUpdateSellerReq);
 
         return ResponseEntity.ok().body(baseRes);

@@ -10,8 +10,10 @@ import com.example.lonua.review.model.entity.Review;
 import com.example.lonua.user.model.entity.request.PatchUserUpdateReq;
 import io.swagger.models.auth.In;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -56,7 +58,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 45, unique = true)
     private String userEmail;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, length = 200)
     private String userPassword;
 
     @Column(nullable = false)
@@ -133,7 +135,12 @@ public class User implements UserDetails {
         return userPassword;
     }
 
-    public void update(PatchUserUpdateReq patchUserUpdateReq) {
+
+    public void update(PatchUserUpdateReq patchUserUpdateReq, String userPassword) {
+        if (userPassword != null) {
+            this.userPassword = userPassword;
+        }
+
         if (patchUserUpdateReq.getUserAddr() != null) {
             this.userAddr = patchUserUpdateReq.getUserAddr();
         }

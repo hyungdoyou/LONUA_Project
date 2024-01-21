@@ -4,8 +4,10 @@ package com.example.lonua.Seller.model.entity;
 import com.example.lonua.Seller.model.request.PatchUpdateSellerReq;
 import com.example.lonua.brand.model.entity.Brand;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -29,7 +31,7 @@ public class Seller implements UserDetails {
     @Column(nullable = false, length = 45, unique = true)
     private String sellerEmail;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, length = 200)
     private String sellerPassword;
 
     @Column(nullable = false)
@@ -79,9 +81,9 @@ public class Seller implements UserDetails {
         return false;
     }
 
-    public void update(PatchUpdateSellerReq patchUpdateSellerReq) {
-        if (patchUpdateSellerReq.getSellerPassword() != null) {
-            this.sellerPassword = patchUpdateSellerReq.getSellerPassword();
+    public void update(String sellerPassword) {
+        if (sellerPassword != null) {
+            this.sellerPassword = sellerPassword;
         }
     }
 }

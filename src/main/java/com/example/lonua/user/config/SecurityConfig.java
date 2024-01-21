@@ -1,5 +1,6 @@
 package com.example.lonua.user.config;
 
+import com.example.lonua.Seller.repository.SellerRepository;
 import com.example.lonua.user.config.filter.JwtFilter;
 import com.example.lonua.user.config.handler.OAuth2AuthenticationSuccessHandler;
 import com.example.lonua.user.exception.security.CustomAccessDeniedHandler;
@@ -25,6 +26,7 @@ public class SecurityConfig{
     private String secretKey;
 
     private final UserRepository userRepository;
+    private final SellerRepository sellerRepository;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final UserOAuth2Service userOAuth2Service;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -43,29 +45,43 @@ public class SecurityConfig{
         try {
             http.csrf().disable()
                     .authorizeHttpRequests()
-                    .antMatchers("/user/signup/**").permitAll()
-                    .antMatchers("/user/verify/**").permitAll()
-                    .antMatchers("/user/login/**").permitAll()
-                    .antMatchers("/branch/**").hasRole("USER")
-                    .antMatchers("/brand/**").hasRole("USER")
+                    .antMatchers("/user/signup", "/seller/signup").permitAll()
+                    .antMatchers("/user/verify").permitAll()
+                    .antMatchers("/user/login", "/seller/login").permitAll()
+
+                    .antMatchers("/branch/list", "/branch/read").hasAnyRole("USER", "SELLER")
+                    .antMatchers("/branch/**").hasRole("SELLER")
+
+                    .antMatchers("/brand/register", "/brand/update", "/brand/delete/**").hasRole("ADMIN")
+                    .antMatchers("/brand/list/**", "/brand/{idx}").hasAnyRole("USER", "SELLER")
+
                     .antMatchers("/cart/**").hasRole("USER")
                     .antMatchers("/coupon/list/**").hasRole("USER")
                     .antMatchers("/likes/**").hasRole("USER")
                     .antMatchers("/orders/**").hasRole("USER")
-                    .antMatchers("/product/**").hasRole("USER")
+
+                    .antMatchers("/product/sametype/**").hasRole("USER")
+                    .antMatchers("/product/register", "/product/update", "/product/delete/**").hasRole("SELLER")
+                    .antMatchers("/product/**").hasAnyRole("USER", "SELLER")
+
+                    .antMatchers("/question/list/**").hasAnyRole("SELLER", "USER")
                     .antMatchers("/question/**").hasRole("USER")
-                    .antMatchers("/reply/**").hasRole("USER")
+
+                    .antMatchers("/reply/**").hasRole("SELLER")
+
+                    .antMatchers("/review/list/**", "/review/read/**").hasAnyRole("SELLER", "USER")
                     .antMatchers("/review/**").hasRole("USER")
-                    .antMatchers("/user/read/**").hasRole("USER")
-                    .antMatchers("/user/update/**").hasRole("USER")
-                    .antMatchers("/user/cancle/**").hasRole("USER")
+
+                    .antMatchers("/user/read", "/user/update", "/user/cancle/**").hasRole("USER")
+
+                    .antMatchers("/seller/update/**", "/seller/delete/**").hasRole("SELLER")
+
                     .antMatchers("/category/**").hasRole("ADMIN")
-                    .antMatchers("/coupon/register/**").hasRole("ADMIN")
-                    .antMatchers("/coupon/delete/**").hasRole("ADMIN")
+                    .antMatchers("/coupon/register", "/coupon/delete").hasRole("ADMIN")
+
                     .antMatchers("/grade/**").hasRole("ADMIN")
                     .antMatchers("/style/**").hasRole("ADMIN")
-                    .antMatchers("/user/list/**").hasRole("ADMIN")
-                    .antMatchers("/user/delete/**").hasRole("ADMIN")
+                    .antMatchers("/user/list/**", "/user/delete/**", "/seller/list/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
                     .exceptionHandling()
@@ -73,7 +89,7 @@ public class SecurityConfig{
                     .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증에 대한 예외 처리
                     .and()
                     .formLogin().disable()
-                    .addFilterBefore(new JwtFilter(secretKey, userRepository), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(new JwtFilter(secretKey, userRepository, sellerRepository), UsernamePasswordAuthenticationFilter.class)
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     // OAuth 2.0 로그인 처리
