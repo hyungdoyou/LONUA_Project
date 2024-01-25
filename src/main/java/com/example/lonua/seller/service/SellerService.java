@@ -59,6 +59,7 @@ public class SellerService {
                 sellerRepository.save(Seller.builder()
                                 .sellerEmail(postSignupSellerReq.getSellerEmail())
                                 .sellerPassword(passwordEncoder.encode(postSignupSellerReq.getSellerPassword()))
+                                .sellerName(postSignupSellerReq.getSellerName())
                                 .authority("ROLE_SELLER")
                                 .brand(brand)
                                 .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
@@ -81,14 +82,14 @@ public class SellerService {
     }
 
     public BaseRes login(PostLoginSellerReq postLoginSellerReq) {
-        Optional<Seller> result = sellerRepository.findBySellerEmail(postLoginSellerReq.getSellerEmail());
+        Optional<Seller> result = sellerRepository.findBySellerEmail(postLoginSellerReq.getEmail());
 
         if(result.isEmpty()) {
-            throw SellerNotFoundException.forEmail(postLoginSellerReq.getSellerEmail());
+            throw SellerNotFoundException.forEmail(postLoginSellerReq.getEmail());
         }
 
         Seller seller = result.get();
-        if(passwordEncoder.matches(postLoginSellerReq.getSellerPassword(), seller.getSellerPassword())) {
+        if(passwordEncoder.matches(postLoginSellerReq.getPassword(), seller.getSellerPassword())) {
             PostLoginSellerRes postLoginSellerRes = PostLoginSellerRes.builder()
                     .token(JwtUtils.generateAccessTokenForSeller(seller, secretKey, expiredTimeMs))
                     .build();
@@ -100,7 +101,7 @@ public class SellerService {
                     .result(postLoginSellerRes)
                     .build();
         } else {
-            throw SellerAccountException.forInvalidPassword(postLoginSellerReq.getSellerPassword());
+            throw SellerAccountException.forInvalidPassword(postLoginSellerReq.getPassword());
         }
     }
     @Transactional(readOnly = true)
@@ -115,6 +116,7 @@ public class SellerService {
             GetListSellerRes getListSellerRes = GetListSellerRes.builder()
                                                     .sellerIdx(seller.getSellerIdx())
                                                     .sellerEmail(seller.getSellerEmail())
+                                                    .sellerName(seller.getSellerName())
                                                     .brandName(seller.getBrand().getBrandName())
                                                     .build();
 

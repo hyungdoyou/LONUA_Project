@@ -22,6 +22,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/seller")
+@CrossOrigin("*")
 @Api(value="판매자 계정 컨트롤러 v1", tags="판매자 계정 API")
 public class SellerController {
 
@@ -42,7 +43,7 @@ public class SellerController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public ResponseEntity signup(@RequestBody @Valid PostLoginSellerReq postLoginSellerReq) {
+    public ResponseEntity login(@RequestBody @Valid PostLoginSellerReq postLoginSellerReq) {
         BaseRes baseRes = sellerService.login(postLoginSellerReq);
 
         return ResponseEntity.ok().body(baseRes);

@@ -36,4 +36,9 @@ public class PostSignupSellerReq {
     @Length(max=45, message = "브랜드 고유키는 최대 45글자 이하여야 합니다.")
     @ApiModelProperty(value = "본인 브랜드 고유키", example = "uniqueKey", required = true)
     private String brandUniqueKey;
+
+    @NotNull(message = "판매자 이름은 필수 입력 항목입니다.")
+    @Length(max=45, message = "판매자 이름은 최대 45글자 이하여야 합니다.")
+    @ApiModelProperty(value = "판매자 이름", example = "[브랜드명] 담당자", required = true)
+    private String sellerName;
 }

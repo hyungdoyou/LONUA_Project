@@ -13,4 +13,5 @@ public class GetListSellerRes {
     private Integer sellerIdx;
     private String brandName;
     private String sellerEmail;
+    private String sellerName;
 }
