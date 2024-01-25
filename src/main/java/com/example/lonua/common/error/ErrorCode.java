@@ -36,6 +36,18 @@ public enum ErrorCode {
     // 브랜드
     BRAND_NOT_EXISTS(HttpStatus.NOT_FOUND, "BRAND-001", "브랜드를 찾을 수 없는 경우"),
 
+    // 리뷰
+    REVIEW_NOT_EXISTS(HttpStatus.NOT_FOUND, "REVIEW-001", "리뷰를 찾을 수 없는 경우"),
+
+    // 좋아요
+    LIKES_NOT_EXISTS(HttpStatus.NOT_FOUND, "LIKES-001", "좋아요를 찾을 수 없는 경우"),
+
+    // 상품
+    PRODUCT_NOT_EXISTS(HttpStatus.NOT_FOUND, "PRDOCUT-001", "상품을 찾을 수 없는 경우"),
+
+    // 주문
+    ORDERS_NOT_EXISTS(HttpStatus.NOT_FOUND, "ORDERS-001", "주문번호를 찾을 수 없는 경우"),
+
     // 스타일
     DUPLICATE_STYLE_TYPE(HttpStatus.BAD_REQUEST, "STYLE-001", "스타일 유형이 중복된 경우"),
     STYLE_NOT_EXISTS(HttpStatus.NOT_FOUND, "STYLE-002", "스타일을 찾을 수 없는 경우"),

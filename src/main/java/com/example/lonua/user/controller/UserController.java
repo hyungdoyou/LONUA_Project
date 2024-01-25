@@ -110,7 +110,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{userIdx}")
-    public ResponseEntity delete(@PathVariable @Valid Integer userIdx) {
+    public ResponseEntity delete(@PathVariable @NotNull @Positive Integer userIdx) {
 
         BaseRes baseRes = userService.delete(userIdx);
 
@@ -121,7 +121,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.GET, value = "/cancle/{userIdx}")
-    public ResponseEntity cancle(@PathVariable @Valid Integer userIdx) {
+    public ResponseEntity cancle(@PathVariable @NotNull @Positive Integer userIdx) {
 
         return ResponseEntity.ok().body(userService.cancle(userIdx));
     }

@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.lonua.common.BaseRes;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.review.exception.ReviewNotFoundException;
 import com.example.lonua.review.model.entity.Review;
 import com.example.lonua.review.model.request.*;
 import com.example.lonua.review.model.response.GetListReviewRes;
@@ -78,7 +79,6 @@ public class ReviewService {
     @Transactional(readOnly = false)
     public void deleteFile(String reviewPhoto) {
         try {
-            reviewPhoto = "https://lonua-brand.s3.ap-northeast-2.amazonaws.com/2024/01/14/085f8c96-a78f-4c0f-a220-83c89672f17c_new+satur.png";
             s3.deleteObject(bucket, reviewPhoto);
         } catch (AmazonS3Exception e) {
             throw new RuntimeException(e);
@@ -143,7 +143,7 @@ public class ReviewService {
             return baseRes;
 
         } else {
-            return null;
+            throw new ReviewNotFoundException(reviewIdx);
         }
 
     }
@@ -155,74 +155,70 @@ public class ReviewService {
         List<Review> reviewList = reviewRepository.findByProduct_ProductIdx(productIdx);
         List<GetListReviewRes> response = new ArrayList<>();
 
-        for (Review review : reviewList) {
+        if(reviewList != null) {
+            for (Review review : reviewList) {
 
-            GetListReviewRes getListReviewRes = GetListReviewRes.builder()
-                    .productName(review.getProduct().getProductName())
-                    .productImage(review.getProduct().getProductImageList().get(0).getProductImage())
-                    .reviewContent(review.getReviewContent())
-                    .reviewPhoto(review.getReviewPhoto())
-                    .evaluation(review.getEvaluation())
-                    .updatedAt(review.getUpdatedAt())
+                GetListReviewRes getListReviewRes = GetListReviewRes.builder()
+                        .productName(review.getProduct().getProductName())
+                        .productImage(review.getProduct().getProductImageList().get(0).getProductImage())
+                        .reviewContent(review.getReviewContent())
+                        .reviewPhoto(review.getReviewPhoto())
+                        .evaluation(review.getEvaluation())
+                        .updatedAt(review.getUpdatedAt())
+                        .build();
+                response.add(getListReviewRes);
+            }
+
+            BaseRes baseRes = BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(response)
                     .build();
-            response.add(getListReviewRes);
+
+            return baseRes;
+        } else {
+            throw new ReviewNotFoundException(null);
         }
-
-        BaseRes baseRes = BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("요청 성공")
-                .result(response)
-                .build();
-
-        return baseRes;
-
     }
 
 
     @Transactional(readOnly = false)
     public BaseRes updateReview(PatchUpdateReviewReq request, MultipartFile reviewFile, User user) {
 
-        Optional<Review> result = reviewRepository.findByReviewIdx(request.getReviewIdx());
+        Optional<Review> result = reviewRepository.findByReviewIdxAndUser_userIdx(request.getReviewIdx(), user.getUserIdx());
 
         if (result.isPresent()) {
-            if (reviewFile != null) {
-                Review review = result.get();
-                System.out.println(review.getReviewPhoto());
+            Review review = result.get();
 
+            if (reviewFile != null) {
                 deleteFile(review.getReviewPhoto());
 
                 String saveFileName = saveFile(reviewFile);
                 review.update(request, saveFileName.replace(File.separator, "/"));
                 review.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
                 reviewRepository.save(review);
+            } else {
+                review.update(request, null);
+                review.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
+                reviewRepository.save(review);
+            }
+            PatchUpdateReviewRes patchUpdateReviewRes = PatchUpdateReviewRes.builder()
+                    .reviewContent(review.getReviewContent())
+                    .reviewPhoto(review.getReviewPhoto())
+                    .evaluation(review.getEvaluation())
+                    .build();
 
-
-                PatchUpdateReviewRes patchUpdateReviewRes = PatchUpdateReviewRes.builder()
-                        .reviewContent(review.getReviewContent())
-                        .reviewPhoto(review.getReviewPhoto())
-                        .evaluation(review.getEvaluation())
-                        .build();
-
-                BaseRes baseRes = BaseRes.builder()
+            return BaseRes.builder()
                         .code(200)
                         .isSuccess(true)
                         .message("리뷰 수정 성공")
                         .result(patchUpdateReviewRes)
                         .build();
 
-                return baseRes;
-            }
-
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("리뷰 수정 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+            throw new ReviewNotFoundException(request.getReviewIdx());
         }
-        return null;
     }
 
     @Transactional(readOnly = false)
@@ -236,12 +232,8 @@ public class ReviewService {
                 .message("리뷰 삭제 성공")
                 .result(reviewIdx)
                 .build();
+        } else {
+            throw new ReviewNotFoundException(reviewIdx);
         }
-        return BaseRes.builder()
-                .code(400)
-                .isSuccess(false)
-                .message("리뷰 삭제 실패")
-                .result("잘못된 요청입니다.")
-                .build();
     }
 }

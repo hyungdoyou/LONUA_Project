@@ -34,7 +34,7 @@ public class ReviewController {
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     public ResponseEntity registReview(
             @RequestPart(value = "review") @Valid PostRegisterReviewReq postRegisterReviewReq,
-            @RequestPart(value = "reviewPhoto") @NotNull MultipartFile file
+            @RequestPart(value = "reviewPhoto") @NotNull(message = "리뷰 사진은 필수 입력 항목입니다.") MultipartFile file
     ) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         BaseRes baseRes = reviewService.registerReview(user, postRegisterReviewReq, file);
@@ -46,7 +46,7 @@ public class ReviewController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.GET, value = "/read/{reviewIdx}")
-    public ResponseEntity readReview(@PathVariable @NotNull @Positive Integer reviewIdx) {
+    public ResponseEntity readReview(@PathVariable @NotNull(message = "리뷰 IDX는 필수 입력 항목입니다.") @Positive(message = "리뷰 IDX는 1이상의 양수입니다.") Integer reviewIdx) {
         BaseRes baseRes = reviewService.readReview(reviewIdx);
         return ResponseEntity.ok().body(baseRes);
     }
@@ -56,7 +56,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
 
     @RequestMapping(method = RequestMethod.GET, value = "/list/{productIdx}")
-    public ResponseEntity listReview(@PathVariable @NotNull @Positive Integer productIdx) {
+    public ResponseEntity listReview(@PathVariable @NotNull(message = "상품 IDX는 필수 입력 항목입니다.") @Positive(message = "상품 IDX는 1이상의 양수입니다.") Integer productIdx) {
         BaseRes baseRes = reviewService.listReview(productIdx);
         return ResponseEntity.ok().body(baseRes);
     }
@@ -67,7 +67,7 @@ public class ReviewController {
     @RequestMapping(method = RequestMethod.PATCH, value = "/update")
     public ResponseEntity updateReview(
             @RequestPart(value = "review") @Valid PatchUpdateReviewReq request,
-            @RequestPart(value = "reviewPhoto") @NotNull MultipartFile reviewFile) {
+            @RequestPart(value = "reviewPhoto") MultipartFile reviewFile) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         BaseRes baseRes = reviewService.updateReview(request, reviewFile, user);
 
@@ -78,7 +78,7 @@ public class ReviewController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{reviewIdx}")
-    public ResponseEntity deleteReview(@PathVariable @NotNull @Positive Integer reviewIdx) {
+    public ResponseEntity deleteReview(@PathVariable @NotNull(message = "리뷰 IDX는 필수 입력 항목입니다.") @Positive(message = "리뷰 IDX는 1이상의 양수입니다.") Integer reviewIdx) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         BaseRes baseRes =  reviewService.deleteReview(reviewIdx, user);
 

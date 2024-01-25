@@ -2,6 +2,7 @@ package com.example.lonua.question.service;
 
 import com.example.lonua.common.BaseRes;
 import com.example.lonua.product.model.entity.Product;
+import com.example.lonua.question.exception.QuestionNotFoundException;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.question.model.request.PatchUpdateQuestionReq;
 import com.example.lonua.question.model.request.PostRegisterQuestionReq;
@@ -97,7 +98,7 @@ public class QuestionService {
                 .code(400)
                 .isSuccess(false)
                 .message("요청 실패")
-                .result("잘못된 요청입니다.")
+                .result("질문을 찾을 수 없습니다.")
                 .build();
         }
     }
@@ -129,18 +130,13 @@ public class QuestionService {
             }
 
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("질문 수정 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+            throw new QuestionNotFoundException(patchUpdateQuestionReq.getQuestionIdx());
         }
     }
 
     @Transactional(readOnly = false)
-    public BaseRes delete(Integer idx, User user) {
-        Integer result = questionRepository.deleteByQuestionIdxAndUser_userIdx(idx, user.getUserIdx());
+    public BaseRes delete(Integer questionIdx, User user) {
+        Integer result = questionRepository.deleteByQuestionIdxAndUser_userIdx(questionIdx, user.getUserIdx());
 
         if(!result.equals(0)) {
             return BaseRes.builder()
@@ -150,12 +146,7 @@ public class QuestionService {
                     .result("요청 성공")
                     .build();
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("질문 삭제 실패")
-                    .result("요청 실패")
-                    .build();
+            throw new QuestionNotFoundException(questionIdx);
         }
     }
 }

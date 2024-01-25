@@ -61,7 +61,7 @@ public class StyleController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{idx}")
-    public ResponseEntity delete(@PathVariable @NotNull @Positive Integer idx) {
+    public ResponseEntity delete(@PathVariable @NotNull(message = "스타일 IDX는 필수 입력 항목입니다.") @Positive(message = "스타일 IDX는 1이상의 양수입니다.") Integer idx) {
         BaseRes baseRes = styleService.delete(idx);
 
         return ResponseEntity.ok().body(baseRes);

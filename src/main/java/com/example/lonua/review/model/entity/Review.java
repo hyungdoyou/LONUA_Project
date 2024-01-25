@@ -50,9 +50,7 @@ public class Review {
         if(patchUpdateReviewReq.getReviewContent() != null) {
             this.reviewContent = patchUpdateReviewReq.getReviewContent();
         }
-//        if(patchUpdateReviewReq.getReviewPhoto() != null) {
-//            this.reviewPhoto = patchUpdateReviewReq.getReviewPhoto();
-//        }
+
         if(patchUpdateReviewReq.getEvaluation() != null) {
             this.evaluation = patchUpdateReviewReq.getEvaluation();
 

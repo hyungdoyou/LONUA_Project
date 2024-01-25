@@ -31,12 +31,12 @@ public class LikesController {
     @ApiOperation(value = "좋아요 등록", response = BaseRes.class, notes = "회원이 원하는 상품에 좋아요를 등록한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
-    @RequestMapping(method = RequestMethod.GET, value = "/{idx}")
-    public ResponseEntity createLikes(@PathVariable @NotNull @Positive Integer idx) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{productIdx}")
+    public ResponseEntity createLikes(@PathVariable @NotNull @Positive Integer productIdx) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         try {
-            return ResponseEntity.ok().body(likesService.createLikes(user, idx));
+            return ResponseEntity.ok().body(likesService.createLikes(user, productIdx));
         } catch (Exception e) {
             return ResponseEntity.ok().body("동시성 에러 발생");
         }

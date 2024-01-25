@@ -59,7 +59,6 @@ public class BrandService {
 
     public void deleteFile(String brandImage) {
         try {
-            brandImage = "https://lonua-brand.s3.ap-northeast-2.amazonaws.com/2024/01/14/085f8c96-a78f-4c0f-a220-83c89672f17c_new+satur.png";
             s3.deleteObject(brandBucket, brandImage);
         } catch (AmazonS3Exception e) {
             throw new RuntimeException(e);

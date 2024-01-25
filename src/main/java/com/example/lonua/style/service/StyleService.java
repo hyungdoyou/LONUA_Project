@@ -63,12 +63,7 @@ public class StyleService {
                     .result(getListStyleResList)
                     .build();
         } else {
-            return BaseRes.builder()
-                    .code(500)
-                    .isSuccess(false)
-                    .message("요청 실패")
-                    .result("요청을 처리할 수 없습니다.")
-                    .build();
+            throw new StyleNotFoundException(null);
         }
     }
 

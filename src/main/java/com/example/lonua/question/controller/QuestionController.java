@@ -65,10 +65,10 @@ public class QuestionController {
     @ApiOperation(value = "질문 삭제", response = BaseRes.class, notes = "회원이 작성한 질문을 삭제한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{idx}")
-    public ResponseEntity delete(@PathVariable @NotNull @Positive Integer idx) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{questionIdx}")
+    public ResponseEntity delete(@PathVariable @NotNull @Positive Integer questionIdx) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        BaseRes baseRes = questionService.delete(idx, user);
+        BaseRes baseRes = questionService.delete(questionIdx, user);
 
         return ResponseEntity.ok().body(baseRes);
     }

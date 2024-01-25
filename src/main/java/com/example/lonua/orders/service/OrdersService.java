@@ -2,6 +2,7 @@ package com.example.lonua.orders.service;
 
 
 import com.example.lonua.common.BaseRes;
+import com.example.lonua.orders.exception.OrdersNotFoundException;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.orders.model.entity.OrdersProduct;
 import com.example.lonua.orders.model.request.PatchUpdateOrdersReq;
@@ -12,6 +13,7 @@ import com.example.lonua.orders.model.response.GetReadOrdersRes;
 import com.example.lonua.orders.model.response.PostCreateOrdersRes;
 import com.example.lonua.orders.repository.OrdersProductRepository;
 import com.example.lonua.orders.repository.OrdersRepository;
+import com.example.lonua.product.exception.ProductNotFoundException;
 import com.example.lonua.product.model.entity.Product;
 import com.example.lonua.product.model.entity.ProductCount;
 import com.example.lonua.product.repository.ProductCountRepository;
@@ -82,12 +84,7 @@ public class OrdersService {
 
                 getCreateOrdersResList.add(getCreateOrdersRes);
             } else {
-                return BaseRes.builder()
-                        .code(400)
-                        .isSuccess(false)
-                        .message("상품 주문 실패")
-                        .result("잘못된 요청입니다.")
-                        .build();
+                throw ProductNotFoundException.forIdx(idx);
             }
         }
 
@@ -118,25 +115,29 @@ public class OrdersService {
 
         List<GetListOrdersRes> getListOrdersResList = new ArrayList<>();
 
-        for(Orders orders : ordersList) {
-            for(OrdersProduct ordersProduct : orders.getOrdersProductList()) {
-                GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
-                        .brandName(ordersProduct.getProduct().getBrand().getBrandName())
-                        .productName(ordersProduct.getProduct().getProductName())
-                        .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
-                        .price(ordersProduct.getProduct().getPrice())
-                        .createdAt(ordersProduct.getOrders().getCreatedAt())
-                        .build();
+        if(ordersList != null) {
+            for(Orders orders : ordersList) {
+                for(OrdersProduct ordersProduct : orders.getOrdersProductList()) {
+                    GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+                            .brandName(ordersProduct.getProduct().getBrand().getBrandName())
+                            .productName(ordersProduct.getProduct().getProductName())
+                            .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
+                            .price(ordersProduct.getProduct().getPrice())
+                            .createdAt(ordersProduct.getOrders().getCreatedAt())
+                            .build();
 
-                getListOrdersResList.add(getListOrdersRes);
+                    getListOrdersResList.add(getListOrdersRes);
+                }
             }
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(getListOrdersResList)
+                    .build();
+        } else {
+            throw new OrdersNotFoundException(null);
         }
-        return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("요청 성공")
-                .result(getListOrdersResList)
-                .build();
     }
 
     // 주문 상세 내역 조회
@@ -164,12 +165,7 @@ public class OrdersService {
                     .result(getReadOrdersRes)
                     .build();
             } else {
-                return BaseRes.builder()
-                        .code(400)
-                        .isSuccess(true)
-                        .message("요청 실패")
-                        .result("잘못된 요청입니다.")
-                        .build();
+            throw new OrdersNotFoundException(ordersIdx);
         }
     }
 
@@ -189,12 +185,7 @@ public class OrdersService {
                     .result(patchUpdateOrdersReq.getStatus())
                     .build();
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("주문 상태 수정 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+            throw new OrdersNotFoundException(patchUpdateOrdersReq.getOrdersIdx());
         }
     }
     @Transactional(readOnly = false)
@@ -212,21 +203,17 @@ public class OrdersService {
                         .message("요청 성공")
                         .result("상품이 삭제되었습니다.")
                         .build();
+            } else {
+                return BaseRes.builder()
+                        .code(200)
+                        .isSuccess(true)
+                        .message("요청 실패")
+                        .result("상품의 배송이 시작되어 주문을 취소할 수 없습니다.")
+                        .build();
             }
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("요청 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
+            throw new OrdersNotFoundException(idx);
         }
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("요청 실패")
-                    .result("잘못된 요청입니다.")
-                    .build();
     }
 
 

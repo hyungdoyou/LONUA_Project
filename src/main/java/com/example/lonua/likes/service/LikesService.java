@@ -2,6 +2,7 @@ package com.example.lonua.likes.service;
 
 
 import com.example.lonua.common.BaseRes;
+import com.example.lonua.likes.exception.LikesNotFoundException;
 import com.example.lonua.likes.model.entity.Likes.Likes;
 import com.example.lonua.likes.model.request.PostCancelLikesReq;
 import com.example.lonua.likes.model.response.GetListLikesRes;
@@ -29,19 +30,18 @@ public class LikesService {
     private final LikesRepository likesRepository;
 
     @Transactional(readOnly = false)
-    public BaseRes createLikes(User user, Integer idx) {
-        Optional<Product> result = productRepository.findByProductIdx(idx);
-        // Todo 이 제품에 좋아요를 눌렀던적이 있는지 확인하는 로직 추가
+    public BaseRes createLikes(User user, Integer productIdx) {
+        Optional<Product> result = productRepository.findByProductIdx(productIdx);
         if (result.isPresent()) {
             Product product = result.get();
 
             Optional<Likes> byUserAndProduct = likesRepository.findByUserAndProduct(user, product);
             if (byUserAndProduct.isPresent()) {
                 return BaseRes.builder()
-                        .code(200)
-                        .isSuccess(true)
-                        .message("요청 성공")
-                        .result("좋아요를 누른적이 있습니다.")
+                        .code(400)
+                        .isSuccess(false)
+                        .message("요청 실패")
+                        .result("이미 좋아요를 누른 상품입니다.")
                         .build();
             } else {
                 ProductCount productCount = product.getProductCount();
@@ -59,7 +59,7 @@ public class LikesService {
                         .code(200)
                         .isSuccess(true)
                         .message("요청 성공")
-                        .result("좋아요를 추가하였습니다.")
+                        .result("상품에 좋아요를 추가하였습니다.")
                         .build();
             }
         }
@@ -71,25 +71,32 @@ public class LikesService {
         List<Likes> likesList = likesRepository.findAll();
 
         List<GetListLikesRes> getListLikesResList = new ArrayList<>();
-        for (Likes likes : likesList) {
-            if (likes.getUser().getUserIdx().equals(user.getUserIdx())) {
-                GetListLikesRes getListLikesRes = GetListLikesRes.builder()
-                        .brandName(likes.getProduct().getBrand().getBrandName())
-                        .productName(likes.getProduct().getProductName())
-                        .price(likes.getProduct().getPrice())
-                        .likeCount(likes.getProduct().getProductCount().getLikeCount())
-                        .build();
-                getListLikesResList.add(getListLikesRes);
+        if(likesList != null) {
+            for (Likes likes : likesList) {
+                if (likes.getUser().getUserIdx().equals(user.getUserIdx())) {
+                    GetListLikesRes getListLikesRes = GetListLikesRes.builder()
+                            .brandName(likes.getProduct().getBrand().getBrandName())
+                            .productName(likes.getProduct().getProductName())
+                            .price(likes.getProduct().getPrice())
+                            .likeCount(likes.getProduct().getProductCount().getLikeCount())
+                            .build();
+                    getListLikesResList.add(getListLikesRes);
+                }
             }
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(getListLikesResList)
+                    .build();
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("요청 실패")
+                    .result("좋아요 목록을 찾을 수 없습니다.")
+                    .build();
         }
-        BaseRes response = BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("요청 성공.")
-                .result(getListLikesResList)
-                .build();
-
-        return response;
     }
 
     @Transactional(readOnly = false)
@@ -112,12 +119,7 @@ public class LikesService {
                     .result("좋아요를 취소하였습니다.")
                     .build();
         } else {
-            return BaseRes.builder()
-                    .code(400)
-                    .isSuccess(false)
-                    .message("요청 실패")
-                    .result("좋아요 취소를 실패 하였습니다.")
-                    .build();
+            throw new LikesNotFoundException(postCancelLikesReq.getLikesIdx());
         }
     }
 }
