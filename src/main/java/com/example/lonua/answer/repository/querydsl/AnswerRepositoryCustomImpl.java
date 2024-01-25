@@ -1,10 +1,9 @@
 package com.example.lonua.answer.repository.querydsl;
 
-import com.example.lonua.Seller.model.entity.QSeller;
+import com.example.lonua.seller.model.entity.QSeller;
 import com.example.lonua.answer.model.entity.Answer;
 import com.example.lonua.answer.model.entity.QAnswer;
 import com.example.lonua.question.model.entity.QQuestion;
-import com.example.lonua.question.model.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

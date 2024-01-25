@@ -1,7 +1,7 @@
-package com.example.lonua.Seller.repository;
+package com.example.lonua.seller.repository;
 
-import com.example.lonua.Seller.model.entity.Seller;
-import com.example.lonua.Seller.repository.querydsl.SellerRepositoryCustom;
+import com.example.lonua.seller.model.entity.Seller;
+import com.example.lonua.seller.repository.querydsl.SellerRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,10 +1,9 @@
 package com.example.lonua.brand.model.entity;
 
-import com.example.lonua.Seller.model.entity.Seller;
+import com.example.lonua.seller.model.entity.Seller;
 import com.example.lonua.branch.model.entity.Branch;
 import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
 import com.example.lonua.product.model.entity.Product;
-import com.example.lonua.answer.model.entity.Answer;
 import lombok.*;
 
 import javax.persistence.*;

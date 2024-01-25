@@ -23,6 +23,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @Api(value="회원 컨트롤러 v1", tags="회원 API")
 public class UserController {
 

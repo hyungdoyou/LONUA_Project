@@ -1,4 +1,4 @@
-package com.example.lonua.Seller.model.response;
+package com.example.lonua.seller.model.response;
 
 import lombok.*;
 

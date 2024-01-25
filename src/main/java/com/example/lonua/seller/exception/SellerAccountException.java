@@ -1,8 +1,7 @@
-package com.example.lonua.Seller.exception;
+package com.example.lonua.seller.exception;
 
 import com.example.lonua.common.error.ErrorCode;
 import com.example.lonua.common.error.exception.BusinessException;
-import com.example.lonua.user.exception.UserAccountException;
 
 public class SellerAccountException extends BusinessException {
     public SellerAccountException(ErrorCode errorCode, String message) {
@@ -14,6 +13,6 @@ public class SellerAccountException extends BusinessException {
     }
 
     public static SellerAccountException forInvalidPassword(String password) {
-        return new SellerAccountException(ErrorCode.DIFFERENT_SELLER_PASSWORD, String.format("Seller Password [ %s ] is different.", password));
+        return new SellerAccountException(ErrorCode.DIFFERENT_SELLER_PASSWORD, String.format("seller Password [ %s ] is different.", password));
     }
 }

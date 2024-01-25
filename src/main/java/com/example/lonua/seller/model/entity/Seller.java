@@ -1,4 +1,4 @@
-package com.example.lonua.Seller.model.entity;
+package com.example.lonua.seller.model.entity;
 
 
 import com.example.lonua.brand.model.entity.Brand;

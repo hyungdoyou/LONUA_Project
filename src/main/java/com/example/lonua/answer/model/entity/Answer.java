@@ -1,7 +1,6 @@
 package com.example.lonua.answer.model.entity;
 
-import com.example.lonua.Seller.model.entity.Seller;
-import com.example.lonua.brand.model.entity.Brand;
+import com.example.lonua.seller.model.entity.Seller;
 import com.example.lonua.question.model.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

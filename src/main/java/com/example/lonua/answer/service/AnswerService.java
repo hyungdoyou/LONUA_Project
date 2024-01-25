@@ -1,6 +1,6 @@
 package com.example.lonua.answer.service;
 
-import com.example.lonua.Seller.model.entity.Seller;
+import com.example.lonua.seller.model.entity.Seller;
 import com.example.lonua.answer.exception.AnswerNotFoundException;
 import com.example.lonua.answer.model.entity.Answer;
 import com.example.lonua.answer.model.request.PatchUpdateAnswerReq;

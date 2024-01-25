@@ -1,10 +1,9 @@
-package com.example.lonua.Seller.controller;
+package com.example.lonua.seller.controller;
 
-import com.example.lonua.Seller.model.request.PatchUpdateSellerReq;
-import com.example.lonua.Seller.model.request.PostLoginSellerReq;
-import com.example.lonua.Seller.model.request.PostSignupSellerReq;
-import com.example.lonua.Seller.service.SellerService;
-import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
+import com.example.lonua.seller.model.request.PatchUpdateSellerReq;
+import com.example.lonua.seller.model.request.PostLoginSellerReq;
+import com.example.lonua.seller.model.request.PostSignupSellerReq;
+import com.example.lonua.seller.service.SellerService;
 import com.example.lonua.common.BaseRes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
 package com.example.lonua.user.config;
 
-import com.example.lonua.Seller.repository.SellerRepository;
+import com.example.lonua.seller.repository.SellerRepository;
 import com.example.lonua.user.config.filter.JwtFilter;
 import com.example.lonua.user.config.handler.OAuth2AuthenticationSuccessHandler;
 import com.example.lonua.user.exception.security.CustomAccessDeniedHandler;

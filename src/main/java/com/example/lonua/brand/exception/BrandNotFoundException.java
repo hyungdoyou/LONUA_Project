@@ -1,6 +1,5 @@
 package com.example.lonua.brand.exception;
 
-import com.example.lonua.Seller.exception.SellerNotFoundException;
 import com.example.lonua.common.error.ErrorCode;
 import com.example.lonua.common.error.exception.EntityNotFoundException;
 

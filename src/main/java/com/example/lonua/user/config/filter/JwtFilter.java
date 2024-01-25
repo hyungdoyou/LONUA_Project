@@ -1,7 +1,7 @@
 package com.example.lonua.user.config.filter;
 
-import com.example.lonua.Seller.model.entity.Seller;
-import com.example.lonua.Seller.repository.SellerRepository;
+import com.example.lonua.seller.model.entity.Seller;
+import com.example.lonua.seller.repository.SellerRepository;
 import com.example.lonua.common.error.ErrorCode;
 import com.example.lonua.common.error.ErrorResponse;
 import com.example.lonua.user.config.utils.JwtUtils;
