@@ -26,8 +26,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: dbgudeh123
-    password: ${APP_PASSWORD}
+    username: devthanks9807
+    password: bsdu nmsx medc iohb
     properties:
       mail:
         smtp:
@@ -82,13 +82,13 @@ jwt:
 cloud:
   aws:
     s3:
-      product-bucket: lonua-product
-      productIntrod-bucket: lonua-productintrod
-      brand-bucket: lonua-brand
-      review-bucket: lonua-review
+      product-bucket: ${AWS_S3_NAME}
+      productIntrod-bucket: ${AWS_S3_NAME}
+      brand-bucket: ${AWS_S3_NAME}
+      review-bucket: ${AWS_S3_NAME}
     credentials:
-      access-key: ${ACCESS_KEY}
-      secret-key: ${SECRET_KEY}
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
     region:
       static: ap-northeast-2
       auto: false
@@ -96,5 +96,5 @@ cloud:
       auto: false
 
 imp:
-  imp-key: ${MY_KEY}
-  imp-secret: ${MY_SECRET_KEY}
+  imp-key: ${PORTONE_KEY}
+  imp-secret: ${PORTONE_SECRETKEY}

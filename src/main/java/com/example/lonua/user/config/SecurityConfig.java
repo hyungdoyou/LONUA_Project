@@ -50,19 +50,19 @@ public class SecurityConfig{
                     .antMatchers("/user/login", "/seller/login").permitAll()
 
                     .antMatchers("/branch/list", "/branch/read").hasAnyRole("USER", "SELLER")
-                    .antMatchers("/branch/**").hasRole("SELLER")
+                    .antMatchers("/branch/**").permitAll()
 
-                    .antMatchers("/brand/register", "/brand/update", "/brand/delete/**").hasRole("ADMIN")
-                    .antMatchers("/brand/list/**", "/brand/{idx}").hasAnyRole("USER", "SELLER")
+                    .antMatchers("/brand/register", "/brand/update", "/brand/delete/**").permitAll()
+                    .antMatchers("/brand/list/**", "/brand/{idx}").permitAll()
 
                     .antMatchers("/cart/**").hasRole("USER")
                     .antMatchers("/coupon/list/**").hasRole("USER")
                     .antMatchers("/likes/**").hasRole("USER")
                     .antMatchers("/orders/**").hasRole("USER")
 
-                    .antMatchers("/product/sametype/**").hasRole("USER")
-                    .antMatchers("/product/register", "/product/update", "/product/delete/**").hasRole("SELLER")
-                    .antMatchers("/product/**").hasAnyRole("USER", "SELLER")
+                    .antMatchers("/product/sametype/**").permitAll()
+                    .antMatchers("/product/register", "/product/update", "/product/delete/**").permitAll()
+                    .antMatchers("/product/**").permitAll()
 
                     .antMatchers("/question/list/**").hasAnyRole("SELLER", "USER")
                     .antMatchers("/question/**").hasRole("USER")
@@ -76,11 +76,11 @@ public class SecurityConfig{
 
                     .antMatchers("/seller/update/**", "/seller/delete/**").hasRole("SELLER")
 
-                    .antMatchers("/category/**").hasRole("ADMIN")
+                    .antMatchers("/category/**").permitAll()
                     .antMatchers("/coupon/register", "/coupon/delete").hasRole("ADMIN")
 
-                    .antMatchers("/grade/**").hasRole("ADMIN")
-                    .antMatchers("/style/**").hasRole("ADMIN")
+                    .antMatchers("/grade/**").permitAll()
+                    .antMatchers("/style/**").permitAll()
                     .antMatchers("/user/list/**", "/user/delete/**", "/seller/list/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
