@@ -25,6 +25,7 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 @RequestMapping("/product")
 @Api(value="상품 컨트롤러 v1", tags="상품 API")
+@CrossOrigin("*")
 public class ProductController {
 
     private final ProductService productService;

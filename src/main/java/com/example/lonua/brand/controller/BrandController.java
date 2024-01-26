@@ -23,6 +23,7 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 @RequestMapping("/brand")
 @Api(value="브랜드(판매자) 컨트롤러 v1", tags="브랜드(판매자) API")
+@CrossOrigin("*")
 public class BrandController {
 
     private final BrandService brandService;

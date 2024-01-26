@@ -87,8 +87,8 @@ cloud:
       brand-bucket: ${BRAND_BUCKET}
       review-bucket: ${REVIEW_BUCKET}
     credentials:
-      access-key: ${ACCESS_KEY}
-      secret-key: ${SECRET_KEY}
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
     region:
       static: ${REGION}
       auto: false
@@ -96,5 +96,5 @@ cloud:
       auto: false
 
 imp:
-  imp-key: ${MY_KEY}
-  imp-secret: ${MY_SECRET_KEY}
+  imp-key: ${PORTONE_KEY}
+  imp-secret: ${PORTONE_SECRETKEY}
