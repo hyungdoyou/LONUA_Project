@@ -45,6 +45,7 @@ public class SecurityConfig{
         try {
             http.csrf().disable()
                     .authorizeHttpRequests()
+                    .antMatchers("/**").permitAll()
                     .antMatchers("/user/signup", "/seller/signup").permitAll()
                     .antMatchers("/user/verify").permitAll()
                     .antMatchers("/user/login", "/seller/login").permitAll()

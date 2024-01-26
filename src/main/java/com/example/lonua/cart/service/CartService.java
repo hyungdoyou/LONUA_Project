@@ -63,12 +63,14 @@ public class CartService {
         Pageable pageable = PageRequest.of(page-1, size);
 
         Page<Cart> cartList = cartRepository.findList(pageable, user.getUserIdx());
+//        Page<Cart> cartList = cartRepository.findAll(pageable);
         List<GetCartListRes> getListResCartList = new ArrayList<>();
 
         for (Cart cart : cartList) {
             GetCartListRes build = GetCartListRes.builder()
                     .cartIdx(cart.getCartIdx())
                     .brandName(cart.getProduct().getBrand().getBrandName())
+                    .productIdx(cart.getProduct().getProductIdx())
                     .productName(cart.getProduct().getProductName())
                     .productImage(cart.getProduct().getProductImageList().get(0).getProductImage())
                     .price(cart.getProduct().getPrice())

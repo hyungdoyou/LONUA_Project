@@ -20,6 +20,10 @@ import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.user.model.entity.User;
 import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -225,7 +230,7 @@ public class OrdersService {
 //                .impUid(postCreateOrdersReq.getImpUid())
 //                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
 //                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-//                .status(true)
+//                .status("주문접수")
 //                .build();
 //
 //        orders = ordersRepository.save(orders);
@@ -244,68 +249,68 @@ public class OrdersService {
 //            productCount.increaseLowerCount(user.getLowerType());
 //        }
 //    }
-//
-//    public BaseRes paymentValidation(User user, PostCreateOrdersReq postCreateOrdersReq) throws IamportResponseException, IOException {
-//
-//        Integer totalPrice = 0;
-//        for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
-//            Optional<Product> result = productRepository.findByProductIdx(idx);
-//            if(result.isPresent()) {
-//                Product product = result.get();
-//                totalPrice += product.getPrice();
-//            }
-//        }
-//
-//        if(postCreateOrdersReq.getAmount().equals(totalPrice) ) {
-//            createOrder(user, postCreateOrdersReq);  // 주문 생성
-//
-//            List<GetCreateOrdersRes> getListOrdersResList = new ArrayList<>();
-//            for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
-//                Optional<Product> result = productRepository.findByProductIdx(idx);
-//
-//                Product product = result.get();
-//                GetCreateOrdersRes getListOrdersRes = GetCreateOrdersRes.builder()
-//                        .brandName(product.getBrand().getBrandName())
-//                        .productName(product.getProductName())
-//                        .price(product.getPrice())
-//                        .build();
-//
-//                getListOrdersResList.add(getListOrdersRes);
-//            }
-//
-//            PostCreateOrdersRes postCreateOrdersRes = PostCreateOrdersRes.builder()
-//                    .userName(user.getName())
-//                    .userAddr(user.getUserAddr())
-//                    .userPhoneNumber(user.getUserPhoneNumber())
-//                    .totalAmount(postCreateOrdersReq.getAmount())
-//                    .impUid(postCreateOrdersReq.getImpUid())
-//                    .payMethod(postCreateOrdersReq.getPayMethod())
-//                    .productList(getListOrdersResList)
-//                    .build();
-//
-//            BaseRes baseRes = BaseRes.builder()
-//                    .code(200)
-//                    .isSuccess(true)
-//                    .message("상품 주문 성공")
-//                    .result(postCreateOrdersRes)
-//                    .build();
-//
-//            return baseRes;
-//        } else{
-//            cancelPayment(postCreateOrdersReq.getImpUid());  // 취소 기능
-//            return null;
-//        }
-//    }
-//
-//    public IamportResponse getPaymentInfo(String impUid) throws IamportResponseException, IOException {
-//        IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);
-//
-//        return response;
-//    }
-//
-//    public void cancelPayment(String impUid) throws IamportResponseException, IOException {
-//        CancelData cancelData = new CancelData(impUid,true);
-//        iamportClient.cancelPaymentByImpUid(cancelData);
-//    }
+
+    public BaseRes paymentValidation(User user, PostCreateOrdersReq postCreateOrdersReq) throws IamportResponseException, IOException {
+
+        Integer totalPrice = 0;
+        for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
+            Optional<Product> result = productRepository.findByProductIdx(idx);
+            if(result.isPresent()) {
+                Product product = result.get();
+                totalPrice += product.getPrice();
+            }
+        }
+
+        if(postCreateOrdersReq.getAmount().equals(totalPrice) ) {
+            createOrder(user, postCreateOrdersReq);  // 주문 생성
+
+            List<GetCreateOrdersRes> getListOrdersResList = new ArrayList<>();
+            for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
+                Optional<Product> result = productRepository.findByProductIdx(idx);
+
+                Product product = result.get();
+                GetCreateOrdersRes getListOrdersRes = GetCreateOrdersRes.builder()
+                        .brandName(product.getBrand().getBrandName())
+                        .productName(product.getProductName())
+                        .price(product.getPrice())
+                        .build();
+
+                getListOrdersResList.add(getListOrdersRes);
+            }
+
+            PostCreateOrdersRes postCreateOrdersRes = PostCreateOrdersRes.builder()
+                    .userName(user.getName())
+                    .userAddr(user.getUserAddr())
+                    .userPhoneNumber(user.getUserPhoneNumber())
+                    .totalAmount(postCreateOrdersReq.getAmount())
+                    .impUid(postCreateOrdersReq.getImpUid())
+                    .payMethod(postCreateOrdersReq.getPayMethod())
+                    .productList(getListOrdersResList)
+                    .build();
+
+            BaseRes baseRes = BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("상품 주문 성공")
+                    .result(postCreateOrdersRes)
+                    .build();
+
+            return baseRes;
+        } else{
+            cancelPayment(postCreateOrdersReq.getImpUid());  // 취소 기능
+            return null;
+        }
+    }
+
+    public IamportResponse getPaymentInfo(String impUid) throws IamportResponseException, IOException {
+        IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);
+
+        return response;
+    }
+
+    public void cancelPayment(String impUid) throws IamportResponseException, IOException {
+        CancelData cancelData = new CancelData(impUid,true);
+        iamportClient.cancelPaymentByImpUid(cancelData);
+    }
     //--------------------------------------------여기까지---------------------------------------------------------
 }

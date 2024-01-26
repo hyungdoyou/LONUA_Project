@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cart")
+@CrossOrigin("*")
 @Api(value="장바구니 컨트롤러 v1", tags="장바구니 API")
 public class CartController {
     private final CartService cartService;
@@ -42,6 +43,8 @@ public class CartController {
     ResponseEntity listCart(@PathVariable Integer page,@PathVariable Integer size) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok().body(cartService.list(user, page, size));
+        //return ResponseEntity.ok().body(cartService.list(page, size));
+
     }
 
     @ApiOperation(value = "장바구니 단일 삭제", response = BaseRes.class, notes = "회원이 장바구니에 물건을 단일 삭제한다.")
