@@ -42,16 +42,16 @@ spring:
   datasource:
     master:
       hikari:
-        username: test01
+        username: kty
         password: qwer1234
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.111/lonua
+        jdbc-url: jdbc:mysql://192.168.72.30/lonua
     slave:
       hikari:
-        username: test01
+        username: kty
         password: qwer1234
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.111/lonua
+        jdbc-url: jdbc:mysql://192.168.72.30/lonua
 
   servlet:
     multipart:
