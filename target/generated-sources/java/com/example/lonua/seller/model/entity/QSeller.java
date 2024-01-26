@@ -11,12 +11,12 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QSeller is a Querydsl query type for seller
+ * QSeller is a Querydsl query type for Seller
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QSeller extends EntityPathBase<Seller> {
 
-    private static final long serialVersionUID = 654444606L;
+    private static final long serialVersionUID = 1647078430L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

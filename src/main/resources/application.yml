@@ -26,7 +26,7 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: dbgudeh123
+    username: ${MAIL_SENDER}
     password: ${APP_PASSWORD}
     properties:
       mail:
@@ -42,16 +42,16 @@ spring:
   datasource:
     master:
       hikari:
-        username: test01
-        password: qwer1234
+        username: ${MASTER}
+        password: ${MASTER_PW}
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.111/lonua
+        jdbc-url: ${MASTER_URL}
     slave:
       hikari:
-        username: test01
-        password: qwer1234
+        username: ${SLAVE}
+        password: ${SLAVE_PW}
         driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbc-url: jdbc:mysql://77.77.77.111/lonua
+        jdbc-url: ${SLAVE_URL}
 
   servlet:
     multipart:
@@ -75,22 +75,22 @@ logging:
     org.springframework.security: DEBUG
 
 jwt:
-  secret-key: abcdefghijklmnopqrstuvwxyz0123456789
+  secret-key: ${JWT_SECRET_KEY}
   token:
-    expired-time-ms: 3000000
+    expired-time-ms: ${EXPIRED_TIME}
 
 cloud:
   aws:
     s3:
-      product-bucket: lonua-product
-      productIntrod-bucket: lonua-productintrod
-      brand-bucket: lonua-brand
-      review-bucket: lonua-review
+      product-bucket: ${PRODUCT_BUCKET}
+      productIntrod-bucket: ${PRODUCT_INTROD_BUCKET}
+      brand-bucket: ${BRAND_BUCKET}
+      review-bucket: ${REVIEW_BUCKET}
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
     region:
-      static: ap-northeast-2
+      static: ${REGION}
       auto: false
     stack:
       auto: false
