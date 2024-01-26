@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CartRepositoryCustomImpl extends QuerydslRepositorySupport implements CartRepositoryCustom {
 
@@ -36,9 +37,7 @@ public class CartRepositoryCustomImpl extends QuerydslRepositorySupport implemen
                 .distinct()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch();
-
-
+                .fetch().stream().distinct().collect(Collectors.toList());
 
         return new PageImpl<>(result, pageable, result.size());
     }

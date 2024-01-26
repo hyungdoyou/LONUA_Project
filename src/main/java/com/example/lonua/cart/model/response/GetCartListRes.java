@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class GetCartListRes {
     private Integer cartIdx;
+    private String brandName;
+    private Integer productIdx;
     private String productName;
+    private String productImage;
     private Integer price;
 }
