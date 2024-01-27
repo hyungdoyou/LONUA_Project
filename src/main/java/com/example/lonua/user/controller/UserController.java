@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -48,17 +49,12 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.GET, value = "/verify")
-    public ResponseEntity verify(@Valid GetEmailVerifyReq getEmailVerifyReq) {
+    public RedirectView verify(@Valid GetEmailVerifyReq getEmailVerifyReq) {
         if (emailVerifyService.verify(getEmailVerifyReq)) {
             BaseRes baseRes = userService.updateStatus(getEmailVerifyReq.getEmail()); // 이메일 인증이 완료되면 회원의 status를 바꿔줌
-            return ResponseEntity.ok().body(baseRes);
+            return new RedirectView("https://www.lonuashop.kro.kr");
         } else {
-            return ResponseEntity.ok().body(BaseRes.builder()
-                            .code(400)
-                            .isSuccess(false)
-                            .message("메일 인증을 다시 진행해주세요.")
-                            .result("인증에 실패하였습니다.")
-                    .build());
+            return new RedirectView("https://www.lonuashop.kro.kr/page/lonua-signup-success.html");
         }
     }
 
