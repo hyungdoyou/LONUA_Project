@@ -23,6 +23,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/review")
+@CrossOrigin("*")
 @Api(value="리뷰 컨트롤러 v1", tags="리뷰 API")
 public class ReviewController {
 

@@ -21,6 +21,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("/category")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @Api(value="카테고리 컨트롤러 v1", tags="카테고리 API")
 public class CategoryController {
     private final CategoryService categoryService;

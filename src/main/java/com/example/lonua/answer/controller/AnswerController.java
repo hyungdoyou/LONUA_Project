@@ -21,6 +21,7 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @RequestMapping("/answer")
 @Api(value="답변 컨트롤러 v1", tags="답변 API")
 public class AnswerController {

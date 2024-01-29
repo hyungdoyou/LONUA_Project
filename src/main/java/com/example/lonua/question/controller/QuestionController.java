@@ -24,6 +24,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/question")
+@CrossOrigin("*")
 @Api(value="질문 컨트롤러 v1", tags="질문 API")
 public class QuestionController {
 

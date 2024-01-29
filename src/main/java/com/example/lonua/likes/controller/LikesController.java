@@ -23,6 +23,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/likes")
+@CrossOrigin("*")
 @Api(value="좋아요 컨트롤러 v1", tags="좋아요 API")
 public class LikesController {
 

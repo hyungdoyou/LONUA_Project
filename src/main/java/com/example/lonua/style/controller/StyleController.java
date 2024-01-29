@@ -21,6 +21,7 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/style")
+@CrossOrigin("*")
 @Api(value="스타일 컨트롤러 v1", tags="스타일 API")
 public class StyleController {
 
