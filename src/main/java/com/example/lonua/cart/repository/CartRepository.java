@@ -12,4 +12,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer>, CartReposi
     @Modifying
     @Query("DELETE FROM Cart c  WHERE c.user.userIdx = :userIdx")
     void deleteAllByUserIdx(Integer userIdx);
+
+    public Integer deleteByCartIdx(Integer idx);
 }
