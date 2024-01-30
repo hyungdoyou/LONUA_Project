@@ -126,7 +126,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json") }) })
     @RequestMapping(method = RequestMethod.POST, value = "/checkPw")
-    public ResponseEntity checkPassword(PostCheckPasswordReq postCheckPasswordReq) {
+    public ResponseEntity checkPassword(@RequestBody @Valid PostCheckPasswordReq postCheckPasswordReq) {
 
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 

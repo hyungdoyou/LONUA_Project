@@ -140,7 +140,6 @@ public class User implements UserDetails {
         if (userPassword != null) {
             this.userPassword = userPassword;
         }
-
         if (patchUserUpdateReq.getUserAddr() != null) {
             this.userAddr = patchUserUpdateReq.getUserAddr();
         }

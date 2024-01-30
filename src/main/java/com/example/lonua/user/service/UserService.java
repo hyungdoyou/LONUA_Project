@@ -288,7 +288,11 @@ public class UserService {
         if (result.isPresent()) {
             User user = result.get();
 
-            user.update(patchUserUpdateReq, passwordEncoder.encode(patchUserUpdateReq.getUserPassword()));
+            if(patchUserUpdateReq.getUserPassword() != null) {
+                user.update(patchUserUpdateReq, passwordEncoder.encode(patchUserUpdateReq.getUserPassword()));
+            } else {
+                user.update(patchUserUpdateReq, null);
+            }
             user.setUpdatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")));
             userRepository.save(user);
 
