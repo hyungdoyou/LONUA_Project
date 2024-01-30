@@ -88,7 +88,7 @@ public class SecurityConfig{
                     .and()
                     .exceptionHandling()
                     .accessDeniedHandler(customAccessDeniedHandler) // 인가에 대한 예외 처리
-                    .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증에 대한 예외 처리
+//                    .authenticationEntryPoint(customAuthenticationEntryPoint) // 인증에 대한 예외 처리
                     .and()
                     .formLogin().disable()
                     .addFilterBefore(new JwtFilter(secretKey, userRepository, sellerRepository), UsernamePasswordAuthenticationFilter.class)
