@@ -6,6 +6,7 @@ import com.example.lonua.user.config.utils.JwtUtils;
 import com.example.lonua.user.exception.UserAccountException;
 import com.example.lonua.user.exception.UserDuplicateException;
 import com.example.lonua.user.exception.UserNotFoundException;
+import com.example.lonua.user.model.entity.request.PostCheckPasswordReq;
 import com.example.lonua.user.model.entity.request.PostUserLoginReq;
 import com.example.lonua.user.model.entity.request.PostSignUpReq;
 import com.example.lonua.user.model.entity.User;
@@ -190,6 +191,18 @@ public class UserService {
             throw UserAccountException.forInvalidPassword(postUserLoginReq.getPassword());
         }
     }
+
+    // 회원정보 수정을 위한 비밀번호 체크
+    @Transactional
+    public Boolean checkPassword(User user, PostCheckPasswordReq postCheckPasswordReq) {
+        if (passwordEncoder.matches(postCheckPasswordReq.getPassword(), user.getPassword())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 
     // 인증메일 발송
     @Transactional(readOnly = false)

@@ -121,4 +121,15 @@ public class UserController {
 
         return ResponseEntity.ok().body(userService.cancle(userIdx));
     }
+
+        @ApiOperation(value = "회원 정보 수정 시 비밀번호 확인", response = BaseRes.class, notes = "회원이 회원 정보를 수정하기 위해서 비밀번호를 입력한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json") }) })
+    @RequestMapping(method = RequestMethod.POST, value = "/checkPw")
+    public ResponseEntity checkPassword(PostCheckPasswordReq postCheckPasswordReq) {
+
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        return ResponseEntity.ok().body(userService.checkPassword(user, postCheckPasswordReq));
+    }
 }
