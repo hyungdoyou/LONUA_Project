@@ -44,4 +44,8 @@ public class PostCreateOrdersReq {
     @NotNull(message = "주문 상품 리스트는 필수 입력 항목입니다.")
     @ApiModelProperty(value = "주문 상품 리스트", example = "[1, 2, 3]", required = true)
     private List<Integer> productIdxList;
+
+    @NotNull(message = "마일리지 적립금액은 필수 입력 항목입니다.")
+    @ApiModelProperty(value = "마일리지", example = "100", required = true)
+    private Integer mileage;
 }

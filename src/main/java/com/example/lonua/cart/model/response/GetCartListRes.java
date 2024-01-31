@@ -16,4 +16,5 @@ public class GetCartListRes {
     private String productName;
     private String productImage;
     private Integer price;
+    private Integer salePrice;
 }

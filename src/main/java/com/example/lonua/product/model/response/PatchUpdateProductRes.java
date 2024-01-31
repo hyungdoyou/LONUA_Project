@@ -11,4 +11,5 @@ public class PatchUpdateProductRes {
     private String productName;
     private Integer quantity;
     private Integer price;
+    private Integer salePrice;
 }

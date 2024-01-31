@@ -29,7 +29,11 @@ public class PatchUpdateProductReq {
     private Integer quantity;
 
     @Range(min = 100,max = 400000000) // 4억 이하로만 해주세요.
-    @ApiModelProperty(value = "가격", example = "1000", required = true)
+    @ApiModelProperty(value = "원 가격", example = "1000", required = true)
     private Integer price;
+
+    @Range(min = 100,max = 400000000) // 4억 이하로만 해주세요.
+    @ApiModelProperty(value = "할인 가격", example = "1000", required = true)
+    private Integer salePrice;
 
 }

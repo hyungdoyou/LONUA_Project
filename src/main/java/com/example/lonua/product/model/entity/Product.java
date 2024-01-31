@@ -76,6 +76,9 @@ public class Product {
     @Column(nullable = false)
     private Integer price;
 
+    @Column(nullable = false)
+    private Integer salePrice;
+
     private Float shoulderWidth; // 어깨 너비
     private Float chestSize;  // 가슴 둘레
     private Float armLength;  // 팔 길이
@@ -103,6 +106,9 @@ public class Product {
         }
         if (patchUpdateProductReq.getPrice() != null) {
             this.price = patchUpdateProductReq.getPrice();
+        }
+        if (patchUpdateProductReq.getSalePrice() != null) {
+            this.salePrice = patchUpdateProductReq.getSalePrice();
         }
     }
 }

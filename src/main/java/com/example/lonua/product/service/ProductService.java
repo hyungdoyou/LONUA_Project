@@ -64,6 +64,7 @@ public class ProductService {
                 .productName(postRegisterProductReq.getProductName())
                 .quantity(postRegisterProductReq.getQuantity())
                 .price(postRegisterProductReq.getPrice())
+                .salePrice(postRegisterProductReq.getSalePrice())
                 .shoulderWidth(postRegisterProductReq.getShoulderWidth())
                 .chestSize(postRegisterProductReq.getChestSize())
                 .armLength(postRegisterProductReq.getArmLength())
@@ -100,6 +101,7 @@ public class ProductService {
                 .productName(product.getProductName())
                 .quantity(product.getQuantity())
                 .price(product.getPrice())
+                .salePrice(product.getSalePrice())
                 .shoulderWidth(product.getShoulderWidth())
                 .chestSize(product.getChestSize())
                 .armLength(product.getArmLength())
@@ -148,6 +150,7 @@ public class ProductService {
                         .productName(product.getProductName())
                         .productImage(image)
                         .price(product.getPrice())
+                        .salePrice(product.getSalePrice())
                         .likeCount(product.getProductCount().getLikeCount())
                         .build();
 
@@ -190,6 +193,7 @@ public class ProductService {
                     .productImages(productImages)
                     .productIntrodImages(productIntrodImages)
                     .price(product.getPrice())
+                    .salePrice(product.getSalePrice())
                     .shoulderWidth(product.getShoulderWidth())
                     .chestSize(product.getChestSize())
                     .armLength(product.getArmLength())
@@ -246,6 +250,7 @@ public class ProductService {
                     .productName(product.getProductName())
                     .quantity(product.getQuantity())
                     .price(product.getPrice())
+                    .salePrice(product.getSalePrice())
                     .build();
 
             BaseRes baseRes = BaseRes.builder()
@@ -312,6 +317,7 @@ public class ProductService {
                     .productName(product.getProductName())
                     .productImage(image)
                     .price(product.getPrice())
+                    .salePrice(product.getSalePrice())
                     .likeCount(product.getProductCount().getLikeCount())
                     .build();
 
@@ -350,6 +356,7 @@ public class ProductService {
                     .productName(product.getProductName())
                     .productImage(image)
                     .price(product.getPrice())
+                    .salePrice(product.getSalePrice())
                     .likeCount(product.getProductCount().getLikeCount())
                     .build();
 
@@ -384,6 +391,7 @@ public class ProductService {
                     .productName(product.getProductName())
                     .productImage(image)
                     .price(product.getPrice())
+                    .salePrice(product.getSalePrice())
                     .likeCount(product.getProductCount().getLikeCount())
                     .build();
 

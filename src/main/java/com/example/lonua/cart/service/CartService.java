@@ -74,6 +74,7 @@ public class CartService {
                     .productName(cart.getProduct().getProductName())
                     .productImage(cart.getProduct().getProductImageList().get(0).getProductImage())
                     .price(cart.getProduct().getPrice())
+                    .salePrice(cart.getProduct().getSalePrice())
                     .build();
             getListResCartList.add(build);
         }

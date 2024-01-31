@@ -20,6 +20,7 @@ public class PostRegisterProductRes {
     private String productName;
     private Integer quantity;
     private Integer price;
+    private Integer salePrice;
 
     private Float shoulderWidth;
     private Float chestSize;

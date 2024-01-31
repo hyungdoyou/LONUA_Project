@@ -19,6 +19,7 @@ import com.example.lonua.product.model.entity.ProductCount;
 import com.example.lonua.product.repository.ProductCountRepository;
 import com.example.lonua.product.repository.ProductRepository;
 import com.example.lonua.user.model.entity.User;
+import com.example.lonua.user.repository.UserRepository;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.CancelData;
@@ -45,6 +46,7 @@ public class OrdersService {
     private final OrdersRepository ordersRepository;
     private final OrdersProductRepository ordersProductRepository;
     private final ProductCountRepository productCountRepository;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = false)
     public BaseRes createOrder(User user, PostCreateOrdersReq postCreateOrdersReq) {
@@ -57,6 +59,10 @@ public class OrdersService {
                 .build();
 
         orders = ordersRepository.save(orders);
+
+        // 마일리지 적립
+        user.setUserMileage(postCreateOrdersReq.getMileage());
+        userRepository.save(user);
 
         List<GetCreateOrdersRes> getCreateOrdersResList = new ArrayList<>();
 
@@ -84,7 +90,7 @@ public class OrdersService {
                 GetCreateOrdersRes getCreateOrdersRes = GetCreateOrdersRes.builder()
                         .brandName(userProduct.getBrand().getBrandName())
                         .productName(userProduct.getProductName())
-                        .price(userProduct.getPrice())
+                        .salePrice(userProduct.getSalePrice())
                         .build();
 
                 getCreateOrdersResList.add(getCreateOrdersRes);
@@ -128,6 +134,7 @@ public class OrdersService {
                             .productName(ordersProduct.getProduct().getProductName())
                             .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
                             .price(ordersProduct.getProduct().getPrice())
+                            .salePrice(ordersProduct.getProduct().getSalePrice())
                             .createdAt(ordersProduct.getOrders().getCreatedAt())
                             .build();
 
@@ -158,6 +165,7 @@ public class OrdersService {
                     .productName(ordersProduct.getProduct().getProductName())
                     .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
                     .price(ordersProduct.getProduct().getPrice())
+                    .salePrice(ordersProduct.getProduct().getSalePrice())
                     .userName(ordersProduct.getOrders().getUser().getName())
                     .userPhoneNumber(ordersProduct.getOrders().getUser().getUserPhoneNumber())
                     .userAddr(ordersProduct.getOrders().getUser().getUserAddr())
@@ -261,7 +269,7 @@ public class OrdersService {
             Optional<Product> result = productRepository.findByProductIdx(idx);
             if(result.isPresent()) {
                 Product product = result.get();
-                totalPrice += product.getPrice();
+                totalPrice += product.getSalePrice();
             }
         }
 
@@ -276,7 +284,7 @@ public class OrdersService {
                 GetCreateOrdersRes getListOrdersRes = GetCreateOrdersRes.builder()
                         .brandName(product.getBrand().getBrandName())
                         .productName(product.getProductName())
-                        .price(product.getPrice())
+                        .salePrice(product.getSalePrice())
                         .build();
 
                 getListOrdersResList.add(getListOrdersRes);

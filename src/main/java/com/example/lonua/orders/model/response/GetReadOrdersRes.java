@@ -14,7 +14,9 @@ public class GetReadOrdersRes {
     private String brandName;
     private String productName;
     private String productImage;
+
     private Integer price;
+    private Integer salePrice;
 
     private String userName;
     private String userPhoneNumber;

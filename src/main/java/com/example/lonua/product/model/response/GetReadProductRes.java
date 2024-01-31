@@ -18,6 +18,7 @@ public class GetReadProductRes {
     private List<String> productIntrodImages;
 
     private Integer price;
+    private Integer salePrice;
 
     private Float shoulderWidth;
     private Float chestSize;
