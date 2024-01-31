@@ -40,7 +40,7 @@ public class CartService {
                         .build())
                 .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
                 .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-                .status(false)
+                .status(true)
                 .build());
 
         return BaseRes.builder()
