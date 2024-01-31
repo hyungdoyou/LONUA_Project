@@ -7,9 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.lonua.brand.model.request.PatchUpdateBrandReq;
 import com.example.lonua.brand.model.request.PostRegisterBrandReq;
 import com.example.lonua.brand.model.entity.Brand;
-import com.example.lonua.brand.model.response.GetListBrandRes;
-import com.example.lonua.brand.model.response.PatchUpdateBrandRes;
-import com.example.lonua.brand.model.response.PostRegisterBrandRes;
+import com.example.lonua.brand.model.response.*;
 import com.example.lonua.brand.repository.BrandRepository;
 import com.example.lonua.common.BaseRes;
 import com.example.lonua.product.model.entity.Product;
@@ -321,5 +319,46 @@ public class BrandService {
                     .result("브랜드를 찾을 수 없습니다.")
                     .build();
         }
+    }
+
+    public BaseRes listAll() {
+
+//        Pageable pageable = PageRequest.of(page-1, size);
+        List<Brand> brandList = brandRepository.findAll();
+
+        List<GetListAllBrandRes> getListAllBrandResList = new ArrayList<>();
+        for (Brand brand : brandList) {
+            List<Product> productList = productRepository.findAllByBrand_BrandIdx(brand.getBrandIdx());
+
+            List<GetBrandProductRes> getBrandProductResList = new ArrayList<>();
+            for(Product product : productList) {
+                GetBrandProductRes getBrandProductRes = GetBrandProductRes.builder()
+                        .productIdx(product.getProductIdx())
+                        .productName(product.getProductName())
+                        .productImage(product.getProductImageList().get(0).getProductImage())
+                        .price(product.getPrice())
+                        .salePrice(product.getSalePrice())
+                        .likeCount(product.getProductCount().getLikeCount())
+                        .build();
+
+                getBrandProductResList.add(getBrandProductRes);
+            }
+            GetListAllBrandRes getListAllBrandRes = GetListAllBrandRes.builder()
+                    .brandName(brand.getBrandName())
+                    .brandImage(brand.getBrandImage())
+                    .brandIntroduction(brand.getBrandIntroduction())
+                    .brandStyle(brand.getBrandStyle())
+                    .getBrandProductResList(getBrandProductResList)
+                    .build();
+
+            getListAllBrandResList.add(getListAllBrandRes);
+        }
+
+        return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListAllBrandResList)
+                .build();
     }
 }

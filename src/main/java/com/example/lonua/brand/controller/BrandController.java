@@ -81,4 +81,15 @@ public class BrandController {
         BaseRes baseRes = brandService.delete(idx);
         return ResponseEntity.ok().body(baseRes);
     }
+
+
+    @ApiOperation(value = "상품 포함 전체 브랜드 조회", response = BaseRes.class, notes = "상품을 포함한 전체 브랜드를 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
+    @RequestMapping(method = RequestMethod.GET, value = "/listall")
+    public ResponseEntity listAll() {
+        BaseRes baseRes = brandService.listAll();
+
+        return ResponseEntity.ok().body(baseRes);
+    }
 }
