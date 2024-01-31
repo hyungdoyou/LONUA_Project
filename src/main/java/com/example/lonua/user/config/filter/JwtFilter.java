@@ -111,6 +111,5 @@ public class JwtFilter extends OncePerRequestFilter {
             handleJwtException(response, new UserAccountException(ErrorCode.UNAUTHORIZED, e.getMessage()));
         }
 
-        filterChain.doFilter(request, response);
     }
 }
