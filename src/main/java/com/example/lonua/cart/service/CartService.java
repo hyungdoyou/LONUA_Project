@@ -87,20 +87,25 @@ public class CartService {
     }
 
     @Transactional(readOnly = false)
-    public BaseRes delete(DeleteCartRemoveReq request) {
+    public BaseRes delete(Integer cartIdx) {
 
-        Cart cart = Cart.builder()
-                .cartIdx(request.getCartIdx())
-                .build();
+        Integer result = cartRepository.deleteByCartIdx(cartIdx);
 
-        cartRepository.delete(cart);
-
-        return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("장바구니 1개 상품 삭제 성공")
-                .result("요청 성공")
-                .build();
+        if(!result.equals(0)) {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("장바구니 1개 상품 삭제 성공")
+                    .result("요청 성공")
+                    .build();
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("장바구니 상품 1개 삭제 실패")
+                    .result("요청 실패")
+                    .build();
+        }
     }
 
 

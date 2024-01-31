@@ -110,5 +110,7 @@ public class JwtFilter extends OncePerRequestFilter {
             // Spring Security 예외 처리
             handleJwtException(response, new UserAccountException(ErrorCode.UNAUTHORIZED, e.getMessage()));
         }
+
+        filterChain.doFilter(request, response);
     }
 }

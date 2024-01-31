@@ -18,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cart")
@@ -50,17 +53,17 @@ public class CartController {
     @ApiOperation(value = "장바구니 단일 삭제", response = BaseRes.class, notes = "회원이 장바구니에 물건을 단일 삭제한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
-    ResponseEntity deleteCart(@RequestBody DeleteCartRemoveReq request) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{cartIdx}")
+    ResponseEntity deleteCart(@PathVariable @NotNull @Positive Integer cartIdx) {
 
-        return ResponseEntity.ok().body(cartService.delete(request));
+        return ResponseEntity.ok().body(cartService.delete(cartIdx));
     }
 
 
     @ApiOperation(value = "장바구니 모두 삭제", response = BaseRes.class, notes = "회원이 장바구니에 모든 물건을 삭제한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
-    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteall")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deleteAll")
     ResponseEntity deleteAllCart() {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok().body(cartService.deleteAll(user));
