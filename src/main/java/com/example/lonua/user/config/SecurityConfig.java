@@ -46,7 +46,7 @@ public class SecurityConfig{
         try {
             http.csrf().disable()
                     .authorizeHttpRequests()
-                    .antMatchers(HttpMethod.OPTIONS, "/user/update").permitAll()  // CORS 해결하기 위한 OPTION 메서드 허용
+                    .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // CORS 해결하기 위한 OPTION 메서드 허용
                     .antMatchers("/user/signup", "/seller/signup").permitAll()
                     .antMatchers("/user/verify").permitAll()
                     .antMatchers("/user/login", "/seller/login").permitAll()

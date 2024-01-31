@@ -332,7 +332,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = false)
-    public BaseRes cancle(Integer userIdx) {
+    public BaseRes cancel(Integer userIdx) {
         Optional<User> byUserIdx = userRepository.findByUserIdx(userIdx);
 
         if (byUserIdx.isPresent()) {
@@ -346,7 +346,6 @@ public class UserService {
                     .message("요청 성공")
                     .result("회원의 상태가 탈퇴 상태로 변경되었습니다.")
                     .build();
-
         } else {
             throw UserNotFoundException.forIdx(userIdx);
         }

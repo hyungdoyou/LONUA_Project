@@ -21,8 +21,8 @@ public class PatchUpdateOrdersReq {
     private Integer ordersIdx;
 
     @NotNull(message = "주문 상태는 핋수 입력 항목입니다.")
-    @Length(min=2, max=10, message = "주문 상태는 [주문접수 / 상품준비중 / 배송중 / 배송완료 / 환불진행중] 만 입력 가능합니다.")
-    @Pattern(regexp = "^(주문접수|상품준비중|배송중|배송완료|환불진행중)$", message = "주문 상태는 [주문접수 / 상품준비중 / 배송중 / 배송완료 / 환불진행중] 만 입력 가능합니다.")
-    @ApiModelProperty(value = "주문 상태( 주문접수 / 상품준비중 / 배송중 / 배송완료 / 환불진행중)", example = "주문 접수", required = true)
+    @Length(min=2, max=10, message = "주문 상태는 [ 주문접수 / 결제완료 / 상품준비중 / 배송중 / 배송완료 ] 만 입력 가능합니다.")
+    @Pattern(regexp = "^(주문접수|결제완료|상품준비중|배송중|배송완료)$", message = "주문 상태는 [ 주문접수 / 결제완료 / 상품준비중 / 배송중 / 배송완료 ] 만 입력 가능합니다.")
+    @ApiModelProperty(value = "주문 상태( 주문접수 / 결제완료 / 상품준비중 / 배송중 / 배송완료 )", example = "주문 접수", required = true)
     private String status;
 }

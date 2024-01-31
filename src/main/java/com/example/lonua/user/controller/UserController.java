@@ -116,10 +116,11 @@ public class UserController {
     @ApiOperation(value = "회원 탈퇴", response = BaseRes.class, notes = "회원이 회원 탈퇴를 진행한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
-    @RequestMapping(method = RequestMethod.GET, value = "/cancle/{userIdx}")
-    public ResponseEntity cancle(@PathVariable @NotNull @Positive Integer userIdx) {
+    @RequestMapping(method = RequestMethod.GET, value = "/cancel")
+    public ResponseEntity cancel() {
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        return ResponseEntity.ok().body(userService.cancle(userIdx));
+        return ResponseEntity.ok().body(userService.cancel(user.getUserIdx()));
     }
 
         @ApiOperation(value = "회원 정보 수정 시 비밀번호 확인", response = BaseRes.class, notes = "회원이 회원 정보를 수정하기 위해서 비밀번호를 입력한다.")

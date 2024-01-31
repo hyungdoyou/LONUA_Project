@@ -53,7 +53,7 @@ public class OrdersService {
                 .impUid(postCreateOrdersReq.getImpUid())
                 .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
                 .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-                .status("주문 접수")
+                .status("주문접수")
                 .build();
 
         orders = ordersRepository.save(orders);
@@ -198,20 +198,24 @@ public class OrdersService {
         Optional<Orders> ordersStauts = ordersRepository.findByOrdersIdx(idx);
         if(ordersStauts.isPresent()) {
             Orders orders = ordersStauts.get();
-            if(orders.getStatus().equals("배송 전") || orders.getStatus().equals("주문 접수")) {
+            if(orders.getStatus().equals("주문접수") || orders.getStatus().equals("결제완료")|| orders.getStatus().equals("상품준비중")) {
                 Integer result1 = ordersProductRepository.deleteByOrders_OrdersIdx(idx);
                 Integer result2 = ordersRepository.deleteByOrdersIdx(idx);
 
-                return BaseRes.builder()
+                if(!result1.equals(0) && !result2.equals(0)) {
+                    return BaseRes.builder()
                         .code(200)
                         .isSuccess(true)
                         .message("요청 성공")
                         .result("상품이 삭제되었습니다.")
                         .build();
+                } else {
+                    throw new OrdersNotFoundException(idx);
+                }
             } else {
                 return BaseRes.builder()
-                        .code(200)
-                        .isSuccess(true)
+                        .code(400)
+                        .isSuccess(false)
                         .message("요청 실패")
                         .result("상품의 배송이 시작되어 주문을 취소할 수 없습니다.")
                         .build();
