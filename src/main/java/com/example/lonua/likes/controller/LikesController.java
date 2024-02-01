@@ -57,10 +57,10 @@ public class LikesController {
     @ApiOperation(value = "좋아요 취소", response = BaseRes.class, notes = "회원이 등록한 좋아요를 취소한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
-    @RequestMapping(method = RequestMethod.POST, value = "/cancel")
-    public ResponseEntity in(@RequestBody @Valid PostCancelLikesReq postCancelLikesReq) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/cancel/{productIdx}")
+    public ResponseEntity in(@PathVariable @NotNull @Positive Integer productIdx) {
         User user = ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        BaseRes baseRes = likesService.cancle(user, postCancelLikesReq);
+        BaseRes baseRes = likesService.cancle(productIdx, user);
 
         return ResponseEntity.ok().body(baseRes);
     }

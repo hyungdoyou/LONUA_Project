@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface LikesRepository extends JpaRepository<Likes, Integer> {
     public List<Likes> findAllByUser(User user);
-    public Integer deleteByLikesIdxAndUser(Integer idx, User user);
+    public Integer deleteByProduct_productIdxAndUser(Integer idx, User user);
 
     public Optional<Likes>findByUserAndProduct(User user, Product product);
 }

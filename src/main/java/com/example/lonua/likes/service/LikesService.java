@@ -101,12 +101,12 @@ public class LikesService {
     }
 
     @Transactional(readOnly = false)
-    public BaseRes cancle(User user, PostCancelLikesReq postCancelLikesReq) {
+    public BaseRes cancle(Integer productIdx, User user) {
 
-        Integer result = likesRepository.deleteByLikesIdxAndUser(postCancelLikesReq.getLikesIdx(), user);
+        Integer result = likesRepository.deleteByProduct_productIdxAndUser(productIdx, user);
 
         if (!result.equals(0)) {
-            Optional<Product> product = productRepository.findByProductIdx(postCancelLikesReq.getProductIdx());
+            Optional<Product> product = productRepository.findByProductIdx(productIdx);
 
             Product cancelProduct = product.get();
             ProductCount productCount = cancelProduct.getProductCount();
@@ -120,7 +120,7 @@ public class LikesService {
                     .result("좋아요를 취소하였습니다.")
                     .build();
         } else {
-            throw new LikesNotFoundException(postCancelLikesReq.getLikesIdx());
+            throw new LikesNotFoundException(productIdx);
         }
     }
 }
