@@ -11,6 +11,7 @@ import lombok.*;
 public class GetListLikesRes {
 
     private String brandName;
+    private Integer productIdx;
     private String productName;
     private Integer price;
     private Integer likeCount;

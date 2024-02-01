@@ -76,6 +76,7 @@ public class LikesService {
                 if (likes.getUser().getUserIdx().equals(user.getUserIdx())) {
                     GetListLikesRes getListLikesRes = GetListLikesRes.builder()
                             .brandName(likes.getProduct().getBrand().getBrandName())
+                            .productIdx(likes.getProduct().getProductIdx())
                             .productName(likes.getProduct().getProductName())
                             .price(likes.getProduct().getPrice())
                             .likeCount(likes.getProduct().getProductCount().getLikeCount())
