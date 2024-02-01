@@ -21,8 +21,8 @@ public class JwtUtils {
         Claims claims = Jwts.claims();
         claims.put("idx", user.getUserIdx());
         claims.put("email", user.getUserEmail());
-        claims.put("name", user.getUsername());
-        claims.put("grade", user.getGrade());
+        claims.put("name", user.getName());
+        claims.put("grade", user.getGrade().getGradeType());
         claims.put("mileage", user.getUserMileage());
         claims.put("ROLE", user.getAuthority());
 
