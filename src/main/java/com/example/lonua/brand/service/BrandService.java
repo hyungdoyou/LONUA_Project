@@ -153,6 +153,7 @@ public class BrandService {
         List<GetListBrandRes> getListBrandResList = new ArrayList<>();
         for (Brand brand : brandList) {
             GetListBrandRes getListBrandRes = GetListBrandRes.builder()
+                    .brandIdx(brand.getBrandIdx())
                     .brandName(brand.getBrandName())
                     .brandImage(brand.getBrandImage())
                     .brandIntroduction(brand.getBrandIntroduction())
@@ -344,6 +345,7 @@ public class BrandService {
                 getBrandProductResList.add(getBrandProductRes);
             }
             GetListAllBrandRes getListAllBrandRes = GetListAllBrandRes.builder()
+                    .brandIdx(brand.getBrandIdx())
                     .brandName(brand.getBrandName())
                     .brandImage(brand.getBrandImage())
                     .brandIntroduction(brand.getBrandIntroduction())

@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetListAllBrandRes {
+    private Integer brandIdx;
     private String brandName;
     private String brandIntroduction;
     private String brandImage;

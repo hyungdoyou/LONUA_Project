@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetListBrandRes {
-
+    private Integer brandIdx;
     private String brandName;
     private String brandIntroduction;
     private String brandImage;
