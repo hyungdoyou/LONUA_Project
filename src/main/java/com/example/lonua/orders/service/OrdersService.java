@@ -61,7 +61,7 @@ public class OrdersService {
         orders = ordersRepository.save(orders);
 
         // 마일리지 적립
-        user.setUserMileage(postCreateOrdersReq.getMileage());
+        user.increaseMileage(postCreateOrdersReq.getMileage());
         userRepository.save(user);
 
         List<GetCreateOrdersRes> getCreateOrdersResList = new ArrayList<>();
