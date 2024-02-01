@@ -136,6 +136,11 @@ public class User implements UserDetails {
     }
 
 
+    public void increaseMileage(Integer mileage) {
+        if(userMileage != null) {
+            this.userMileage += mileage;
+        }
+    }
     public void update(PatchUserUpdateReq patchUserUpdateReq, String userPassword) {
         if (userPassword != null) {
             this.userPassword = userPassword;
