@@ -10,6 +10,7 @@ import lombok.*;
 public class GetListOrdersRes {
 
     private Integer ordersProductIdx;
+    private Integer productIdx;
     private String impUid;
     private String brandName;
     private String productName;

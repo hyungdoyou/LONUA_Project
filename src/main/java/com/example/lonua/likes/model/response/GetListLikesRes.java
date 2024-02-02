@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 public class GetListLikesRes {
 
+    private Integer likesIdx;
     private String brandName;
     private Integer productIdx;
     private String productName;

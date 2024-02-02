@@ -131,6 +131,7 @@ public class OrdersService {
                 for(OrdersProduct ordersProduct : orders.getOrdersProductList()) {
                     GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
                             .ordersProductIdx(ordersProduct.getOrdersProductIdx())
+                            .productIdx(ordersProduct.getProduct().getProductIdx())
                             .impUid(ordersProduct.getOrders().getImpUid())
                             .brandName(ordersProduct.getProduct().getBrand().getBrandName())
                             .productName(ordersProduct.getProduct().getProductName())
