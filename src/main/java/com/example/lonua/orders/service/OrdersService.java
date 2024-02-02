@@ -130,12 +130,15 @@ public class OrdersService {
             for(Orders orders : ordersList) {
                 for(OrdersProduct ordersProduct : orders.getOrdersProductList()) {
                     GetListOrdersRes getListOrdersRes = GetListOrdersRes.builder()
+                            .ordersProductIdx(ordersProduct.getOrdersProductIdx())
+                            .impUid(ordersProduct.getOrders().getImpUid())
                             .brandName(ordersProduct.getProduct().getBrand().getBrandName())
                             .productName(ordersProduct.getProduct().getProductName())
                             .productImage(ordersProduct.getProduct().getProductImageList().get(0).getProductImage())
                             .price(ordersProduct.getProduct().getPrice())
                             .salePrice(ordersProduct.getProduct().getSalePrice())
                             .createdAt(ordersProduct.getOrders().getCreatedAt())
+                            .status(ordersProduct.getOrders().getStatus())
                             .build();
 
                     getListOrdersResList.add(getListOrdersRes);

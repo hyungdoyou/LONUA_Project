@@ -78,8 +78,9 @@ public class LikesService {
                             .brandName(likes.getProduct().getBrand().getBrandName())
                             .productIdx(likes.getProduct().getProductIdx())
                             .productName(likes.getProduct().getProductName())
+                            .productImage(likes.getProduct().getProductImageList().get(0).getProductImage())
                             .price(likes.getProduct().getPrice())
-                            .likeCount(likes.getProduct().getProductCount().getLikeCount())
+                            .salePrice(likes.getProduct().getSalePrice())
                             .build();
                     getListLikesResList.add(getListLikesRes);
                 }

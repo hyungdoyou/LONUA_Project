@@ -33,8 +33,8 @@ public class CouponController {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     ResponseEntity registerCoupon(@RequestBody @Valid PostCouponRegisterReq request) {
-        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return ResponseEntity.ok().body(couponService.create(user, request));
+
+        return ResponseEntity.ok().body(couponService.create(request));
     }
 
     @ApiOperation(value = "쿠폰 모두 조회", response = BaseRes.class, notes = "회원이 쿠폰을 모두 조회 한다.")

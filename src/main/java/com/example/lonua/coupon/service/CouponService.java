@@ -25,7 +25,7 @@ public class CouponService {
     private final CouponRepository couponRepository;
 
     @Transactional(readOnly = false)
-    public BaseRes create(User user, PostCouponRegisterReq request) {
+    public BaseRes create(PostCouponRegisterReq request) {
         Coupon coupon = couponRepository.save(Coupon.builder()
                 .couponName(request.getCouponName())
                 .couponDiscountRate(request.getCouponDiscountRate())
@@ -35,7 +35,7 @@ public class CouponService {
                 // TODO 만료일을 어떻게 집어 넣을지 고민해봐야한다 일단 1년으로 간다
                 .couponExpirationDate(LocalDateTime.now().plusYears(1L).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
                 .user(User.builder()
-                        .userIdx(user.getUserIdx())
+                        .userIdx(request.getUserIdx())
                         .build())
                 .build());
 

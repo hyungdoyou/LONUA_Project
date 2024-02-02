@@ -13,7 +13,7 @@ public class GetListLikesRes {
     private String brandName;
     private Integer productIdx;
     private String productName;
+    private String productImage;
     private Integer price;
-    private Integer likeCount;
-
+    private Integer salePrice;
 }
