@@ -39,4 +39,22 @@ public class QuestionRepositoryCustomImpl extends QuerydslRepositorySupport impl
 
         return new PageImpl<>(result, pageable, result.size());
     }
+
+    @Override
+    public Page<Question> findProductQuestionList(Pageable pageable, Integer productIdx) {
+        QQuestion question = new QQuestion("question");
+        QProduct product = new QProduct("product");
+        QUser user = new QUser("user");
+
+        List<Question> result = from(question)
+                .leftJoin(question.user, user).fetchJoin()
+                .leftJoin(question.product, product).fetchJoin()
+                .where(question.product.productIdx.eq(productIdx))
+                .distinct()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch().stream().collect(Collectors.toList());   // where 조건문으로 찾을때는 distinct() 를 빼줘야함 ( 이미 중복되는것이 사라졌기 때문에 )
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
 }

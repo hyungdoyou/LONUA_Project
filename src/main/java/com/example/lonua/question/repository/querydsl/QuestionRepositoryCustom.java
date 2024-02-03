@@ -9,4 +9,6 @@ import org.springframework.data.domain.Pageable;
 public interface QuestionRepositoryCustom {
 
     Page<Question> findQuestionList(Pageable pageable, Integer idx);
+
+    Page<Question> findProductQuestionList(Pageable pageable, Integer productIdx);
 }

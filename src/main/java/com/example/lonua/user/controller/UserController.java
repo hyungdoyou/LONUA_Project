@@ -52,9 +52,9 @@ public class UserController {
     public RedirectView verify(@Valid GetEmailVerifyReq getEmailVerifyReq) {
         if (emailVerifyService.verify(getEmailVerifyReq)) {
             BaseRes baseRes = userService.updateStatus(getEmailVerifyReq.getEmail()); // 이메일 인증이 완료되면 회원의 status를 바꿔줌
-            return new RedirectView("https://www.lonuashop.kro.kr");
+            return new RedirectView("https://www.lonuashop.kro.kr/");
         } else {
-            return new RedirectView("https://www.lonuashop.kro.kr/page/lonua-signup-success.html");
+            return new RedirectView("https://www.lonuashop.kro.kr/UserSignUp");
         }
     }
 
@@ -95,7 +95,6 @@ public class UserController {
     @RequestMapping(method = RequestMethod.PATCH, value = "/update")
     public ResponseEntity update(@RequestBody @Valid PatchUserUpdateReq patchUserUpdateReq) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
         BaseRes baseRes = userService.update(user.getUserEmail(), patchUserUpdateReq);
 
         return ResponseEntity.ok().body(baseRes);
@@ -107,7 +106,6 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete/{userIdx}")
     public ResponseEntity delete(@PathVariable @NotNull @Positive Integer userIdx) {
-
         BaseRes baseRes = userService.delete(userIdx);
 
         return ResponseEntity.ok().body(baseRes);
@@ -128,9 +126,9 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json") }) })
     @RequestMapping(method = RequestMethod.POST, value = "/checkPw")
     public ResponseEntity checkPassword(@RequestBody @Valid PostCheckPasswordReq postCheckPasswordReq) {
-
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         return ResponseEntity.ok().body(userService.checkPassword(user, postCheckPasswordReq));
     }
+
 }

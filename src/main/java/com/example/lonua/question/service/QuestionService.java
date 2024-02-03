@@ -6,6 +6,7 @@ import com.example.lonua.question.exception.QuestionNotFoundException;
 import com.example.lonua.question.model.entity.Question;
 import com.example.lonua.question.model.request.PatchUpdateQuestionReq;
 import com.example.lonua.question.model.request.PostRegisterQuestionReq;
+import com.example.lonua.question.model.response.GetListProductQuestionRes;
 import com.example.lonua.question.model.response.GetListQuestionRes;
 import com.example.lonua.question.model.response.PostRegisterQuestionRes;
 import com.example.lonua.question.repository.QuestionRepository;
@@ -64,6 +65,48 @@ public class QuestionService {
 
     // 질문 목록 조회
     @Transactional(readOnly = true)
+    public BaseRes listproductQnA(Integer productIdx, Integer page, Integer size) {
+
+        Pageable pageable = PageRequest.of(page-1, size);
+
+        Page<Question> questionList = questionRepository.findProductQuestionList(pageable, productIdx);
+
+        if(questionList != null) {
+            List<GetListProductQuestionRes> getListProductQuestionResList = new ArrayList<>();
+            for(Question question : questionList) {
+
+            GetListProductQuestionRes getListProductQuestionRes = GetListProductQuestionRes.builder()
+                    .questionIdx(question.getQuestionIdx())
+                    .userName(question.getUser().getName())
+                    .questionType(question.getQuestionType())
+                    .questionTitle(question.getQuestionTitle())
+                    .questionContent(question.getQuestionContent())
+                    .updatedAt(question.getUpdatedAt())
+                    .hasAnswer(question.getHasAnswer())
+                    .isSecret(question.getIsSecret())
+                    .build();
+
+                getListProductQuestionResList.add(getListProductQuestionRes);
+        }
+
+            return BaseRes.builder()
+                .code(200)
+                .isSuccess(true)
+                .message("요청 성공")
+                .result(getListProductQuestionResList)
+                .build();
+        } else {
+            return BaseRes.builder()
+                .code(400)
+                .isSuccess(false)
+                .message("요청 실패")
+                .result("상품에 해당하는 질문을 찾을 수 없습니다.")
+                .build();
+        }
+    }
+
+    // 상품 상세 페이지 질문 목록 조회
+    @Transactional(readOnly = true)
     public BaseRes list(User user, Integer page, Integer size) {
 
         Pageable pageable = PageRequest.of(page-1, size);
@@ -74,35 +117,34 @@ public class QuestionService {
             List<GetListQuestionRes> getListQuestionResList = new ArrayList<>();
             for(Question question : questionList) {
 
-            GetListQuestionRes getListQuestionRes = GetListQuestionRes.builder()
-                    .productName(question.getProduct().getProductName())
-                    .productImage(question.getProduct().getProductImageList().get(0).getProductImage())
-                    .questionType(question.getQuestionType())
-                    .questionTitle(question.getQuestionTitle())
-                    .questionContent(question.getQuestionContent())
-                    .createdAt(question.getCreatedAt())
-                    .hasAnswer(question.getHasAnswer())
-                    .build();
+                GetListQuestionRes getListQuestionRes = GetListQuestionRes.builder()
+                        .productName(question.getProduct().getProductName())
+                        .productImage(question.getProduct().getProductImageList().get(0).getProductImage())
+                        .questionType(question.getQuestionType())
+                        .questionTitle(question.getQuestionTitle())
+                        .questionContent(question.getQuestionContent())
+                        .createdAt(question.getCreatedAt())
+                        .hasAnswer(question.getHasAnswer())
+                        .build();
 
-            getListQuestionResList.add(getListQuestionRes);
-        }
+                getListQuestionResList.add(getListQuestionRes);
+            }
 
             return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("요청 성공")
-                .result(getListQuestionResList)
-                .build();
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(getListQuestionResList)
+                    .build();
         } else {
             return BaseRes.builder()
-                .code(400)
-                .isSuccess(false)
-                .message("요청 실패")
-                .result("질문을 찾을 수 없습니다.")
-                .build();
+                    .code(400)
+                    .isSuccess(false)
+                    .message("요청 실패")
+                    .result("질문을 찾을 수 없습니다.")
+                    .build();
         }
     }
-
     @Transactional(readOnly = false)
     public BaseRes update(User user, PatchUpdateQuestionReq patchUpdateQuestionReq) {
         Optional<Question> result = questionRepository.findByQuestionIdxAndUser_userIdx(patchUpdateQuestionReq.getQuestionIdx(), user.getUserIdx());

@@ -20,6 +20,7 @@ public class GetListUserRes {
     private String userPhoneNumber;
     private String userAddr;
     private String preferStyle;
+    private Integer mileage;
     private Integer upperType;
     private Integer lowerType;
     private String gradeType;

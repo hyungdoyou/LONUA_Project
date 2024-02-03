@@ -51,6 +51,15 @@ public class QuestionController {
 
         return ResponseEntity.ok().body(baseRes);
     }
+    @ApiOperation(value = "상품 상세 페이지 질문 목록 조회", response = BaseRes.class, notes = "상품 상세 페이지에서 질문 목록을 조회한다. (페이지 별)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
+    @RequestMapping(method = RequestMethod.GET, value = "/productQnA/list/{productIdx}/{page}/{size}")
+    public ResponseEntity listproductQnA(@PathVariable @NotNull @Positive Integer productIdx, @PathVariable @NotNull @Positive Integer page, @PathVariable @NotNull @Positive Integer size) {
+        BaseRes baseRes = questionService.listproductQnA(productIdx, page, size);
+
+        return ResponseEntity.ok().body(baseRes);
+    }
 
     @ApiOperation(value = "질문 수정", response = BaseRes.class, notes = "회원이 작성한 질문을 수정한다.")
     @ApiResponses(value = {

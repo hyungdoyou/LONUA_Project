@@ -39,11 +39,16 @@ public class JwtUtils {
     }
 
     // 카카오 로그인 사용자 토큰 생성
-    public static String generateAccessTokenForOAuth(String nickName, String secretKey, Long expiredTimeMs) {
+    public static String generateAccessTokenForOAuth(User user, String secretKey, Long expiredTimeMs) {
 
         Claims claims = Jwts.claims();
-        claims.put("email", nickName);
-        claims.put("ROLE", "ROLE_USER");
+        claims.put("idx", user.getUserIdx());
+        claims.put("email", user.getUserEmail());
+        claims.put("name", user.getName());
+        claims.put("grade", user.getGrade().getGradeType());
+        claims.put("mileage", user.getUserMileage());
+        claims.put("ROLE", user.getAuthority());
+
 
         byte[] secretBytes = secretKey.getBytes();
 

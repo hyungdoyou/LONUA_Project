@@ -66,6 +66,7 @@ public class SecurityConfig{
                     .antMatchers("/product/register", "/product/update", "/product/delete/**").permitAll()
                     .antMatchers("/product/**").permitAll()
 
+                    .antMatchers("/question/productQnA/**").permitAll()
                     .antMatchers("/question/list/**").hasAnyRole("SELLER", "USER")
                     .antMatchers("/question/**").hasRole("USER")
 

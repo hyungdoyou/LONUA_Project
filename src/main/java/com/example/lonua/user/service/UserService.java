@@ -150,6 +150,7 @@ public class UserService {
                     .userPhoneNumber(user.getUserPhoneNumber())
                     .userAddr(user.getUserAddr())
                     .preferStyle(user.getPreferStyle())
+                    .mileage(user.getUserMileage())
                     .upperType(user.getUpperType())
                     .lowerType(user.getLowerType())
                     .gradeType(user.getGrade().getGradeType())
@@ -176,7 +177,7 @@ public class UserService {
         }
 
         User user = result.get();
-        if (passwordEncoder.matches(postUserLoginReq.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(postUserLoginReq.getPassword(), user.getPassword()) && user.getStatus().equals(true)) {
             PostUserLoginRes postUserLoginRes = PostUserLoginRes.builder()
                     .token(JwtUtils.generateAccessToken(user, secretKey, expiredTimeMs))
                     .build();
