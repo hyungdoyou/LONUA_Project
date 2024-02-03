@@ -1,7 +1,10 @@
 package com.example.lonua.orders.service;
 
 
+import com.example.lonua.cart.repository.CartRepository;
 import com.example.lonua.common.BaseRes;
+import com.example.lonua.coupon.model.entity.Coupon;
+import com.example.lonua.coupon.repository.CouponRepository;
 import com.example.lonua.orders.exception.OrdersNotFoundException;
 import com.example.lonua.orders.model.entity.Orders;
 import com.example.lonua.orders.model.entity.OrdersProduct;
@@ -29,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +52,11 @@ public class OrdersService {
     private final OrdersProductRepository ordersProductRepository;
     private final ProductCountRepository productCountRepository;
     private final UserRepository userRepository;
+    private final CouponRepository couponRepository;
+    private final CartRepository cartRepository;
 
-    @Transactional(readOnly = false)
+
+    @Transactional
     public BaseRes createOrder(User user, PostCreateOrdersReq postCreateOrdersReq) {
         Orders orders = Orders.builder()
                 .user(user)
@@ -63,6 +71,12 @@ public class OrdersService {
         // 마일리지 적립
         user.increaseMileage(postCreateOrdersReq.getMileage());
         userRepository.save(user);
+
+        // 주문한 상품 장바구니에서 제거
+
+
+        // 사용한 쿠폰 삭제
+
 
         List<GetCreateOrdersRes> getCreateOrdersResList = new ArrayList<>();
 
@@ -237,48 +251,83 @@ public class OrdersService {
         }
     }
 
+    // 쿠폰 적용 시 가격 계산
+    public Integer calculateDiscountedPrice(Integer originalPrice, Coupon coupon) {
+        // 쿠폰의 할인율을 가져옵니다. (예: 할인율이 20%일 경우 0.2)
+        double discountRate = coupon.getCouponDiscountRate() / 100.0;
+        double discountedPrice = originalPrice - (originalPrice * discountRate);
 
-    //----------------------------------카카오페이 결제를 통한 주문------------------------------------------------
-//    @Transactional
-//    public void createOrder(User user, PostCreateOrdersReq postCreateOrdersReq) {
-//        Orders orders = Orders.builder()
-//                .user(user)
-//                .impUid(postCreateOrdersReq.getImpUid())
-//                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-//                .updatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-//                .status("주문접수")
-//                .build();
-//
-//        orders = ordersRepository.save(orders);
-//
-//        for (Integer idx : postCreateOrdersReq.getProductIdxList()) {
-//            // 주문 상품 DB에 추가
-//            ordersProductRepository.save(OrdersProduct.builder()
-//                    .orders(orders)
-//                    .product(Product.builder().productIdx(idx).build())
-//                    .build());
-//
-//            // 회원 상, 하체 유형에 따라 상품의 카운트 수 증가
-//            Optional<ProductCount> result = productCountRepository.findByProduct_ProductIdx(idx);
-//            ProductCount productCount = result.get();
-//            productCount.increaseUpperCount(user.getUpperType());
-//            productCount.increaseLowerCount(user.getLowerType());
-//        }
-//    }
+        return (int) discountedPrice;
+    }
 
+    // 사용한 쿠폰 삭제
+    @Transactional
+    public void deleteCoupon(PostCreateOrdersReq postCreateOrdersReq) {
+        if(postCreateOrdersReq.getCouponIdxList() != null) {
+            for(Integer idx : postCreateOrdersReq.getCouponIdxList()) {
+                couponRepository.deleteByCouponIdx(idx);
+            }
+        }
+    }
+
+    // 장바구니에서 제거
+    @Transactional
+    public void deleteCart(PostCreateOrdersReq postCreateOrdersReq) {
+        if(postCreateOrdersReq.getOrdersCartIdxList() != null) {
+            for(Integer idx: postCreateOrdersReq.getOrdersCartIdxList()) {
+                cartRepository.deleteByCartIdx(idx);
+            }
+        }
+    }
+
+    @Transactional
     public BaseRes paymentValidation(User user, PostCreateOrdersReq postCreateOrdersReq) throws IamportResponseException, IOException {
 
         Integer totalPrice = 0;
-        for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
-            Optional<Product> result = productRepository.findByProductIdx(idx);
-            if(result.isPresent()) {
-                Product product = result.get();
-                totalPrice += product.getSalePrice();
+        Boolean isSuccess = false;
+        if(postCreateOrdersReq.getCouponIdxList() == null) {
+            for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
+                Optional<Product> result = productRepository.findByProductIdx(idx);
+                if(result.isPresent()) {
+                    Product product = result.get();
+                    totalPrice += product.getSalePrice();
+                }
+
+                if(postCreateOrdersReq.getAmount().equals(totalPrice)) {
+                    isSuccess = true;
+                }
+            }
+        } else {
+            // 쿠폰이 적용된 경우
+            for (Integer idx : postCreateOrdersReq.getProductIdxList()) {
+                Optional<Product> result = productRepository.findByProductIdx(idx);
+                if (result.isPresent()) {
+                    Product product = result.get();
+                    // 여기서 쿠폰 적용 로직 추가
+                    Integer couponIdx = postCreateOrdersReq.getProductCouponMap().get(idx);
+                    if (couponIdx != null && !couponIdx.equals(0)) {
+                        Optional<Coupon> couponResult = couponRepository.findByCouponIdx(couponIdx);
+                        if (couponResult.isPresent()) {
+                            Coupon coupon = couponResult.get();
+                            // 쿠폰 적용 가격 계산
+                            // 가격 계산 로직에 쿠폰의 할인율 등을 반영해야 합니다.
+                            totalPrice += calculateDiscountedPrice(product.getSalePrice(), coupon);
+                        }
+                    } else {
+                        totalPrice += product.getSalePrice();
+                    }
+                }
+
+                if(postCreateOrdersReq.getAmount().equals(totalPrice)) {
+                    isSuccess = true;
+                }
             }
         }
 
-        if(postCreateOrdersReq.getAmount().equals(totalPrice) ) {
+        if(isSuccess) {
             createOrder(user, postCreateOrdersReq);  // 주문 생성
+            deleteCoupon(postCreateOrdersReq);  // 쿠폰 삭제
+            deleteCart(postCreateOrdersReq); // 장바구니 삭제
 
             List<GetCreateOrdersRes> getListOrdersResList = new ArrayList<>();
             for(Integer idx : postCreateOrdersReq.getProductIdxList()) {
@@ -317,6 +366,7 @@ public class OrdersService {
             return null;
         }
     }
+
 
     public IamportResponse getPaymentInfo(String impUid) throws IamportResponseException, IOException {
         IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);

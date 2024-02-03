@@ -8,6 +8,7 @@ import com.example.lonua.coupon.model.request.PostCouponRegisterReq;
 import com.example.lonua.coupon.model.response.GetCouponListRes;
 import com.example.lonua.coupon.model.response.PostCouponRegisterRes;
 import com.example.lonua.coupon.repository.CouponRepository;
+import com.example.lonua.review.exception.ReviewNotFoundException;
 import com.example.lonua.user.model.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +32,10 @@ public class CouponService {
         Coupon coupon = couponRepository.save(Coupon.builder()
                 .couponName(request.getCouponName())
                 .couponDiscountRate(request.getCouponDiscountRate())
-                .status(request.getStatus())
+                .status(true)
                 .receivedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
-                // 만료날짜는 1년 후로 임의로 설정
-                // TODO 만료일을 어떻게 집어 넣을지 고민해봐야한다 일단 1년으로 간다
-                .couponExpirationDate(LocalDateTime.now().plusYears(1L).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                // 만료날짜는 2개월 뒤로 임의 설정
+                .couponExpirationDate(LocalDateTime.now().plusMonths(2L).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
                 .user(User.builder()
                         .userIdx(request.getUserIdx())
                         .build())
@@ -85,12 +87,19 @@ public class CouponService {
         List<GetCouponListRes> getListResCouponList = new ArrayList<>();
 
         for (Coupon coupon : all) {
+
+            // 쿠폰 남은시간 일수로 계산
+            String expiredDay = coupon.getCouponExpirationDate();
+            LocalDateTime expirationTime = LocalDateTime.parse(expiredDay, DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
+            LocalDateTime now = LocalDateTime.now();
+            long remainDay = ChronoUnit.DAYS.between(now, expirationTime);
+
             GetCouponListRes getCouponListRes = GetCouponListRes.builder()
                     .couponIdx(coupon.getCouponIdx())
                     .couponName(coupon.getCouponName())
                     .couponDiscountRate(coupon.getCouponDiscountRate())
                     .receivedDate(coupon.getReceivedDate())
-                    .couponExpirationDate(coupon.getCouponExpirationDate())
+                    .couponExpirationDate(remainDay)
                     .status(coupon.getStatus())
                     .userIdx(coupon.getUser().getUserIdx())
                     .build();
@@ -104,19 +113,59 @@ public class CouponService {
                 .build();
     }
 
+    public BaseRes apply(Integer couponIdx) {
+        Optional<Coupon> result = couponRepository.findByCouponIdx(couponIdx);
+
+        if (result.isPresent()) {
+            Coupon coupon = result.get();
+            if (coupon.getStatus()) {
+                coupon.setStatus(false);
+                couponRepository.save(coupon);
+
+                return BaseRes.builder()
+                        .code(200)
+                        .isSuccess(true)
+                        .message("쿠폰 적용 성공")
+                        .result(couponIdx)
+                        .build();
+            } else {
+                return BaseRes.builder()
+                        .code(400)
+                        .isSuccess(false)
+                        .message("쿠폰 적용 실패")
+                        .result("요청 살패")
+                        .build();
+            }
+
+        } else {
+            return BaseRes.builder()
+                    .code(400)
+                    .isSuccess(false)
+                    .message("쿠폰 적용 실패")
+                    .result("요청 살패")
+                    .build();
+        }
+    }
+
     @Transactional(readOnly = false)
     public BaseRes delete(DeleteCouponRemoveReq request) {
-        Coupon coupon = Coupon.builder()
-                .couponIdx(request.getCouponIdx())
-                .build();
 
-        couponRepository.delete(coupon);
 
+        Integer result = couponRepository.deleteByCouponIdx(request.getCouponIdx());
+
+        if (!result.equals(0)) {
+            return BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("쿠폰 삭제 성공")
+                    .result("요청 성공")
+                    .build();
+        }
         return BaseRes.builder()
-                .code(200)
-                .isSuccess(true)
-                .message("요청성공")
-                .result("쿠폰 삭제에 성공했습니다.")
+                .code(400)
+                .isSuccess(false)
+                .message("쿠폰 삭제 실패")
+                .result("요청 실패")
                 .build();
     }
 }

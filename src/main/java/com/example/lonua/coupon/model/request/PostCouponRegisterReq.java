@@ -31,7 +31,4 @@ public class PostCouponRegisterReq {
     @ApiModelProperty(value = "발급할 쿠폰의 할인율", example = "50", required = true)
     private Integer couponDiscountRate;
 
-    @NotNull
-    @ApiModelProperty(value = "발급할 쿠폰의 상태", example = "false", required = true)
-    private Boolean status;  // 필요있나?
 }

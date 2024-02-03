@@ -15,7 +15,7 @@ public class GetCouponListRes {
     private String couponName;
     private Integer couponDiscountRate;
     private String receivedDate;
-    private String couponExpirationDate;
+    private Long couponExpirationDate;
     private Boolean status;
     private Integer userIdx;
 }

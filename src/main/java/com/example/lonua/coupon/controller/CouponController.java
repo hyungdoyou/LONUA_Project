@@ -17,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +47,16 @@ public class CouponController {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return ResponseEntity.ok().body(couponService.list(user));
     }
+
+
+    @ApiOperation(value = "쿠폰 적용", response = BaseRes.class, notes = "회원이 쿠폰을 적용 한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
+    @RequestMapping(method = RequestMethod.GET, value = "/apply/{couponIdx}")
+    ResponseEntity apply(@PathVariable @NotNull @Positive Integer couponIdx) {
+        return ResponseEntity.ok().body(couponService.apply(couponIdx));
+    }
+
 
 //    @ApiOperation(value = "쿠폰 하나 가져오기")
 //    @RequestMapping(method = RequestMethod.GET, value = "/read")

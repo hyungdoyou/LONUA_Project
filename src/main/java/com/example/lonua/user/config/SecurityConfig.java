@@ -58,7 +58,7 @@ public class SecurityConfig{
                     .antMatchers("/brand/list/**", "/brand/{idx}").permitAll()
 
                     .antMatchers("/cart/**").hasRole("USER")
-                    .antMatchers("/coupon/list/**").hasRole("USER")
+                    .antMatchers("/coupon/list/**", "/coupon/apply/**").hasRole("USER")
                     .antMatchers("/likes/**").hasRole("USER")
                     .antMatchers("/orders/**").hasRole("USER")
 

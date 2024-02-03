@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -44,6 +45,15 @@ public class PostCreateOrdersReq {
     @NotNull(message = "주문 상품 리스트는 필수 입력 항목입니다.")
     @ApiModelProperty(value = "주문 상품 리스트", example = "[1, 2, 3]", required = true)
     private List<Integer> productIdxList;
+
+    @ApiModelProperty(value = "사용한 쿠폰 리스트", example = "[1, 2, 3]", required = true)
+    private List<Integer> couponIdxList;
+
+    @ApiModelProperty(value = "사용한 상품과 쿠폰 맵", example = "{1:2}", required = true)
+    private Map<Integer, Integer> productCouponMap;
+
+    @ApiModelProperty(value = "주문한 장바구니 리스트", example = "[1, 2, 3]", required = true)
+    private List<Integer> ordersCartIdxList;
 
     @NotNull(message = "마일리지 적립금액은 필수 입력 항목입니다.")
     @ApiModelProperty(value = "마일리지", example = "100", required = true)
