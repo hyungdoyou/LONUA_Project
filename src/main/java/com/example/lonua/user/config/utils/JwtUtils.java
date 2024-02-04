@@ -9,6 +9,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class JwtUtils {
     }
 
     // 카카오 로그인 사용자 토큰 생성
+    @Transactional
     public static String generateAccessTokenForOAuth(User user, String secretKey, Long expiredTimeMs) {
 
         Claims claims = Jwts.claims();

@@ -1,6 +1,8 @@
 package com.example.lonua.user.service;
 
 import com.example.lonua.common.BaseRes;
+import com.example.lonua.coupon.model.entity.Coupon;
+import com.example.lonua.coupon.repository.CouponRepository;
 import com.example.lonua.grade.model.entity.Grade;
 import com.example.lonua.user.config.utils.JwtUtils;
 import com.example.lonua.user.exception.UserAccountException;
@@ -45,6 +47,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender emailSender;
     private final EmailVerifyService emailVerifyService;
+    private final CouponRepository couponRepository;
 
 
     // 회원가입
@@ -243,7 +246,7 @@ public class UserService {
     }
 
     // 카카오 회원가입
-    @Transactional(readOnly = false)
+    @Transactional
     public void kakaoSignup(String nickName) {
 
         User user = User.builder()
@@ -267,7 +270,27 @@ public class UserService {
                 .status(false)
                 .build();
 
-        userRepository.save(user);
+        user = userRepository.save(user);
+
+        couponRepository.save(Coupon.builder()
+                .couponName("회원가입 감사 10% 쿠폰")
+                .couponDiscountRate(10)
+                .status(true)
+                .receivedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                // 만료날짜 : 1달 뒤
+                .couponExpirationDate(LocalDateTime.now().plusMonths(2L).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .user(user)
+                .build());
+
+        couponRepository.save(Coupon.builder()
+                .couponName(LocalDateTime.now().getMonthValue() + " 월 LONUA 정기 15% 쿠폰")
+                .couponDiscountRate(15)
+                .status(true)
+                .receivedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                // 만료날짜 : 1달 뒤
+                .couponExpirationDate(LocalDateTime.now().plusMonths(1L).format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
+                .user(user)
+                .build());
     }
 
     // 회원 이메일 검증

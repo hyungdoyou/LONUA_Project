@@ -25,6 +25,6 @@ public class Grade {
     @Column(nullable = false)
     private Integer discountRate;
 
-    @OneToMany(mappedBy = "grade")
+    @OneToMany(mappedBy = "grade", fetch = FetchType.EAGER)
     private List<User> userList = new ArrayList<>();
 }

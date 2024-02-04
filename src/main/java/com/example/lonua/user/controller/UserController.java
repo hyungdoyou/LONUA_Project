@@ -49,14 +49,14 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
     @RequestMapping(method = RequestMethod.GET, value = "/verify")
-    public RedirectView verify(@Valid GetEmailVerifyReq getEmailVerifyReq) {
+    public ResponseEntity verify(@Valid GetEmailVerifyReq getEmailVerifyReq) {
         if (emailVerifyService.verify(getEmailVerifyReq)) {
             BaseRes baseRes = userService.updateStatus(getEmailVerifyReq.getEmail()); // 이메일 인증이 완료되면 회원의 status를 바꿔줌
-//            return ResponseEntity.ok().body(true);
-            return new RedirectView("http://localhost:8081/UserLogIn");
+            return ResponseEntity.ok().body(true);
+//            return new RedirectView("http://localhost:8081/UserLogIn");
         } else {
-            return new RedirectView("http://localhost:8081/UserLogIn");
-//            return ResponseEntity.ok().body(false);
+//            return new RedirectView("http://localhost:8081/UserLogIn");
+            return ResponseEntity.ok().body(false);
         }
     }
 

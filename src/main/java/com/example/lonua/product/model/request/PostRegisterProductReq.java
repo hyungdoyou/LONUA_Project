@@ -39,8 +39,8 @@ public class PostRegisterProductReq {
     private Integer style_idx;
 
     @NotNull
-    @Length(min=1, max=45)
-    @ApiModelProperty(value = "상품명(45자 이하)", example = "하프 집업 카라넥 케이블 니트 [카키]", required = true)
+    @Length(min=1, max=100)
+    @ApiModelProperty(value = "상품명(100자 이하)", example = "하프 집업 카라넥 케이블 니트 [카키]", required = true)
     private String productName;
 
     @NotNull

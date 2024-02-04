@@ -13,7 +13,7 @@ spring:
               - profile_nickname
               - profile_image
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            redirect-uri:  http://localhost:8080/login/oauth2/code/kakao
             client-name: Kakao
             client-authentication-method: POST
         provider:
@@ -55,8 +55,8 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 20MB
+      max-request-size: 20MB
 
   jpa:
     hibernate:

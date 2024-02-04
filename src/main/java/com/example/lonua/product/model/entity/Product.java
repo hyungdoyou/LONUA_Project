@@ -67,7 +67,7 @@ public class Product {
     @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private ProductCount productCount;
 
-    @Column(nullable = false, length = 45)
+    @Column(nullable = false, length = 100)
     private String productName;
 
     @Column(nullable = false)

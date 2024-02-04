@@ -32,8 +32,6 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
         if(user == null) {
             // DB에 없으면 회원 가입
             userService.kakaoSignup(userName);
-        } else {
-            throw UserDuplicateException.forSignupEmail(userName);
         }
         // 로그인 처리(JWT 토큰 발급) 및 SecurityContext에 사용자 추가 -> 핸들러로 이동
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")), attributes, "id");

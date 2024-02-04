@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     // 인증 성공 시 실행되는 메서드
     @Override
+    @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
@@ -59,7 +61,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/oauth2/redirect/"+token)
+        return UriComponentsBuilder.fromUriString("http://localhost:8081/KakaoLogIn/"+token)
                 .build().toUriString();
     }
 }

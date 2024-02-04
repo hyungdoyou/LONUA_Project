@@ -118,6 +118,9 @@ public class QuestionService {
             for(Question question : questionList) {
 
                 GetListQuestionRes getListQuestionRes = GetListQuestionRes.builder()
+                        .questionIdx(question.getQuestionIdx())
+                        .productIdx(question.getProduct().getProductIdx())
+                        .brandName(question.getProduct().getBrand().getBrandName())
                         .productName(question.getProduct().getProductName())
                         .productImage(question.getProduct().getProductImageList().get(0).getProductImage())
                         .questionType(question.getQuestionType())
@@ -125,6 +128,7 @@ public class QuestionService {
                         .questionContent(question.getQuestionContent())
                         .createdAt(question.getCreatedAt())
                         .hasAnswer(question.getHasAnswer())
+                        .isSecret(question.getIsSecret())
                         .build();
 
                 getListQuestionResList.add(getListQuestionRes);
