@@ -35,7 +35,7 @@ public class ReviewController {
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     public ResponseEntity registReview(
             @RequestPart(value = "review") @Valid PostRegisterReviewReq postRegisterReviewReq,
-            @RequestPart(value = "reviewPhoto") @NotNull(message = "리뷰 사진은 필수 입력 항목입니다.") MultipartFile file
+            @RequestPart(value = "reviewPhoto") MultipartFile file
     ) {
         User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         BaseRes baseRes = reviewService.registerReview(user, postRegisterReviewReq, file);
