@@ -52,9 +52,11 @@ public class UserController {
     public RedirectView verify(@Valid GetEmailVerifyReq getEmailVerifyReq) {
         if (emailVerifyService.verify(getEmailVerifyReq)) {
             BaseRes baseRes = userService.updateStatus(getEmailVerifyReq.getEmail()); // 이메일 인증이 완료되면 회원의 status를 바꿔줌
-            return new RedirectView("https://www.lonuashop.kro.kr/");
+//            return ResponseEntity.ok().body(true);
+            return new RedirectView("http://localhost:8081/UserLogIn");
         } else {
-            return new RedirectView("https://www.lonuashop.kro.kr/UserSignUp");
+            return new RedirectView("http://localhost:8081/UserLogIn");
+//            return ResponseEntity.ok().body(false);
         }
     }
 

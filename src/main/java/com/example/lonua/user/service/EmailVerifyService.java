@@ -50,7 +50,7 @@ public class EmailVerifyService {
                         .build());
 
                 couponRepository.save(Coupon.builder()
-                        .couponName(LocalDateTime.now().getMonth() + " 월 LONUA 정기 15% 쿠폰")
+                        .couponName(LocalDateTime.now().getMonthValue() + " 월 LONUA 정기 15% 쿠폰")
                         .couponDiscountRate(15)
                         .status(true)
                         .receivedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")))
