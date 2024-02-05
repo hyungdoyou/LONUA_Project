@@ -335,6 +335,7 @@ public class BrandService {
             for(Product product : productList) {
                 GetBrandProductRes getBrandProductRes = GetBrandProductRes.builder()
                         .productIdx(product.getProductIdx())
+                        .brandIdx(product.getBrand().getBrandIdx())
                         .productName(product.getProductName())
                         .productImage(product.getProductImageList().get(0).getProductImage())
                         .price(product.getPrice())

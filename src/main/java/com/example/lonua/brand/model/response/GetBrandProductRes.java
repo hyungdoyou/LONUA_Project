@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class GetBrandProductRes {
     private Integer productIdx;
+    private Integer brandIdx;
     private String productName;
     private String productImage;
     private Integer price;

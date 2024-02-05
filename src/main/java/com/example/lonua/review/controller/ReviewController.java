@@ -52,6 +52,17 @@ public class ReviewController {
         return ResponseEntity.ok().body(baseRes);
     }
 
+        @ApiOperation(value = "회원 본인이 작성한 리뷰 목록 조회", response = BaseRes.class, notes = "회원은 본인이 작성한 전체 리뷰를 조회할 수 있다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
+
+    @RequestMapping(method = RequestMethod.GET, value = "/list")
+    public ResponseEntity list() {
+                User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        BaseRes baseRes = reviewService.list(user);
+        return ResponseEntity.ok().body(baseRes);
+    }
+
     @ApiOperation(value = "리뷰 목록 조회", response = BaseRes.class, notes = "회원은 상품에 대한 전체 리뷰를 조회할 수 있다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })

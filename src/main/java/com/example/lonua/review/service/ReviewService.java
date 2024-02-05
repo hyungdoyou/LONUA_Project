@@ -147,7 +147,42 @@ public class ReviewService {
         }
 
     }
+    @Transactional(readOnly = true)
+    public BaseRes list(User user) {
 
+        List<Review> reviewList = reviewRepository.findByUser_UserIdx(user.getUserIdx());
+        List<GetListReviewRes> response = new ArrayList<>();
+
+        if(reviewList != null) {
+            for (Review review : reviewList) {
+
+                GetListReviewRes getListReviewRes = GetListReviewRes.builder()
+                        .reviewIdx(review.getReviewIdx())
+                        .productIdx(review.getProduct().getProductIdx())
+                        .name(review.getUser().getName())
+                        .brandName(review.getProduct().getBrand().getBrandName())
+                        .productName(review.getProduct().getProductName())
+                        .productImage(review.getProduct().getProductImageList().get(0).getProductImage())
+                        .reviewContent(review.getReviewContent())
+                        .reviewPhoto(review.getReviewPhoto())
+                        .evaluation(review.getEvaluation())
+                        .updatedAt(review.getUpdatedAt())
+                        .build();
+                response.add(getListReviewRes);
+            }
+
+            BaseRes baseRes = BaseRes.builder()
+                    .code(200)
+                    .isSuccess(true)
+                    .message("요청 성공")
+                    .result(response)
+                    .build();
+
+            return baseRes;
+        } else {
+            throw new ReviewNotFoundException(null);
+        }
+    }
 
     @Transactional(readOnly = true)
     public BaseRes listReview(Integer productIdx) {
