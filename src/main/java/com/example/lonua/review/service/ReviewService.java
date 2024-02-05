@@ -90,7 +90,17 @@ public class ReviewService {
     @Transactional(readOnly = false)
     public BaseRes registerReview(User user, PostRegisterReviewReq postRegisterReviewReq, MultipartFile file) {
 
-        String reviewPhoto = saveFile(file);
+        Optional<Review> result = reviewRepository.findByProduct_productIdxAndUser_userIdx(postRegisterReviewReq.getProductIdx(), user.getUserIdx());
+
+        if(result.isPresent()) {
+            return  BaseRes.builder()
+                .code(400)
+                .isSuccess(false)
+                .message("리뷰 등록 실패")
+                .result("이미 등록된 리뷰입니다.")
+                .build();
+        } else {
+            String reviewPhoto = saveFile(file);
 
         reviewRepository.save(Review.builder()
                 .product(Product.builder().productIdx(postRegisterReviewReq.getProductIdx()).build())
@@ -117,7 +127,7 @@ public class ReviewService {
                 .build();
 
         return baseRes;
-
+        }
     }
 
     @Transactional(readOnly = true)
