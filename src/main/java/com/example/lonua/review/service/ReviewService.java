@@ -159,6 +159,7 @@ public class ReviewService {
             for (Review review : reviewList) {
 
                 GetListReviewRes getListReviewRes = GetListReviewRes.builder()
+                        .name(review.getUser().getName())
                         .productName(review.getProduct().getProductName())
                         .productImage(review.getProduct().getProductImageList().get(0).getProductImage())
                         .reviewContent(review.getReviewContent())

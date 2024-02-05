@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetListReviewRes {
 
+    private String name;
     private String reviewContent;
     private String reviewPhoto;
     private Integer evaluation;
