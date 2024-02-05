@@ -216,7 +216,7 @@ public class UserService {
         message.setSubject("[LONUA] 회원가입을 완료하기 위해서 이메일 인증을 진행해 주세요"); // 메일 제목
 
         String uuid = UUID.randomUUID().toString();
-        message.setText("http://localhost:8080/user/verify?email=" + postSignUpReq.getUserEmail() + "&uuid=" + uuid);    // 메일 내용
+        message.setText("https://www.lonuashop.kro.kr/api/user/verify?email=" + postSignUpReq.getUserEmail() + "&uuid=" + uuid);    // 메일 내용
 
         emailSender.send(message);
         emailVerifyService.create(postSignUpReq.getUserEmail(), uuid);
