@@ -67,5 +67,4 @@ public class StyleController {
 
         return ResponseEntity.ok().body(baseRes);
     }
-
 }

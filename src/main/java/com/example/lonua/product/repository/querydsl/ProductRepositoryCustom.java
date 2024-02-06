@@ -15,6 +15,8 @@ public interface ProductRepositoryCustom {
 
     Page<Product> findCategoryList(Pageable pageable, Integer idx);
 
+    Page<Product> findStyleList(Pageable pageable, Integer idx);
+
     Page<Product> findSameTypeList(Pageable pageable, Integer upperType, Integer lowerType);
 
     Page<Product> findBrandList(Pageable pageable, Integer brandIdx);

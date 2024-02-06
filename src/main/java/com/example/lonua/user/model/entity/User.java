@@ -73,7 +73,7 @@ public class User implements UserDetails {
     @Column(nullable = false, length = 1)    // M or G
     private String userGender;
 
-    @Column(nullable = false, length = 13, unique = true)   // 010-0000-0000
+    @Column(nullable = false, length = 13)   // 010-0000-0000
     private String userPhoneNumber;
 
     @Column(nullable = false, length = 45)

@@ -96,8 +96,19 @@ public class ProductController {
         return ResponseEntity.ok().body(baseRes);
     }
 
+        // 2. 스타일 별 상품 리스트 검색(최신 등록 순)
+    @ApiOperation(value = "스타일 별 상품 목록 조회", response = BaseRes.class, notes = "회원이 스타일에 해당하는 상품의 목록을 조회한다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
+    @RequestMapping(method = RequestMethod.GET, value = "/stylelist/{styleIdx}/{page}/{size}")
+    public ResponseEntity styleProductlist(@PathVariable @NotNull @Positive Integer styleIdx, @PathVariable @NotNull @Positive Integer page, @PathVariable @NotNull @Positive Integer size) {
 
-    // 2. 같은 상/하체 체형을 가진 사람이 많이 주문한 상품 리스트 검색(상체 - 하체 순 정렬)
+        BaseRes baseRes = productService.styleProductlist(styleIdx, page, size);
+        return ResponseEntity.ok().body(baseRes);
+    }
+
+
+    // 3. 같은 상/하체 체형을 가진 사람이 많이 주문한 상품 리스트 검색(상체 - 하체 순 정렬)
     @ApiOperation(value = "회원의 신체 유형에 따른 상품 목록 조회", response = BaseRes.class, notes = "회원이 자신의 상/하체 유형과 동일한 회원이 많이 구매한 상품 순으로 상품 목록을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })
@@ -109,7 +120,7 @@ public class ProductController {
         return ResponseEntity.ok().body(baseRes);
     }
 
-    // 3. 판매자가 등록한 본인 브랜드의 상품 리스트 검색
+    // 4. 판매자가 등록한 본인 브랜드의 상품 리스트 검색
     @ApiOperation(value = "브랜드 별 상품의 목록 조회", response = BaseRes.class, notes = "회원/판매자가 브랜드 별 상품의 목록을 조회한다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK ( 요청 성공 )", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = BaseRes.class)) }) })

@@ -3,6 +3,7 @@ package com.example.lonua.product.repository.querydsl;
 import com.example.lonua.brand.model.entity.QBrand;
 import com.example.lonua.category.model.entity.QCategory;
 import com.example.lonua.product.model.entity.*;
+import com.example.lonua.style.model.entity.QStyle;
 import com.example.lonua.user.model.entity.QUser;
 import com.example.lonua.user.model.entity.User;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -56,6 +57,29 @@ public class ProductRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 .leftJoin(product.brand, brand).fetchJoin()
                 .leftJoin(product.category, category).fetchJoin()
                 .where(category.categoryIdx.eq(idx))
+                .orderBy(product.createdAt.desc())
+                .distinct()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch().stream().distinct().collect(Collectors.toList());
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+        @Override
+    public Page<Product> findStyleList(Pageable pageable, Integer idx) {
+        QProduct product = new QProduct("product");
+        QProductImage productImage = new QProductImage("productImage");
+        QProductCount productCount = new QProductCount("productCount");
+        QBrand brand = new QBrand("brand");
+        QStyle style = new QStyle("style");
+
+        List<Product> result = from(product)
+                .leftJoin(product.productImageList, productImage).fetchJoin()
+                .leftJoin(product.productCount, productCount).fetchJoin()
+                .leftJoin(product.brand, brand).fetchJoin()
+                .leftJoin(product.style, style).fetchJoin()
+                .where(style.styleIdx.eq(idx))
                 .orderBy(product.createdAt.desc())
                 .distinct()
                 .offset(pageable.getOffset())
