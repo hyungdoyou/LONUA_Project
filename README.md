@@ -1,14 +1,17 @@
 ![header](https://capsule-render.vercel.app/api?type=Waving&color=F7BE81&height=250&section=header&text=👕LONUA👕&desc=All%20For%20Individual%20Customized%20Fashion&descSize=20&descAlign=50&descAlignY=70&fontSize=100&animation=fadeIn&fontColor=B404AE)
 
 <br>
+<div align="center">
 
-## &nbsp;👔[ LONUA 데모 사이트 바로가기](https://www.lonuashop.kro.kr) 👔
+ ### &nbsp;👔[ LONUA 데모 사이트 바로가기](https://www.lonuashop.kro.kr) 👔
+
+</div>
 
 <br>
 
 ---
 
-## ✨ 프로젝트 기본 소개
+### ✨ 프로젝트 기본 소개
 
 ---
 - 온라인 쇼핑몰 이용자 수가 **"지속적으로 증가"** 하고 있는만큼, 쇼핑몰에 등록되는 상품의 수 역시  
@@ -22,7 +25,7 @@
 ---
 
 
-## 📌 기술 스택
+### 📌 기술 스택
 &nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/L i n u x-FCC624?style=flat&logo=linux&logoColor=black"></a>
 &nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/MySQL InnoDB-4479A1?style=flat&logo=MySQL&logoColor=white"/></a>
 &nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/CentOS   8-262577?style=flat&logo=centos&logoColor=white&color=purple"/></a></a>
@@ -31,7 +34,7 @@
 
 ---
 
-## ✍ 프로젝트 진행 현황
+### ✍ 프로젝트 진행 현황
 
 - ### 2023.12.27. ~ 2024.01.12. : 개인 진행
 - ### 2024.01.12. ~ 2024.01.17. : 백엔드 미니 팀프로젝트로 진행
