@@ -1,5 +1,6 @@
 ![header](https://capsule-render.vercel.app/api?type=Waving&color=F7BE81&height=250&section=header&text=👕LONUA👕&desc=All%20For%20Individual%20Customized%20Fashion&descSize=20&descAlign=50&descAlignY=70&fontSize=100&animation=fadeIn&fontColor=B404AE)
 
+---
 <br>
 <div align="center">
 
@@ -11,9 +12,17 @@
 
 ---
 
-### ✨ 프로젝트 기본 소개
+### 🤼‍♂️팀원 소개
+
+<br><br>
+
+&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　 🐻 **[이동규](https://github.com/PTCman)**&nbsp;　 🦁 **[김태윤](https://github.com/thanks9807)** &nbsp;　 🐶 **[유형도](https://github.com/hyungdoyou)** &nbsp;　 🐯 **[정원준](https://github.com/Wonjunmar)** &nbsp;　 🐺 **[김경미](https://github.com/asasd)**
+<br><br><br><br><br>
 
 ---
+
+### ✨ 프로젝트 기본 소개
+
 - 온라인 쇼핑몰 이용자 수가 **"지속적으로 증가"** 하고 있는만큼, 쇼핑몰에 등록되는 상품의 수 역시  
   **"기하급수적으로 늘어나"** &nbsp;&nbsp;상품 선택 시 이용자가 **선택의 어려움**을 겪고 있다.
 
