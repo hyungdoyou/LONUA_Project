@@ -37,24 +37,24 @@
 
 ### 🧐 프로젝트 배경
 
-<p align="center"><img src="https://github.com/hyungdoyou/be02-pre-personalproject-lonua/assets/148875644/3a553c3a-81fa-4d0d-a6b4-49ad1e57628c" width=400, height=300></p>
+<p align="center"><img src="https://github.com/hyungdoyou/be02-pre-personalproject-lonua/assets/148875644/3a553c3a-81fa-4d0d-a6b4-49ad1e57628c" width=500, height=400></p>
 
-&nbsp;　　　　　　　　　소비자 데이터 플랫폼 **“오픈서베이”** 에 따르면 의류 구매 채널에 대해 만 15세 ~ 39세<br>
-&nbsp;　　　　　　　　　남녀 2천명을 대상으로 조사한 결과, 온라인 **쇼핑몰을 이용하는 사람의 수가 88.2%** 로<br>
-&nbsp;　　　　　　　　　10명 가운데 9명은 온라인 상에서 의류를 구매하는 것으로 나타났다.
+&nbsp;　　　　　　　　소비자 데이터 플랫폼 **“오픈서베이”** 에 따르면 의류 구매 채널에 대해 만 15세 ~ 39세<br>
+&nbsp;　　　　　　　　남녀 2천명을 대상으로 조사한 결과, 온라인 **쇼핑몰을 이용하는 사람의 수가 88.2%** 로<br>
+&nbsp;　　　　　　　　10명 가운데 9명은 온라인 상에서 의류를 구매하는 것으로 나타났다.
 <br>
 <br><br>
 
-<p align="center"><img src="https://github.com/beyond-sw-camp/be02-2nd-developer_passion-fashion/assets/148875644/478249f3-96d2-48cd-9f63-09308353e9c1"  width=400, height=300></p>
+<p align="center"><img src="https://github.com/beyond-sw-camp/be02-2nd-developer_passion-fashion/assets/148875644/478249f3-96d2-48cd-9f63-09308353e9c1"  width=500, height=400></p>
 
 
-&nbsp;　　　　　　　　　통계청의 조사결과에 따르면, 국내 온라인 쇼핑 시장 규모가 2020년 150조 대비하여 2022년에는<br>
-&nbsp;　　　　　　　　　70조가 증가한 220조로 **2년 사이 약 69%가 성장**한 것으로 나타났다. 이처럼, 온라인 쇼핑몰<br> 
-&nbsp;　　　　　　　　　이용자 수가 **“지속적으로 증가”** 하고 있는 만큼, 쇼핑몰에 등록되는 상품의 수 역시<br>
-&nbsp;　　　　　　　　　**“기하급수적으로 늘어나”** 상품 선택 시 이용자가 선택의 어려움을 겪고 있는 현실이다.<br>
-&nbsp;　　　　　　　　　따라서 개인에게 맞는 옷, 스타일을 제공하여 수많은 상품에 대한 이용자의 선택의 폭을 줄이고,<br> 
-&nbsp;　　　　　　　　　쇼핑시간을 단축 시킴으로써 이용자가 쇼핑 시 선택의 어려움을 해결해주기 위해<br> 
-&nbsp;　　　　　　　　　**“LONUA”** 프로젝트를 계획하였다. 
+&nbsp;　　　　　　　　통계청의 조사결과에 따르면, 국내 온라인 쇼핑 시장 규모가 2020년 150조 대비하여 2022년에는<br>
+&nbsp;　　　　　　　　70조가 증가한 220조로 **2년 사이 약 69%가 성장**한 것으로 나타났다. 이처럼, 온라인 쇼핑몰<br> 
+&nbsp;　　　　　　　　이용자 수가 **“지속적으로 증가”** 하고 있는 만큼, 쇼핑몰에 등록되는 상품의 수 역시<br>
+&nbsp;　　　　　　　　**“기하급수적으로 늘어나”** 상품 선택 시 이용자가 선택의 어려움을 겪고 있는 현실이다.<br>
+&nbsp;　　　　　　　　따라서 개인에게 맞는 옷, 스타일을 제공하여 수많은 상품에 대한 이용자의 선택의 폭을 줄이고,<br> 
+&nbsp;　　　　　　　　쇼핑시간을 단축 시킴으로써 이용자가 쇼핑 시 선택의 어려움을 해결해주기 위해<br> 
+&nbsp;　　　　　　　　**“LONUA”** 프로젝트를 계획하였다. 
 
 ---
 
@@ -96,7 +96,6 @@
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✍ [요구사항 정의서 바로가기](https://docs.google.com/spreadsheets/d/1Nd-ynajTURSO0YTQONnNcPaXUq9pdHJr4mDEV2tIZ-c/edit#gid=0)
 
-<br>
 
 ---
 
@@ -109,7 +108,6 @@
         <img src="https://github.com/beyond-sw-camp/be02-2nd-developer_passion-fashion/assets/148875644/602c77af-fb0d-414d-afec-00ba7ba38dcd">
   </details>
 
-<br>
 
 ---
 ### 🌈 [화면 설계도 ( Figma ) 바로가기](https://www.figma.com/file/y0feF1Z0msfu71CPTd7Xaj/LONUA-FIGMA?type=design&node-id=0-1&mode=design)
@@ -156,8 +154,6 @@
 
 </details>
 
-<br>
-
 ---
 
 ### ✍ 프로젝트 진행 현황
@@ -167,8 +163,6 @@
 - #### 1.18. ~ 2. 2. : 개인 진행
 - #### 2. 3. ~ 2. 6. : 프론트엔드 미니 팀프로젝트로 진행
 - #### 2. 7. ~ 2.26. : 개인 진행
-
-<br>
 
 ---
 
