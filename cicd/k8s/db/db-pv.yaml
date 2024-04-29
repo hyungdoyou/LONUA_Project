@@ -1,0 +1,21 @@
+apiVersion: v1 # 사용할 Kubernetes API 버전
+kind: PersistentVolume # 리소스의 종류: PersistentVolume
+metadata: # 리소스의 메타데이터 설정
+  name: db-pv # PersistentVolume의 이름
+spec: # 세부 설정
+  capacity: # 용량 설정
+    storage: 5G # 저장소의 용량 설정
+  accessModes: # 액세스 모드 설정
+    - ReadWriteOnce # 읽기/쓰기 액세스 모드 설정
+  local: # 로컬 볼륨 설정
+    path: /mysql-vol # 로컬 볼륨의 경로 설정
+  nodeAffinity: # 노드 어피니티 설정
+    required: # 필수적인 노드 선택 조건 설정
+      nodeSelectorTerms: # 노드 선택 조건 설정
+        - matchExpressions: # 일치 표현식 설정
+            - {
+                # 키와 값 설정
+                key: kubernetes.io/hostname, # 호스트네임 키 설정
+                operator: In, # In 연산자 사용
+                values: ["worker01"], # worker01 값 설정
+              }

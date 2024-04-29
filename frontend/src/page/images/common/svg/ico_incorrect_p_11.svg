@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11">
+    <g data-name="Rectangle 104" style="fill:#fff;stroke:#fa5500">
+        <rect width="11" height="11" rx="5.5" style="stroke:none"/>
+        <rect x=".5" y=".5" width="10" height="10" rx="5" style="fill:none"/>
+    </g>
+    <path data-name="Union 7" d="M9163 5V2h1v3zm0-4V0h1v1z" transform="translate(-9158 3)" style="fill:#fa5500"/>
+</svg>

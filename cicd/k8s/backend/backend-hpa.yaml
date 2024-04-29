@@ -1,0 +1,26 @@
+apiVersion: autoscaling/v2beta2 # 사용할 HPA 의 API 버전
+kind: HorizontalPodAutoscaler # 리소스의 종류 : HPA
+
+metadata: # 리소스의 메타데이터 설정
+  name: backend-hpa # HPA의 이름
+
+spec: # 세부 설정
+  scaleTargetRef: # 자동 스케일링 대상 설정
+    apiVersion: apps/v1 # 대상 리소스의 API 버전 설정
+    kind: Deployment # 대상 리소스의 종류 설정
+    name: backend-deployment # 대상 리소스의 이름 설정
+  minReplicas: 2 # 최소 파드 수 설정
+  maxReplicas: 4 # 최대 파드 수 설정
+  metrics: # 측정 지표 설정
+    - type: Resource # 리소스 기반 측정 지표 설정
+      resource: # 리소스 측정 지표 설정
+        name: cpu # 측정할 리소스 종류 설정 (CPU)
+        target: # 측정 대상 설정
+          type: Utilization # 측정 유형 설정 (Utilization)
+          averageUtilization: 50 # 평균 이용률 설정 (50%)
+    - type: Resource # 리소스 기반 측정 지표 설정
+      resource: # 리소스 측정 지표 설정
+        name: memory # 측정할 리소스 종류 설정 (메모리)
+        target: # 측정 대상 설정
+          type: Utilization # 측정 유형 설정 (Utilization)
+          averageUtilization: 50 # 평균 이용률 설정 (50%)

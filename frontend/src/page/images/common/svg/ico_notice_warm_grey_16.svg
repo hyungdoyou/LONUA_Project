@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <g data-name="사각형 353" style="fill:transparent;stroke:#777">
+        <rect width="16" height="16" rx="8" style="stroke:none"/>
+        <rect x=".5" y=".5" width="15" height="15" rx="7.5" style="fill:none"/>
+    </g>
+    <path data-name="합치기 29" d="M2636.25-603.25v-4a.751.751 0 0 1 .75-.75.751.751 0 0 1 .75.751v4a.751.751 0 0 1-.75.751.751.751 0 0 1-.75-.752zM2636-610a1 1 0 0 1 1-1 1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1z" transform="translate(-2629 615)" style="fill:#777"/>
+</svg>

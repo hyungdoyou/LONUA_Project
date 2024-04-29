@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # 사용할 Kubernetes API 버전
+kind: Deployment # 리소스의 종류 : Deployment
+metadata: # 리소스의 메타데이터 설정
+  name: db-deployment # Deployment의 이름
+spec: # 세부 설정
+  replicas: 1 # 파드의 복제본 수
+  strategy: # 업데이트 전략 설정
+    type: Recreate # Recreate 방식 사용
+  revisionHistoryLimit: 1 # 리비전 히스토리 제한 설정 ( 기존 버전 몇개를 남겨둘 지 지정)
+  selector: # 라벨 선택자
+    matchLabels: # 일치하는 라벨 설정
+      type: mysql # 라벨의 타입이 'mysql'
+  template: # 템플릿 설정
+    metadata: # 템플릿의 메타데이터 설정
+      labels: # 파드에 붙일 라벨 설정
+        type: mysql # 라벨의 타입이 'mysql'
+    spec: # 세부 설정
+      nodeSelector: # 노드 선택자 설정
+        kubernetes.io/hostname: worker01 # worker01에 파드 배치
+      containers: # 컨테이너 설정
+        - name: mysql # 컨테이너 이름 설정
+          image: mysql:latest # 사용할 컨테이너 이미지 설정
+          envFrom: # 환경변수 설정
+            - configMapRef: # ConfigMap 참조 설정
+                name: db-config # 사용할 ConfigMap의 이름 설정
+          volumeMounts: # 볼륨 마운트 설정
+            - name: db-vol # 사용할 볼륨의 이름 설정
+              mountPath: /var/lib/mysql # 볼륨을 마운트할 경로 설정
+      terminationGracePeriodSeconds: 5 # 파드 종료 전 대기 시간 설정
+      volumes: # 볼륨 설정
+        - name: db-vol # 볼륨의 이름 설정
+          persistentVolumeClaim: # PVC 설정
+            claimName: db-pvc # 사용할 PVC의 이름 설정

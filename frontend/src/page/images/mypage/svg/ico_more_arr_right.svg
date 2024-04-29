@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="5" height="15" viewBox="0 0 5 15">
+    <g data-name="그룹 981">
+        <path data-name="사각형 830" style="fill:#fff" d="M0 0h5v15H0z"/>
+        <g data-name="그룹 974">
+            <path data-name="사각형 806" transform="translate(1 9)" style="fill:#777" d="M0 0h2v1H0z"/>
+            <path data-name="사각형 808" transform="translate(2 8)" style="fill:#777" d="M0 0h2v1H0z"/>
+            <path data-name="사각형 809" transform="translate(3 7)" style="fill:#777" d="M0 0h2v1H0z"/>
+            <path data-name="사각형 810" transform="translate(2 6)" style="fill:#777" d="M0 0h2v1H0z"/>
+            <path data-name="사각형 811" transform="translate(1 5)" style="fill:#777" d="M0 0h2v1H0z"/>
+            <path data-name="사각형 812" transform="translate(0 4)" style="fill:#777" d="M0 0h2v1H0z"/>
+            <path data-name="사각형 807" transform="translate(0 10)" style="fill:#777" d="M0 0h2v1H0z"/>
+        </g>
+    </g>
+</svg>

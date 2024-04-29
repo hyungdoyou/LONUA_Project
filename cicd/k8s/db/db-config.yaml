@@ -1,0 +1,7 @@
+apiVersion: v1 # 사용할 Kubernetes API 버전
+kind: ConfigMap # 리소스의 종류 : ConfigMap
+metadata: # 리소스의 메타데이터 설정
+  name: db-config # ConfigMap의 이름
+data: # 환경변수 설정
+  MYSQL_ROOT_PASSWORD: qwer1234
+  MYSQL_DATABASE: lonua

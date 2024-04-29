@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+    <path style="fill:transparent" d="M0 0h34v34H0z"/>
+    <g data-name="Rounded Rectangle 2" transform="translate(4.474 16.105)" style="stroke:#fff;stroke-width:1.5px;fill:none">
+        <rect width="25.053" height="15.211" rx="2" style="stroke:none"/>
+        <rect x=".75" y=".75" width="23.553" height="13.711" rx="1.25" style="fill:none"/>
+    </g>
+    <g data-name="Rectangle 1799" style="stroke:#fff;stroke-width:1.5px;fill:none">
+        <path style="stroke:none" d="M0 0h28.632v7.158H0z" transform="translate(2.684 10.737)"/>
+        <path style="fill:none" d="M.75.75h27.132v5.658H.75z" transform="translate(2.684 10.737)"/>
+    </g>
+    <g data-name="Rectangle 1797" style="fill:#fff;opacity:.996;stroke:#fff;stroke-width:1.5px">
+        <path style="stroke:none" d="M0 0h1.789v20.579H0z" transform="translate(16.105 10.737)"/>
+        <path style="fill:none" d="M.75.75h.289v19.079H.75z" transform="translate(16.105 10.737)"/>
+    </g>
+    <g data-name="리본 copy">
+        <g data-name="Shape 3" style="fill:none">
+            <path d="M1473.378 838.616s2.992-13.184 8.489-8.384-4.677 8.261-8.489 8.384z" style="stroke:none" transform="translate(-1456.809 -826.352)"/>
+            <path d="M1475.452 836.805a18.62 18.62 0 0 0 2.98-.94c1.881-.778 3.18-1.734 3.473-2.557a.92.92 0 0 0-.014-.672c-.1-.265-.355-.702-1.01-1.274-.518-.452-.98-.682-1.373-.682-.942 0-2.127 1.415-3.171 3.786a25.47 25.47 0 0 0-.885 2.34m-2.074 1.81s2.993-13.183 8.49-8.384c5.497 4.8-4.678 8.26-8.49 8.384z" style="fill:#fff;stroke:none" transform="translate(-1456.809 -826.352)"/>
+        </g>
+        <g data-name="Shape 3 copy" style="fill:none">
+            <path d="M1472.3 838.578s-3.059-13.393-8.681-8.517 4.781 8.392 8.681 8.517z" style="stroke:none" transform="translate(-1454.52 -826.315)"/>
+            <path d="M1470.228 836.774a25.84 25.84 0 0 0-.918-2.418c-1.073-2.419-2.297-3.863-3.275-3.863-.412 0-.894.236-1.43.702-.673.584-.937 1.03-1.04 1.301a.944.944 0 0 0-.016.692c.299.841 1.63 1.819 3.563 2.615 1.063.437 2.156.76 3.116.971m2.074 1.804c-3.897-.125-14.302-3.64-8.68-8.516 5.62-4.877 8.68 8.516 8.68 8.516z" style="fill:#fff;stroke:none" transform="translate(-1454.52 -826.315)"/>
+        </g>
+    </g>
+</svg>

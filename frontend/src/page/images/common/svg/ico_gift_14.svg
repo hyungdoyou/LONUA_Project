@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="11" height="14" viewBox="0 0 11 14">
+    <path data-name="사각형 1294" style="fill:transparent" d="M0 0h11v14H0z"/>
+    <g data-name="Rectangle 1029" style="stroke-linejoin:round;stroke:#fa5500;fill:none">
+        <path style="stroke:none" d="M0 0h11v4H0z" transform="translate(0 3.5)"/>
+        <path style="fill:none" d="M.5.5h10v3H.5z" transform="translate(0 3.5)"/>
+    </g>
+    <g data-name="Rectangle 1029 copy" style="stroke-linejoin:round;stroke:#fa5500;fill:none">
+        <path style="stroke:none" d="M0 0h11v6.5H0z" transform="translate(0 6.5)"/>
+        <path style="fill:none" d="M.5.5h10V6H.5z" transform="translate(0 6.5)"/>
+    </g>
+    <path data-name="Rectangle 1030" transform="translate(5 3)" style="fill:#fa5500" d="M0 0h1v10H0z"/>
+    <g data-name="Ellipse 30" style="stroke-linejoin:round;fill:none">
+        <path d="M2.045 4.5v-.009a2.25 2.25 0 1 1 2.446-2.446H4.5V4.5z" style="stroke:none" transform="translate(1.5)"/>
+        <path d="M3.5 3.5V2.18A1.258 1.258 0 0 0 2.25 1C1.56 1 1 1.56 1 2.25A1.258 1.258 0 0 0 2.18 3.5H3.5m1 1H2.045v-.01A2.25 2.25 0 1 1 4.49 2.046H4.5V4.5z" style="fill:#fa5500;stroke:none" transform="translate(1.5)"/>
+    </g>
+    <g data-name="Ellipse 30 copy" style="stroke-linejoin:round;fill:none">
+        <path d="M0 4.5V2.045h.009a2.25 2.25 0 1 1 2.446 2.446V4.5z" style="stroke:none" transform="translate(5)"/>
+        <path d="m2.32 3.5.045-.005A1.258 1.258 0 0 0 3.5 2.25C3.5 1.56 2.94 1 2.25 1A1.258 1.258 0 0 0 1 2.18V3.5h1.32m.135 1H0V2.045h.01a2.25 2.25 0 1 1 2.445 2.446V4.5z" style="fill:#fa5500;stroke:none" transform="translate(5)"/>
+    </g>
+</svg>

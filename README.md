@@ -14,12 +14,14 @@
 
 ### 🤼‍♂️팀원 소개
 
-<br><br>
+<br>
 
 &nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　&nbsp;　 🐻 **[이동규](https://github.com/PTCman)**&nbsp;　 🦁 **[김태윤](https://github.com/thanks9807)** &nbsp;　 🐶 **[유형도](https://github.com/hyungdoyou)** &nbsp;　 🐯 **[정원준](https://github.com/Wonjunmar)** &nbsp;　 🐺 **[김경미](https://github.com/asasd)**
-<br><br><br><br><br>
+
+<br>
 
 ---
+<br>
 
 ### ✨ 프로젝트 기본 소개
 
@@ -30,6 +32,7 @@
 - 따라서 **개인에게 맞는 옷, 스타일을 제공**하여 수많은 상품에 대한 선택의 폭을 줄임으로써  
   **쇼핑시간을 단축** 시켜주는 **"<span style="color:blue">개인 맞춤형 패션 플랫폼 서비스"</span>** 를 제공한다.
 
+<br>
 
 ---
 

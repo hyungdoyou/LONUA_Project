@@ -1,0 +1,163 @@
+pipeline {
+    agent any
+    
+    // 파이프라인 실행에 필요한 도구로 maven 지정
+    tools {
+        maven "maven-3.9.5"
+    }
+
+    // 파이프라인의 실행 단계 정의
+    stages {
+
+        // 1. 깃 클론
+        stage('git clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hyungdoyou/devops-backend'
+            }
+        }
+        
+        // 2. maven 빌드
+        stage('Build') { 
+            steps {
+                sh 'mvn -B -DskipTests clean package' 
+            }
+        }
+
+        // 3. Docker 빌드
+        stage('Docker Build') {
+            steps {
+                script {
+                    // 도커 이미지 : hyungdoyou/be:2.[빌드 숫자]
+                    sh 'docker build --tag hyungdoyou/be:2.$BUILD_NUMBER .'
+                }
+            }
+            post {
+                // Docker 빌드 성공 시 슬랙 채널 ( #테스트 ) 로 성공 알림 발송
+                success {
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'good', 
+                        message: "Docker image hyungdoyou/be:2.${BUILD_NUMBER} build success.", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token')
+                }
+
+                // Docker 빌드 실패 시 슬랙 채널 ( #테스트 ) 로 실패 알림 발송
+                failure {
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'danger', 
+                        message: "Docker image hyungdoyou/be:2.${BUILD_NUMBER} build failed.", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token')
+                }
+            }
+        }
+
+        // 4. Docker Push
+        stage('Docker Push') {
+            steps {
+                script {
+                    // Docker 로그인
+                    withCredentials([usernamePassword(credentialsId: 'docker_credentials', usernameVariable: 'DOCKER_EMAIL', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u ${DOCKER_EMAIL} -p ${DOCKER_PASSWORD}"
+                    }
+                    // Docker Push
+                    sh 'docker push hyungdoyou/be:2.$BUILD_NUMBER'
+                }
+            }
+            post {
+                // Docker Push 성공 시 슬랙 채널 ( #테스트 ) 로 성공 알림 발송
+                success {
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'good', 
+                        message: "Docker image hyungdoyou/fe:3.${BUILD_NUMBER} push success.", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token')
+                }
+                // Docker Push 실패 시 슬랙 채널 ( #테스트 ) 로 실패 알림 발송
+                failure {
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'danger', 
+                        message: "Docker image hyungdoyou/fe:3.${BUILD_NUMBER} push failed.", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token')
+                }
+            }
+        }
+
+        // 5. SSH 전송
+        stage('SSH transfer') {
+            steps {
+                // SSH 전송 플러그인 사용
+                sshPublisher(
+                    // 오류 발생 시 진행을 멈춤
+                    continueOnError: false, 
+                    // 오류 발생 시 파이프라인을 실패시킴
+                    failOnError: true,
+                    // 전송자 목록
+                    publishers: [
+                        // SSH 전송 설명
+                        sshPublisherDesc(
+                            // SSH 서버 설정 이름 지정 ( master 노드 )
+                            configName: "k8s-master",
+                            // 자세한 출력 모드 활성화
+                            verbose: true,
+                            transfers: [
+                                sshTransfer(
+                                    // 전송할 파일 지정
+                                    sourceFiles: "backend-deployment.yml",
+                                    // 원격 디렉토리 지정 ( 원격서버로 파일을 전송할 위치 )
+                                    remoteDirectory: "/root/",
+                                    // 전송 후 야멜 파일의 VERSION을 파이프라인 빌드 숫자로 변경
+                                    // backend-deployment 야멜 파일 실행
+                                    execCommand: '''
+                                        sed -i "s/VERSION/$BUILD_ID/g" /root/backend-deployment.yml
+                                        kubectl apply -f /root/backend-deployment.yml
+                                    '''
+                                )
+                            ]
+                        )
+                    ]
+                )
+            }
+            post {
+                // SSH Transfer 성공 시 슬랙 채널 ( #테스트 ) 로 성공 알림 발송
+                success {
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'good', 
+                        message: "frontend-deployment.yml transfer success.", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token')
+                }
+                // SSH Transfer 실패 시 슬랙 채널 ( #테스트 ) 로 실패 알림 발송
+                failure {
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'danger', 
+                        message: "frontend-deployment.yml transfer failed.", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token')
+                }
+            }
+        }
+        // 6. 슬랙 알림
+        stage('Slack Notification') {
+            steps {
+                script {
+                    // 파이프라인 단계가 끝나고 슬랙으로 최종 알림 발송
+                    slackSend(
+                        channel: '#테스트', 
+                        color: 'good',
+                        message: "Build version : ${env.BUILD_NUMBER} is finally successful!", 
+                        teamDomain: 'jenkins-alert-hq', 
+                        tokenCredentialId: 'slack-jenkins-token'
+                        )
+                }
+            }
+        }
+    }
+}

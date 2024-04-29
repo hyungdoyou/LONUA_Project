@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+    <path style="fill:transparent" d="M0 0h20v20H0z"/>
+    <g data-name="Group 1594">
+        <g data-name="Rounded Rectangle 2" transform="translate(1.605 9.507)" style="stroke:#000;fill:none">
+            <rect width="16.621" height="10.092" rx="1" style="stroke:none"/>
+            <rect x=".5" y=".5" width="15.621" height="9.092" rx=".5" style="fill:none"/>
+        </g>
+        <g data-name="Rectangle 1799" style="stroke:#000;fill:none">
+            <path style="stroke:none" d="M0 0h18.996v4.749H0z" transform="translate(.418 5.747)"/>
+            <path style="fill:none" d="M.5.5h17.996v3.749H.5z" transform="translate(.418 5.747)"/>
+        </g>
+        <path data-name="Rectangle 1797" transform="translate(9.322 5.747)" style="opacity:.996" d="M0 0h1.187v13.653H0z"/>
+        <g data-name="리본 copy">
+            <g data-name="Shape 3" style="fill:none">
+                <path d="M1473.378 835.441s1.985-8.747 5.632-5.563-3.103 5.481-5.632 5.563z" style="stroke:none" transform="translate(-1463.747 -828.681)"/>
+                <path d="M1474.76 834.233a12.346 12.346 0 0 0 1.97-.622c1.246-.516 2.106-1.15 2.3-1.693.126-.352-.102-.784-.677-1.287-.236-.205-.585-.45-.908-.45-.623 0-1.408.937-2.1 2.508a16.838 16.838 0 0 0-.584 1.544m-1.383 1.208s1.985-8.747 5.632-5.563c3.647 3.185-3.103 5.48-5.632 5.563z" style="fill:#000;stroke:none" transform="translate(-1463.747 -828.681)"/>
+            </g>
+            <g data-name="Shape 3 copy" style="fill:none">
+                <path d="M1468.832 835.353s-2.03-8.886-5.759-5.651 3.173 5.568 5.759 5.651z" style="stroke:none" transform="translate(-1458.397 -828.593)"/>
+                <path d="M1467.449 834.149a17.118 17.118 0 0 0-.607-1.596c-.71-1.603-1.521-2.56-2.168-2.56-.273 0-.59.156-.946.464-.592.514-.827.957-.7 1.317.199.557 1.082 1.205 2.362 1.732.702.29 1.424.503 2.059.643m1.383 1.204c-2.586-.083-9.489-2.416-5.76-5.651 3.73-3.235 5.76 5.65 5.76 5.65z" style="fill:#000;stroke:none" transform="translate(-1458.397 -828.593)"/>
+            </g>
+        </g>
+    </g>
+</svg>

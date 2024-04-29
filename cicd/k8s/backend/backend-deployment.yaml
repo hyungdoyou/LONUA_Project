@@ -1,0 +1,47 @@
+apiVersion: apps/v1 # 사용할 Kubernetes API 버전
+kind: Deployment # 리소스의 종류 : Deployment
+
+metadata: # 리소스의 메타데이터 설정
+  name: backend-deployment # Deployment의 이름
+
+spec: # 세부 설정
+  replicas: 2 # 파드의 복제본 수
+  strategy: # 업데이트 전략 설정
+    type: RollingUpdate # RolingUpdate 방식 사용
+  revisionHistoryLimit: 1 # 리비전 히스토리 제한 설정 ( 기존 버전 몇개를 남겨둘 지 지정)
+  minReadySeconds: 10 # 롤링 업데이트를 위한 최소 준비 시간 설정
+  selector: # 라벨 선택자
+    matchLabels: # 일치하는 라벨 설정
+      type: backend # 라벨의 타입이 'backend'
+  template: # 템플릿 설정
+    metadata: # 템플릿의 메타데이터 설정
+      labels: # 파드에 붙일 라벨 설정
+        type: backend # 라벨의 타입이 'backend'
+    spec: # 세부 설정
+      containers: # 컨테이너 설정
+        - name: backend-container # 컨테이너의 이름
+          image: hyungdoyou/be:2.VERSION # 컨테이너에 사용할 이미지 및 이미지 버전 설정
+          resources: # 컨테이너의 리소스 제한 및 요청 설정
+            requests: # 컨테이너가 요청하는 리소스 설정
+              memory: "1024m" # 메모리 요청 ( 실제 실행된 파드 참고 설정 )
+              cpu: "600m" # CPU 요청 ( 실제 실행된 파드 참고 설정 )
+            limits: # 컨테이너의 리소스 제한 설정
+              memory: "3Gi" # 메모리 제한 설정
+              cpu: "2000m" # CPU 제한 설정
+          readinessProbe: # 파드 준비 상태 검사 설정
+            httpGet: # HTTP GET 요청을 사용하여 검사
+              path: /product/list/1/1 # 검사할 경로 설정
+              port: 8080 # 검사할 포트 설정
+            initialDelaySeconds: 20 # 검사 시작 대기 시간 설정
+            periodSeconds: 10 # 검사 주기 설정
+            successThreshold: 3 # 성공 임계값 설정
+          livenessProbe: # 파드 실행 상태 검사 설정
+            httpGet: # HTTP GET 요청을 사용하여 검사
+              path: /product/list/1/1 # 검사할 경로 설정
+              port: 8080 # 검사할 포트 설정
+            initialDelaySeconds: 20 # 검사 시작 대기 시간 설정
+            periodSeconds: 10   # 검사 주기 설정
+          envFrom: # 컨테이너 환경 변수 설정
+            - configMapRef: # ConfigMap 참조 설정
+                name: backend-config # 사용할 ConfigMap 이름
+      terminationGracePeriodSeconds: 5 # 파드 종료까지의 대기 시간 설정

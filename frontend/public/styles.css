@@ -1,0 +1,58 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+* {
+  font-weight: normal;
+  box-sizing: border-box;
+  font-weight: normal;
+  font-style: normal;
+}
+
+ol,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+  background-color: transparent;
+  vertical-align: middle;
+}
+
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+}
+
+
+.fa-heart-o:before {
+  content: "\f08a";
+}
+
+button {
+  border: 0px;
+  background-color: transparent;
+  padding: 0px;
+  cursor: pointer;
+  vertical-align: middle;
+  outline: none;
+  appearance: none;
+}
+
+body,
+input,
+select,
+textarea,
+button {
+  font-family: ProximaNova-Regular, "Noto Sans KR", "Apple SD Gothic Neo",
+    "Malgun Gothic", "맑은 고딕", sans-serif;
+  line-height: 1;
+}

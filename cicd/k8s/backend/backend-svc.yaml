@@ -1,0 +1,12 @@
+apiVersion: v1 # 사용할 Kubernetes API 버전
+kind: Service # 리소스의 종류 : 서비스
+
+metadata: # 리소스의 메타데이터 설정
+  name: backend-svc # 서비스의 이름
+
+spec: # 세부 설정
+  selector: # 서비스가 선택할 파드의 라벨 셀렉터 설정
+    type: backend # 파드의 라벨 셀렉터 (type: backend)
+  ports: # 서비스의 포트 설정
+    - port: 8080 # 서비스의 포트 번호
+      targetPort: 8080 # 포트포워딩 설정

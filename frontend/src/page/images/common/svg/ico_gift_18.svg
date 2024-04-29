@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18">
+    <g data-name="Rectangle 1029" style="stroke-linejoin:round;stroke:#000;fill:none">
+        <path style="stroke:none" d="M0 0h15v6H0z" transform="translate(0 5)"/>
+        <path style="fill:none" d="M.5.5h14v5H.5z" transform="translate(0 5)"/>
+    </g>
+    <g data-name="Rectangle 1029 copy" style="stroke-linejoin:round;stroke:#000;fill:none">
+        <path d="M0 0h15v7a1 1 0 0 1-1 1H0V0z" style="stroke:none" transform="translate(0 10)"/>
+        <path d="M.5.5h14V7a.5.5 0 0 1-.5.5H.5v-7z" style="fill:none" transform="translate(0 10)"/>
+    </g>
+    <path data-name="Rectangle 1030" d="M7 5.735h1v12H7z"/>
+    <g data-name="그룹 1593">
+        <g data-name="Ellipse 30" style="stroke-linejoin:round;fill:none">
+            <path d="M2.726 6v-.012a3 3 0 1 1 3.262-3.261H6V6z" style="stroke:none" transform="translate(2)"/>
+            <path d="M5 5V2.883a1.012 1.012 0 0 1-.008-.066A2.013 2.013 0 0 0 3 1c-1.103 0-2 .897-2 2 0 1.042.78 1.898 1.816 1.992L2.883 5H5m1 1H2.726v-.012a3 3 0 1 1 3.262-3.261H6V6z" style="fill:#000;stroke:none" transform="translate(2)"/>
+        </g>
+        <g data-name="Ellipse 30" style="stroke-linejoin:round;fill:none">
+            <path d="M2.726 0v.012a3 3 0 1 0 3.262 3.261H6V0z" style="stroke:none" transform="rotate(180 6.5 3)"/>
+            <path d="M2.883 1a1.012 1.012 0 0 1-.067.008A1.988 1.988 0 0 0 1 3c0 1.103.897 2 2 2 1.025 0 1.9-.798 1.992-1.817L5 3.117V1H2.883m-.157-1H6v3.273h-.012A3 3 0 1 1 2.726.013V0z" style="fill:#000;stroke:none" transform="rotate(180 6.5 3)"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,32 @@
+name: frontend devops
+
+on:
+  push:
+    branches: [develop]
+
+permissions: write-all
+
+jobs:
+  deploy:
+    name: frontend test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "v20.8.1"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: result
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        with:
+          files: "test-results/*.xml"
