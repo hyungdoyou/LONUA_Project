@@ -13,14 +13,6 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=flat&logo=AmazonAWS&logoColor=black&color=orange"/></a></a>
 &nbsp;&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat&logo=Amazon S3&logoColor=white&color=red"/></a></a>
 
----
-
-<br>
-
-### 💾 프로젝트 설계
-
-### &nbsp;&nbsp;➡ &nbsp;[ 피그마(Figma) 바로가기](https://www.figma.com/file/y0feF1Z0msfu71CPTd7Xaj/LONUA-FIGMA?type=design&node-id=0-1&mode=design)
-
 <br>
 
 ---
